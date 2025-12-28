@@ -129,31 +129,33 @@ button:hover {
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec";
+const API = "https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec";
 
-document.getElementById("bookingForm").addEventListener("submit", async function(e){
+document.getElementById("bookingForm").addEventListener("submit", e => {
   e.preventDefault();
 
-  const kodeBooking = "MT-" + Date.now().toString().slice(-6);
-
-  const payload = {
-    kode_booking: kodeBooking,
-    nama: nama.value.trim(),
-    no_hp: no_hp.value.trim(),        // STRING
-    armada: armada.value.trim(),
-    tujuan: tujuan.value.trim(),
-    no_kursi: no_kursi.value.trim(),  // "11-12" AMAN
-    tanggal: keberangkatan.value,     // yyyy-mm-dd
-    jam: jam.value.replace("WIB","").trim(), // 08:30
+  const data = {
+    nama: nama.value,
+    no_hp: no_hp.value,
+    armada: armada.value,
+    tujuan: tujuan.value,
+    no_kursi: no_kursi.value,
+    tanggal: keberangkatan.value, // YYYY-MM-DD (AMAN)
+    jam: jam.value,               // HH:mm (AMAN)
     harga: harga.value
   };
 
-  await fetch(API_URL, {
+  fetch(API, {
     method: "POST",
-    body: JSON.stringify(payload)
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === "ok") {
+      window.location.href =
+        "?page=etiket&kode=" + res.kode;
+    }
   });
-
-  window.location.href = "etiket.html";
 });
 </script>
 
