@@ -1,232 +1,225 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard App</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>App Dashboard</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Font -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Poppins', sans-serif;
-    }
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
 
-    body {
-      background: #f4f6f9;
-      color: #333;
-    }
+body{
+  background:#f2f5f9;
+  padding-bottom:80px;
+}
 
-    /* HEADER */
-    .header {
-      background: linear-gradient(135deg, #1e88e5, #1565c0);
-      color: #fff;
-      padding: 16px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: 0 4px 12px rgba(0,0,0,.2);
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
+/* HEADER */
+.header{
+  padding:20px;
+  background:linear-gradient(135deg,#1e88e5,#1565c0);
+  color:#fff;
+  border-radius:0 0 24px 24px;
+  box-shadow:0 6px 16px rgba(0,0,0,.2);
+}
 
-    .header h1 {
-      font-size: 20px;
-      font-weight: 600;
-    }
+.header h2{
+  font-size:18px;
+  font-weight:500;
+}
 
-    .header i {
-      font-size: 22px;
-      cursor: pointer;
-    }
+.header span{
+  font-size:13px;
+  opacity:.9;
+}
 
-    /* CONTAINER */
-    .container {
-      padding: 24px;
-    }
+/* CONTENT */
+.container{
+  padding:20px;
+}
 
-    /* DASHBOARD GRID */
-    .dashboard {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+/* GRID 2 KOLOM */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
+}
 
-    /* CARD */
-    .card {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-      transition: all .3s ease;
-      position: relative;
-      overflow: hidden;
-    }
+/* CARD */
+.card{
+  background:#fff;
+  padding:18px;
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.08);
+  transition:.3s;
+  position:relative;
+  overflow:hidden;
+}
 
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 6px;
-      background: linear-gradient(90deg, #1e88e5, #fbc02d);
-    }
+.card::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:5px;
+  background:linear-gradient(90deg,#1e88e5,#fbc02d);
+}
 
-    .card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 16px 35px rgba(0,0,0,.15);
-    }
+.card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 14px 30px rgba(0,0,0,.15);
+}
 
-    .card-icon {
-      width: 55px;
-      height: 55px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #1e88e5, #42a5f5);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      margin-bottom: 14px;
-    }
+.icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:linear-gradient(135deg,#1e88e5,#42a5f5);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#fff;
+  font-size:20px;
+  margin-bottom:10px;
+}
 
-    .card.yellow .card-icon {
-      background: linear-gradient(135deg, #fbc02d, #fdd835);
-      color: #333;
-    }
+.card.yellow .icon{
+  background:linear-gradient(135deg,#fbc02d,#fdd835);
+  color:#333;
+}
 
-    .card h3 {
-      font-size: 14px;
-      font-weight: 400;
-      color: #777;
-    }
+.card h3{
+  font-size:13px;
+  font-weight:400;
+  color:#777;
+}
 
-    .card h2 {
-      font-size: 26px;
-      font-weight: 600;
-      margin-top: 4px;
-    }
+.card h2{
+  font-size:22px;
+  font-weight:600;
+}
 
-    /* SECTION TITLE */
-    .section-title {
-      margin: 32px 0 16px;
-      font-weight: 600;
-      font-size: 18px;
-      color: #1e88e5;
-    }
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  height:70px;
+  background:#fff;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  box-shadow:0 -6px 20px rgba(0,0,0,.15);
+  border-radius:20px 20px 0 0;
+}
 
-    /* ACTIVITY CARD */
-    .activity {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 10px 25px rgba(0,0,0,.08);
-    }
+.bottom-nav a{
+  text-decoration:none;
+  color:#777;
+  font-size:12px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
-    .activity-item {
-      display: flex;
-      align-items: center;
-      margin-bottom: 14px;
-    }
+.bottom-nav a i{
+  font-size:20px;
+  margin-bottom:4px;
+}
 
-    .activity-item i {
-      width: 40px;
-      height: 40px;
-      background: #e3f2fd;
-      color: #1e88e5;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 12px;
-    }
+.bottom-nav a.active{
+  color:#1e88e5;
+}
 
-    .activity-item span {
-      font-size: 14px;
-    }
-
-    /* RESPONSIVE */
-    @media(max-width: 600px){
-      .header h1 {
-        font-size: 16px;
-      }
-    }
-  </style>
+/* BUTTON TENGAH */
+.nav-center{
+  width:54px;
+  height:54px;
+  background:linear-gradient(135deg,#fbc02d,#fdd835);
+  border-radius:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#333;
+  font-size:22px;
+  margin-top:-30px;
+  box-shadow:0 10px 25px rgba(0,0,0,.25);
+}
+</style>
 </head>
 <body>
 
-  <!-- HEADER -->
-  <div class="header">
-    <h1><i class="fa-solid fa-chart-line"></i> Dashboard App</h1>
-    <i class="fa-solid fa-user-circle"></i>
-  </div>
+<!-- HEADER -->
+<div class="header">
+  <h2>Hai, Selamat Datang 👋</h2>
+  <span>Dashboard Web Apps</span>
+</div>
 
-  <!-- CONTENT -->
-  <div class="container">
-
-    <!-- STAT CARDS -->
-    <div class="dashboard">
-      <div class="card">
-        <div class="card-icon">
-          <i class="fa-solid fa-users"></i>
-        </div>
-        <h3>Total Pengguna</h3>
-        <h2>1.245</h2>
-      </div>
-
-      <div class="card yellow">
-        <div class="card-icon">
-          <i class="fa-solid fa-wallet"></i>
-        </div>
-        <h3>Pendapatan</h3>
-        <h2>Rp 18,5jt</h2>
-      </div>
-
-      <div class="card">
-        <div class="card-icon">
-          <i class="fa-solid fa-file-lines"></i>
-        </div>
-        <h3>Laporan</h3>
-        <h2>326</h2>
-      </div>
-
-      <div class="card yellow">
-        <div class="card-icon">
-          <i class="fa-solid fa-bell"></i>
-        </div>
-        <h3>Notifikasi</h3>
-        <h2>12</h2>
-      </div>
+<!-- CONTENT -->
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-users"></i></div>
+      <h3>Pengguna</h3>
+      <h2>1.250</h2>
     </div>
 
-    <!-- ACTIVITY -->
-    <div class="section-title">Aktivitas Terbaru</div>
-
-    <div class="activity">
-      <div class="activity-item">
-        <i class="fa-solid fa-circle-check"></i>
-        <span>Pengguna baru berhasil mendaftar</span>
-      </div>
-      <div class="activity-item">
-        <i class="fa-solid fa-file-export"></i>
-        <span>Laporan bulanan diunduh</span>
-      </div>
-      <div class="activity-item">
-        <i class="fa-solid fa-gear"></i>
-        <span>Pengaturan aplikasi diperbarui</span>
-      </div>
+    <div class="card yellow">
+      <div class="icon"><i class="fa-solid fa-wallet"></i></div>
+      <h3>Saldo</h3>
+      <h2>Rp 8,4jt</h2>
     </div>
 
+    <div class="card yellow">
+      <div class="icon"><i class="fa-solid fa-file-lines"></i></div>
+      <h3>Laporan</h3>
+      <h2>326</h2>
+    </div>
+
+    <div class="card">
+      <div class="icon"><i class="fa-solid fa-bell"></i></div>
+      <h3>Notifikasi</h3>
+      <h2>12</h2>
+    </div>
   </div>
+</div>
+
+<!-- BOTTOM NAVIGATION -->
+<div class="bottom-nav">
+  <a href="#" class="active">
+    <i class="fa-solid fa-house"></i>
+    Home
+  </a>
+  <a href="#">
+    <i class="fa-solid fa-chart-pie"></i>
+    Statistik
+  </a>
+
+  <div class="nav-center">
+    <i class="fa-solid fa-plus"></i>
+  </div>
+
+  <a href="#">
+    <i class="fa-solid fa-file"></i>
+    Laporan
+  </a>
+  <a href="#">
+    <i class="fa-solid fa-gear"></i>
+    Setting
+  </a>
+</div>
 
 </body>
 </html>
