@@ -129,33 +129,34 @@ button:hover {
 </div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec";
-
-document.getElementById("bookingForm").addEventListener("submit", e => {
+<script>
+document.getElementById("bookingForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const data = {
-    nama: nama.value,
-    no_hp: no_hp.value,
-    armada: armada.value,
-    tujuan: tujuan.value,
-    no_kursi: no_kursi.value,
-    tanggal: keberangkatan.value, // YYYY-MM-DD (AMAN)
-    jam: jam.value,               // HH:mm (AMAN)
+    nama: nama.value.trim(),
+    no_hp: no_hp.value.trim(),
+    armada: armada.value.trim(),
+    tujuan: tujuan.value.trim(),
+    no_kursi: no_kursi.value.trim(),
+    tanggal: keberangkatan.value, // YYYY-MM-DD
+    jam: jam.value,               // HH:mm
     harga: harga.value
   };
 
-  fetch(API, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    if (res.status === "ok") {
-      window.location.href =
-        "?page=etiket&kode=" + res.kode;
-    }
-  });
+  google.script.run
+    .withSuccessHandler(res => {
+      if (res.status === "ok") {
+        window.location.href =
+          "?page=etiket&kode=" + res.kode;
+      } else {
+        alert("Gagal menyimpan data");
+      }
+    })
+    .withFailureHandler(err => {
+      alert("ERROR: " + err.message);
+    })
+    .doPost({ postData: { contents: JSON.stringify(data) } });
 });
 </script>
 
