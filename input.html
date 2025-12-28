@@ -128,9 +128,9 @@ button:hover {
     </form>
 </div>
 
+
 <script>
-<script>
-document.getElementById("bookingForm").addEventListener("submit", function(e){
+document.getElementById("bookingForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
   const data = {
@@ -139,26 +139,36 @@ document.getElementById("bookingForm").addEventListener("submit", function(e){
     armada: armada.value.trim(),
     tujuan: tujuan.value.trim(),
     no_kursi: no_kursi.value.trim(),
-    tanggal: keberangkatan.value, // YYYY-MM-DD
-    jam: jam.value,               // HH:mm
+    tanggal: keberangkatan.value, // yyyy-mm-dd
+    jam: jam.value.trim(),
     harga: harga.value
   };
 
-  google.script.run
-    .withSuccessHandler(res => {
-      if (res.status === "ok") {
-        window.location.href =
-          "?page=etiket&kode=" + res.kode;
-      } else {
-        alert("Gagal menyimpan data");
+  try {
+    const res = await fetch(
+      "https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
       }
-    })
-    .withFailureHandler(err => {
-      alert("ERROR: " + err.message);
-    })
-    .doPost({ postData: { contents: JSON.stringify(data) } });
+    );
+
+    const json = await res.json();
+
+    if (json.status === "ok") {
+      window.location.href =
+        "etiket.html?kode=" + json.kode;
+    } else {
+      alert("Gagal menyimpan data");
+    }
+
+  } catch (err) {
+    alert("ERROR koneksi API");
+    console.error(err);
+  }
 });
 </script>
-
 </body>
+
 </html>
