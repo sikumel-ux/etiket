@@ -130,43 +130,39 @@ button:hover {
 
 
 <script>
-document.getElementById("bookingForm").addEventListener("submit", async function(e){
+document.getElementById("bookingForm").addEventListener("submit", function(e){
   e.preventDefault();
 
   const data = {
-    nama: nama.value.trim(),
-    no_hp: no_hp.value.trim(),
-    armada: armada.value.trim(),
-    tujuan: tujuan.value.trim(),
-    no_kursi: no_kursi.value.trim(),
-    tanggal: keberangkatan.value, // yyyy-mm-dd
-    jam: jam.value.trim(),
-    harga: harga.value
+    nama: document.getElementById("nama").value.trim(),
+    no_hp: document.getElementById("no_hp").value.trim(),
+    armada: document.getElementById("armada").value.trim(),
+    tujuan: document.getElementById("tujuan").value.trim(),
+    no_kursi: document.getElementById("no_kursi").value.trim(),
+    tanggal: document.getElementById("keberangkatan").value, // yyyy-mm-dd
+    jam: document.getElementById("jam").value.trim(),
+    harga: document.getElementById("harga").value
   };
 
-  try {
-    const res = await fetch(
-      "https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      }
-    );
-
-    const json = await res.json();
-
-    if (json.status === "ok") {
-      window.location.href =
-        "etiket.html?kode=" + json.kode;
+  fetch("https://script.google.com/macros/s/AKfycbyZMsfMjMRwqI0r1cu9DMO4yBjMUP53L4mIzBUrxkJj60FBN6iUHYlEntmXKErHTEmS/exec", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if (res.status === "ok") {
+      window.location.href = "etiket.html?kode=" + res.kode;
     } else {
-      alert("Gagal menyimpan data");
+      alert("Gagal simpan data");
     }
-
-  } catch (err) {
-    alert("ERROR koneksi API");
+  })
+  .catch(err => {
     console.error(err);
-  }
+    alert("ERROR koneksi API");
+  });
 });
 </script>
 </body>
