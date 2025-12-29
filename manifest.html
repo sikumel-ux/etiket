@@ -3,72 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manifest Penumpang | Mahika Trans</title>
+    <title>Manifes Keberangkatan | Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; }
-        h2 { text-align: center; color: #0f4c81; }
-        .card { background: white; padding: 15px; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-left: 5px solid #1b9aaa; }
-        .tgl-badge { background: #0f4c81; color: white; padding: 4px 8px; border-radius: 5px; font-size: 12px; }
-        .info-bus { font-weight: bold; color: #333; margin: 5px 0; }
-        .detail { font-size: 14px; color: #666; }
-        .loading { text-align: center; padding: 20px; }
-        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-bottom a { color: #0f4c81; font-size: 20px; text-decoration: none; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f0f2f5; margin: 0; padding: 20px; padding-bottom: 80px; }
+        
+        .container { max-width: 500px; margin: auto; }
+        h2 { text-align: center; color: #0f4c81; margin-bottom: 20px; }
+
+        /* Styling Group Tanggal */
+        .date-section { margin-top: 20px; }
+        .date-header { 
+            background: #1b9aaa; color: white; padding: 8px 15px; 
+            border-radius: 8px; font-weight: 600; font-size: 14px;
+            display: inline-block; margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Styling Kartu Penumpang */
+        .card { 
+            background: white; border-radius: 12px; padding: 15px; 
+            margin-bottom: 10px; display: flex; align-items: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid #0f4c81;
+        }
+        .card-time { 
+            font-weight: bold; color: #0f4c81; font-size: 16px; 
+            min-width: 70px; border-right: 1px solid #eee; margin-right: 15px;
+        }
+        .card-info { flex-grow: 1; }
+        .card-info .nama { font-weight: 600; font-size: 15px; color: #333; display: block; }
+        .card-info .detail { font-size: 13px; color: #666; margin-top: 3px; }
+        .card-info .bus { color: #1b9aaa; font-weight: 600; font-size: 13px; }
+
+        /* Loading & Error */
+        .status-msg { text-align: center; padding: 40px; color: #666; }
+        .loader { 
+            border: 4px solid #f3f3f3; border-top: 4px solid #0f4c81; 
+            border-radius: 50%; width: 30px; height: 30px; 
+            animation: spin 1s linear infinite; margin: auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Navigasi Bawah */
+        .nav-bottom { 
+            position: fixed; bottom: 0; left: 0; right: 0; 
+            background: white; display: flex; justify-content: space-around; 
+            padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); 
+        }
+        .nav-bottom a { color: #ccc; font-size: 22px; transition: 0.3s; }
+        .nav-bottom a.active { color: #0f4c81; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Daftar Manifes</h2>
-    <div id="loading" class="loading">Memuat data keberangkatan...</div>
-    <div id="manifestList"></div>
-    <div style="height: 80px;"></div> </div>
+    <h2>Manifes Penumpang</h2>
+    
+    <div id="app">
+        <div class="status-msg" id="loader">
+            <div class="loader"></div>
+            <p>Mengambil data dari Google Sheets...</p>
+        </div>
+        <div id="manifestContent"></div>
+    </div>
+</div>
 
 <div class="nav-bottom">
-    <a href="index.html"><i class="fas fa-ticket"></i></a>
-    <a href="manifest.html" style="color: #1b9aaa;"><i class="fas fa-list"></i></a>
-    <a href="#" onclick="location.reload()"><i class="fas fa-sync"></i></a>
+    <a href="index.html"><i class="fas fa-edit"></i></a>
+    <a href="manifes.html" class="active"><i class="fas fa-clipboard-list"></i></a>
+    <a href="#" onclick="location.reload()"><i class="fas fa-sync-alt"></i></a>
 </div>
 
 <script>
-    const API_URL = "URL_WEB_APP_GOOGLE_SCRIPT_KAMU?action=getManifest";
+    // Pastikan URL API sudah benar dan menyertakan ?p=manifes
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec?p=manifes";
+
+    function formatTanggalIndo(dateStr) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('id-ID', { 
+            weekday: 'long', 
+            day: 'numeric', 
+            month: 'long', 
+            year: 'numeric' 
+        });
+    }
 
     async function loadManifest() {
+        const contentDiv = document.getElementById("manifestContent");
+        const loader = document.getElementById("loader");
+
         try {
             const response = await fetch(API_URL);
             const data = await response.json();
-            const listDiv = document.getElementById("manifestList");
-            document.getElementById("loading").style.display = "none";
+            
+            loader.style.display = "none";
 
             if (data.length === 0) {
-                listDiv.innerHTML = "<p style='text-align:center'>Tidak ada jadwal keberangkatan terdekat.</p>";
+                contentDiv.innerHTML = `<div class="status-msg">Tidak ada jadwal keberangkatan terdekat.</div>`;
                 return;
             }
 
-            listDiv.innerHTML = data.map(item => {
-                const d = new Date(item.tanggal);
-                const tglFormat = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
-                
-                return `
-                    <div class="card">
-                        <span class="tgl-badge">${tglFormat} - ${item.jam}</span>
-                        <div class="info-bus">${item.armada}</div>
-                        <div class="detail">
-                            <i class="fas fa-user"></i> ${item.nama} <br>
-                            <i class="fas fa-map-marker-alt"></i> Tujuan: ${item.tujuan}
-                        </div>
+            // Grouping data berdasarkan tanggal
+            const grouped = data.reduce((acc, item) => {
+                const dateKey = item.tanggal.split('T')[0]; // Ambil YYYY-MM-DD
+                if (!acc[dateKey]) acc[dateKey] = [];
+                acc[dateKey].push(item);
+                return acc;
+            }, {});
+
+            let html = '';
+            for (const date in grouped) {
+                html += `
+                    <div class="date-section">
+                        <div class="date-header">${formatTanggalIndo(date)}</div>
+                        ${grouped[date].map(item => `
+                            <div class="card">
+                                <div class="card-time">${item.jam}</div>
+                                <div class="card-info">
+                                    <span class="nama">${item.nama}</span>
+                                    <span class="bus">${item.armada}</span>
+                                    <div class="detail">
+                                        <i class="fas fa-map-marker-alt"></i> Ke: ${item.tujuan}
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
                     </div>
                 `;
-            }).join('');
-        } catch (err) {
-            document.getElementById("loading").innerText = "Gagal memuat data.";
-            console.error(err);
+            }
+            contentDiv.innerHTML = html;
+
+        } catch (error) {
+            console.error(error);
+            loader.innerHTML = `<p style="color:red">Gagal memuat data. Pastikan API sudah di-deploy sebagai 'Anyone'.</p>`;
         }
     }
 
     loadManifest();
 </script>
+
 </body>
 </html>
