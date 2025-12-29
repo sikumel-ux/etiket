@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiket Mahika Trans</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <div class="header">
+            <img src="logo.png" alt="Mahika Trans" class="logo">
+        </div>
+        <p class="kode-booking" id="kodeBooking">-</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="kolom">
+            <p><i class="fas fa-user"></i> <span id="nama"></span></p>
+            <p><i class="fas fa-phone"></i> <span id="no_hp"></span></p>
+            <p><i class="fas fa-bus"></i> <span id="armada"></span></p>
+            <p><i class="fas fa-map-marker-alt"></i> <span id="tujuan"></span></p>
+        </div>
+
+        <div class="kolom">
+            <p><i class="fas fa-chair"></i> <span id="no_kursi"></span></p>
+            <p><i class="fas fa-calendar-alt"></i> <span id="tgl"></span></p>
+            <p><i class="fas fa-clock"></i> <span id="jam"></span></p>
+            <p><i class="fa-solid fa-rupiah-sign"></i> <span id="harga"></span></p>
+        </div>
+    </div>
+
+    <div class="tear-line"></div>
+
+    <div class="barcode">
+        <img id="barcodeImg" alt="Barcode Kode Booking">
+        <p class="thanks">Terimakasih atas kepercayaan Anda menggunakan jasa layanan kami.</p>
+    </div>
+
+    <div class="keterangan">
+        <p><strong>Perhatian:</strong></p>
+        <p>1. Tiket yang sudah dipesan tidak dapat dibatalkan</p>
+        <p>2. Harap datang maksimal 30 menit sebelum jadwal pemberangkatan</p>
+        <p>3. Anak usia 3 tahun atau tinggi badan 90cm wajib membeli tiket</p>
+    </div>
+
+    <div class="nav-bottom">
+        <a href="index.html"><i class="fas fa-ticket"></i></a>
+        <a href="manifest.html"><i class="fas fa-list"></i></a>
+        <a href="laporan.html"><i class="fas fa-chart-bar"></i></a>
+        <a href="#" onclick="window.print()"><i class="fas fa-print"></i></a>
+    </div>
+</div>
+
+<script>
+// Fungsi pembantu untuk format tanggal agar tidak NaN
+function formatTanggalIndo(dateStr) {
+    if (!dateStr) return "-";
+    // dateStr formatnya yyyy-mm-dd
+    const parts = dateStr.split("-");
+    if (parts.length !== 3) return dateStr;
+    
+    const bulanIndo = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+    const thn = parts[0];
+    const bln = bulanIndo[parseInt(parts[1]) - 1];
+    const tgl = parts[2];
+    
+    return `${tgl} ${bln} ${thn}`;
+}
+
+const params = new URLSearchParams(window.location.search);
+const kode = params.get("kode");
+
+if (!kode) {
+    document.body.innerHTML = "<div style='text-align:center; padding-top:50px;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+} else {
+    const dataRaw = localStorage.getItem("etiket_" + kode);
+    
+    if (!dataRaw) {
+        document.body.innerHTML = "<div style='text-align:center; padding-top:50px;'><h3>Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+    } else {
+        const data = JSON.parse(dataRaw);
+
+        // Pengisian data ke HTML
+        document.getElementById("kodeBooking").innerText = data.kode_booking || kode;
+        document.getElementById("nama").innerText = data.nama || "-";
+        document.getElementById("no_hp").innerText = data.no_hp || "-";
+        document.getElementById("armada").innerText = data.armada || "-";
+        document.getElementById("tujuan").innerText = data.tujuan || "-";
+        document.getElementById("no_kursi").innerText = data.no_kursi || "-";
+        
+        // Perbaikan Tanggal: pakai properti 'tanggal' (sesuai input.html yang kita buat tadi)
+        document.getElementById("tgl").innerText = formatTanggalIndo(data.tanggal);
+
+        document.getElementById("jam").innerText = data.jam || "-";
+        
+        // Format Harga
+        if(data.harga) {
+            document.getElementById("harga").innerText = "Rp " + Number(data.harga).toLocaleString("id-ID");
+        }
+
+        // Barcode
+        const kodeUntukBarcode = data.kode_booking || kode;
+        document.getElementById("barcodeImg").src = `https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(kodeUntukBarcode)}&code=Code128`;
+    }
+}
+</script>
+
+</body>
+</html>
