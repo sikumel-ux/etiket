@@ -5,82 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan Keuangan | Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 100px; }
         
+        /* HEADER GRADASI */
         .header-finance { 
             background: linear-gradient(135deg, #0066AE, #004a80); 
-            color: white; padding: 30px 20px; text-align: center;
-            border-radius: 0 0 25px 25px;
-            position: relative;
+            color: white; padding: 45px 20px 60px 20px; text-align: center;
+            border-radius: 0 0 30px 30px;
         }
+        .header-finance h2 { margin: 0; font-weight: 800; letter-spacing: 2px; font-size: 24px; }
+        .header-finance p { margin: 5px 0 0 0; font-size: 11px; opacity: 0.8; letter-spacing: 1px; }
 
-        .container { padding: 15px; }
-
-        /* TOMBOL TAMBAHKAN */
-        .btn-tambah {
-            background: #ff9800; /* Warna orange agar kontras dengan biru */
-            color: white;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            border-radius: 12px;
-            margin: -20px auto 20px auto;
-            width: 80%;
-            font-weight: 600;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            position: relative;
-            z-index: 10;
-        }
-        .btn-tambah i { margin-right: 8px; }
-        .btn-tambah:active { transform: scale(0.95); }
+        .container { padding: 0 20px; }
 
         /* CARD RINGKASAN */
         .card-summary {
             background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            padding: 30px 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            margin-top: -35px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.3);
         }
-        .card-summary small { color: #888; font-size: 12px; }
-        .card-summary h2 { margin: 5px 0; color: #0066AE; font-size: 28px; }
+        .card-summary small { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
+        .card-summary h2 { margin: 10px 0 0 0; color: #0066AE; font-size: 34px; font-weight: 800; }
+
+        /* FLOATING ACTION BUTTON (FAB) */
+        .fab-add {
+            position: fixed;
+            bottom: 90px; /* Di atas navigasi bawah */
+            right: 25px;
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, #0066AE, #004a80);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 20px rgba(0, 102, 174, 0.4);
+            text-decoration: none;
+            z-index: 999;
+            transition: all 0.2s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+        .fab-add:active { transform: scale(0.9) rotate(90deg); }
 
         /* NAV BOTTOM */
         .nav-bottom { 
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 400px; 
             background: #fff; display: flex; justify-content: space-around; 
-            padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); 
-            border-radius: 20px 20px 0 0; z-index: 1000;
+            padding: 12px 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.07); 
+            border-radius: 25px 25px 0 0; z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 10px; font-weight: 600; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; transition: 0.3s; }
         .nav-bottom a.active { color: #0066AE; }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { font-size: 9px; font-weight: 700; display: block; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
 <div class="header-finance">
-    <h2 style="margin:0;">Dashboard Keuangan</h2>
-    <p style="margin:5px 0 0 0; font-size: 12px; opacity: 0.8;">Mahika Trans Management</p>
+    <h2>KEUANGAN</h2>
+    <p>MANAJEMEN PENDAPATAN TIKET</p>
 </div>
 
 <div class="container">
-    <a href="komisi.html" class="btn-tambah">
-        <i class="fas fa-plus-circle"></i> Tambahkan Data
-    </a>
-
     <div class="card-summary">
-        <small>Total Pendapatan Tiket</small>
+        <small>Total Omzet Penjualan</small>
         <h2 id="totalTiket">Rp 0</h2>
     </div>
+</div>
 
-    </div>
+<a href="komisi.html" class="fab-add">
+    <i class="fas fa-plus"></i>
+</a>
 
 <div class="nav-bottom">
     <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
@@ -90,27 +96,33 @@
 </div>
 
 <script>
-    // URL API yang sama untuk mengambil data tiket
-    const API_URL = "URL_WEB_APP_EXEC_KAMU"; 
+    // URL API LANGSUNG DIMASUKKAN
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
     async function hitungPendapatan() {
+        const totalElement = document.getElementById('totalTiket');
+        totalElement.innerText = "Memuat...";
+
         try {
             const response = await fetch(API_URL);
             const data = await response.json();
             
             let total = 0;
             data.forEach(item => {
-                // Bersihkan string harga dari titik/koma jika ada, lalu konversi ke angka
+                // Menghapus karakter non-angka dan hitung total
                 let harga = parseInt(String(item.harga).replace(/[^0-9]/g, '')) || 0;
                 total += harga;
             });
 
-            document.getElementById('totalTiket').innerText = "Rp " + total.toLocaleString('id-ID');
+            totalElement.innerText = "Rp " + total.toLocaleString('id-ID');
         } catch (error) {
-            console.error("Gagal hitung pendapatan:", error);
+            console.error("Error Fetching Finance Data:", error);
+            totalElement.innerText = "Gagal Muat";
+            totalElement.style.color = "red";
         }
     }
 
+    // Jalankan hitung otomatis saat halaman dibuka
     window.onload = hitungPendapatan;
 </script>
 
