@@ -20,7 +20,6 @@
 
         .container { padding: 0 20px; }
 
-        /* CARD RINGKASAN (Sama style-nya dengan Index) */
         .card-summary {
             background: white;
             padding: 30px 20px;
@@ -33,7 +32,6 @@
         .card-summary small { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
         .card-summary h2 { margin: 10px 0 0 0; color: #0066AE; font-size: 34px; font-weight: 800; }
 
-        /* FAB TOMBOL + */
         .fab-add {
             position: fixed;
             bottom: 90px;
@@ -50,11 +48,8 @@
             box-shadow: 0 8px 20px rgba(0, 102, 174, 0.4);
             text-decoration: none;
             z-index: 999;
-            transition: all 0.2s ease;
         }
-        .fab-add:active { transform: scale(0.9); }
 
-        /* NAV BOTTOM */
         .nav-bottom { 
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 400px; 
@@ -72,7 +67,7 @@
 
 <div class="header-finance">
     <h2>KEUANGAN</h2>
-    <p>TOTAL KOMISI TERKUMPUL</p>
+    <p>MANAJEMEN KOMISI MANUAL</p>
 </div>
 
 <div class="container">
@@ -94,34 +89,35 @@
 </div>
 
 <script>
-    // URL API yang mengarah ke data KOMISI
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
-    async function loadKomisi() {
+    async function loadFinanceData() {
         const display = document.getElementById('totalKomisi');
-        display.innerText = "Loading...";
+        display.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
 
         try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
+            // Logika filter bulan sama dengan index.html
+            const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
             
-            // Logika: Filter data yang berasal dari input komisi manual
-            // Kita jumlahkan kolom nominal/jumlah dari data tersebut
-            let total = 0;
-            data.forEach(item => {
-                // Pastikan nama properti sesuai dengan yang kamu kirim dari komisi.html (misal: nominal atau harga)
-                let nilai = parseInt(String(item.harga || item.nominal || "0").replace(/\D/g, '')) || 0;
-                total += nilai;
+            // Memanggil API dengan parameter yang sudah terbukti jalan di Index
+            const response = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
+            const dataRev = await response.json();
+
+            let totalKomisi = 0;
+            dataRev.forEach(row => {
+                // Sesuai kode index kamu: row[4] adalah kolom komisi di sheet pendapatan
+                totalKomisi += parseInt(row[4]) || 0;
             });
 
-            display.innerText = "Rp " + total.toLocaleString('id-ID');
+            display.innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
+
         } catch (error) {
-            console.error(error);
+            console.error("Error Load Finance:", error);
             display.innerText = "Gagal Muat";
         }
     }
 
-    window.onload = loadKomisi;
+    window.onload = loadFinanceData;
 </script>
 
 </body>
