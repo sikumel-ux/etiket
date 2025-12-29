@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Etiket | Mahika Trans</title>
+
+<style>
+* { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    background: linear-gradient(135deg,#0f4c81,#1b9aaa);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+}
+
+.form-container {
+    background:#fff;
+    width:100%;
+    max-width:420px;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,.2);
+}
+
+.form-container h2 {
+    text-align:center;
+    margin-bottom:20px;
+    color:#0f4c81;
+}
+
+.input-group { margin-bottom:14px; }
+
+.input-group label {
+    display:block;
+    font-size:13px;
+    margin-bottom:4px;
+    color:#333;
+}
+
+.input-group input {
+    width:100%;
+    padding:11px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+.input-group input:focus {
+    outline:none;
+    border-color:#1b9aaa;
+}
+
+button {
+    width:100%;
+    padding:13px;
+    background:linear-gradient(135deg,#1b9aaa,#0f4c81);
+    border:none;
+    border-radius:10px;
+    color:#fff;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+button:disabled { opacity: 0.6; cursor: not-allowed; }
+button:hover { opacity:.9; }
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+    <h2>Booking Tiket</h2>
+    <form id="bookingForm">
+        <div class="input-group">
+            <label>Nama</label>
+            <input type="text" id="nama" name="nama" required>
+        </div>
+
+        <div class="input-group">
+            <label>No. HP</label>
+            <input type="text" id="no_hp" name="no_hp" required>
+        </div>
+
+        <div class="input-group">
+            <label>Armada</label>
+            <input type="text" id="armada" name="armada" required>
+        </div>
+
+        <div class="input-group">
+            <label>Tujuan</label>
+            <input type="text" id="tujuan" name="tujuan" required>
+        </div>
+
+        <div class="input-group">
+            <label>No. Kursi</label>
+            <input type="text" id="no_kursi" name="no_kursi" required>
+        </div>
+
+        <div class="input-group">
+            <label>Tanggal Keberangkatan</label>
+            <input type="date" id="keberangkatan" name="tanggal" required>
+        </div>
+
+        <div class="input-group">
+            <label>Jam Keberangkatan</label>
+            <input type="text" id="jam" name="jam" placeholder="08:30 WIB" required>
+        </div>
+
+        <div class="input-group">
+            <label>Harga (Rp)</label>
+            <input type="number" id="harga" name="harga" required>
+        </div>
+
+        <button type="submit" id="btnSubmit">Booking Sekarang</button>
+    </form>
+</div>
+
+<script>
+// API URL Baru yang kamu berikan
+const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
+
+document.getElementById("bookingForm").addEventListener("submit", function(e){
+  e.preventDefault();
+
+  const btn = document.getElementById("btnSubmit");
+  btn.disabled = true;
+  btn.innerText = "Memproses...";
+
+  const kodeBooking = "MT-" + Date.now().toString().slice(-6);
+
+  // Sesuaikan nama field dengan yang ada di Code.gs (doPost)
+  const data = {
+    tanggal: document.getElementById("keberangkatan").value,
+    jam: document.getElementById("jam").value,
+    nama: document.getElementById("nama").value,
+    no_hp: document.getElementById("no_hp").value,
+    armada: document.getElementById("armada").value,
+    tujuan: document.getElementById("tujuan").value,
+    no_kursi: document.getElementById("no_kursi").value,
+    harga: document.getElementById("harga").value,
+    kode_booking: kodeBooking
+  };
+
+  // Kirim data ke Google Sheets
+  fetch(API_URL, {
+    method: "POST",
+    mode: "no-cors", // Penting untuk bypass CORS dari GitHub ke Google Apps Script
+    headers: { "Content-Type": "text/plain;charset=utf-8" },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    // Karena mode: 'no-cors', kita langsung anggap sukses
+    localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+    alert("Data berhasil dikirim!");
+    window.location.href = "etiket.html?kode=" + kodeBooking;
+  })
+  .catch(err => {
+    alert("Terjadi kesalahan koneksi.");
+    console.error(err);
+    btn.disabled = false;
+    btn.innerText = "Booking Sekarang";
+  });
+});
+</script>
+</body>
+</html>
