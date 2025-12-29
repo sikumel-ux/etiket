@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finance | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 80px; display: flex; justify-content: center; }
+        .etiket-container { width: 100%; max-width: 400px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        .etiket-header { background: linear-gradient(135deg, #0066AE, #005b99); color: #fff; padding: 30px 20px; border-radius: 0 0 25px 25px; margin-bottom: 20px; }
+        
+        /* FINANCE CARD */
+        .revenue-card { background: white; margin: -40px 20px 20px 20px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; border: 1px solid #eee; }
+        .revenue-card small { color: #888; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .revenue-card h2 { margin: 5px 0; color: #0066AE; font-size: 28px; font-weight: 800; }
+        
+        .form-mini { padding: 0 20px; margin-bottom: 20px; }
+        .form-mini input { background: #fff; border: 1.5px solid #eee; }
+
+        .list-container { padding: 0 20px; }
+        .income-item { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #eee; }
+        .income-item .bus-name { font-weight: 600; font-size: 14px; }
+        .income-item .pax-info { font-size: 11px; color: #999; }
+        .income-item .amount { color: #27ae60; font-weight: 700; font-size: 14px; }
+
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; max-width: 400px; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 18px; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h2 style="margin:0">Laporan Komisi</h2>
+        <p style="font-size: 12px; opacity: 0.8;">Data pendapatan Mahika Trans</p>
+    </div>
+
+    <div class="revenue-card">
+        <small>Total Bulan Ini</small>
+        <h2 id="grandTotal">Rp 0</h2>
+        <input type="month" id="filterBulan" style="border:none; color:#0066AE; font-weight:bold; outline:none; background:#f0f7ff; padding:5px 10px; border-radius:8px; margin-top:10px;">
+    </div>
+
+    <div class="list-container" id="listPendapatan">
+        <p style="text-align: center; color:#999;">Memuat data...</p>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html" class="active"><i class="fas fa-wallet"></i><span>Finance</span></a>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
+
+    // Set default bulan ini
+    const now = new Date();
+    const currentMonth = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
+    document.getElementById('filterBulan').value = currentMonth;
+
+    async function loadPendapatan() {
+        const bln = document.getElementById('filterBulan').value;
+        const res = await fetch(`${API_URL}?p=getPendapatan&bulan=${bln}`);
+        const data = await res.json();
+        
+        let total = 0;
+        let html = '';
+        data.forEach(item => {
+            total += item[4];
+            html += `
+                <div class="income-item">
+                    <div>
+                        <div class="bus-name">${item[1]}</div>
+                        <div class="pax-info">${new Date(item[0]).getDate()} • ${item[2]} Pax</div>
+                    </div>
+                    <div class="amount">+ Rp ${item[4].toLocaleString('id-ID')}</div>
+                </div>
+            `;
+        });
+        document.getElementById('listPendapatan').innerHTML = html || "<p style='text-align:center;'>Tidak ada data.</p>";
+        document.getElementById('grandTotal').innerText = "Rp " + total.toLocaleString('id-ID');
+    }
+
+    document.getElementById('filterBulan').addEventListener('change', loadPendapatan);
+    loadPendapatan();
+</script>
+</body>
+                                                      </html>
+                                                      
