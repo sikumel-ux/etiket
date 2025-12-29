@@ -10,7 +10,6 @@
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 100px; }
         
-        /* HEADER GRADASI */
         .header-finance { 
             background: linear-gradient(135deg, #0066AE, #004a80); 
             color: white; padding: 45px 20px 60px 20px; text-align: center;
@@ -21,26 +20,26 @@
 
         .container { padding: 0 20px; }
 
-        /* CARD RINGKASAN */
+        /* CARD RINGKASAN (Sama style-nya dengan Index) */
         .card-summary {
             background: white;
             padding: 30px 20px;
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             margin-top: -35px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            border: 1px solid #fff;
         }
         .card-summary small { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
         .card-summary h2 { margin: 10px 0 0 0; color: #0066AE; font-size: 34px; font-weight: 800; }
 
-        /* FLOATING ACTION BUTTON (FAB) */
+        /* FAB TOMBOL + */
         .fab-add {
             position: fixed;
-            bottom: 90px; /* Di atas navigasi bawah */
+            bottom: 90px;
             right: 25px;
-            width: 25px;
-            height: 25px;
+            width: 65px;
+            height: 65px;
             background: linear-gradient(135deg, #0066AE, #004a80);
             color: white;
             border-radius: 50%;
@@ -52,9 +51,8 @@
             text-decoration: none;
             z-index: 999;
             transition: all 0.2s ease;
-            border: 2px solid rgba(255,255,255,0.2);
         }
-        .fab-add:active { transform: scale(0.9) rotate(90deg); }
+        .fab-add:active { transform: scale(0.9); }
 
         /* NAV BOTTOM */
         .nav-bottom { 
@@ -64,23 +62,23 @@
             padding: 12px 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.07); 
             border-radius: 25px 25px 0 0; z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; transition: 0.3s; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
         .nav-bottom a.active { color: #0066AE; }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-bottom span { font-size: 9px; font-weight: 700; display: block; text-transform: uppercase; }
+        .nav-bottom span { font-size: 9px; font-weight: 700; display: block; }
     </style>
 </head>
 <body>
 
 <div class="header-finance">
     <h2>KEUANGAN</h2>
-    <p>MANAJEMEN PENDAPATAN TIKET</p>
+    <p>TOTAL KOMISI TERKUMPUL</p>
 </div>
 
 <div class="container">
     <div class="card-summary">
-        <small>Total Omzet Penjualan</small>
-        <h2 id="totalTiket">Rp 0</h2>
+        <small>Komisi Bulan Ini</small>
+        <h2 id="totalKomisi">Rp 0</h2>
     </div>
 </div>
 
@@ -96,53 +94,35 @@
 </div>
 
 <script>
-    // URL API TETAP SAMA
+    // URL API yang mengarah ke data KOMISI
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
-    async function hitungPendapatan() {
-        const totalElement = document.getElementById('totalTiket');
-        totalElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghitung...';
+    async function loadKomisi() {
+        const display = document.getElementById('totalKomisi');
+        display.innerText = "Loading...";
 
         try {
-            // Kita gunakan fetch dengan tambahan mode cors dan cache-control
-            const response = await fetch(API_URL, {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) throw new Error('Respon Server Tidak Bagus');
-
+            const response = await fetch(API_URL);
             const data = await response.json();
             
-            if (!data || data.length === 0) {
-                totalElement.innerText = "Rp 0";
-                return;
-            }
-
+            // Logika: Filter data yang berasal dari input komisi manual
+            // Kita jumlahkan kolom nominal/jumlah dari data tersebut
             let total = 0;
             data.forEach(item => {
-                // Pastikan harga adalah angka murni
-                let hargaStr = String(item.harga || "0").replace(/[^0-9]/g, '');
-                let hargaNominal = parseInt(hargaStr) || 0;
-                total += hargaNominal;
+                // Pastikan nama properti sesuai dengan yang kamu kirim dari komisi.html (misal: nominal atau harga)
+                let nilai = parseInt(String(item.harga || item.nominal || "0").replace(/\D/g, '')) || 0;
+                total += nilai;
             });
 
-            // Animasi angka berjalan (optional but cool)
-            totalElement.innerText = "Rp " + total.toLocaleString('id-ID');
-
+            display.innerText = "Rp " + total.toLocaleString('id-ID');
         } catch (error) {
-            console.error("Detail Error:", error);
-            totalElement.innerHTML = '<span style="font-size:14px; color:#e74c3c;">Gagal memuat data.<br><button onclick="hitungPendapatan()" style="background:none; border:1px solid #e74c3c; color:#e74c3c; padding:5px 10px; border-radius:5px; margin-top:10px; cursor:pointer;">Coba Lagi</button></span>';
+            console.error(error);
+            display.innerText = "Gagal Muat";
         }
     }
 
-    // Jalankan otomatis
-    window.onload = hitungPendapatan;
+    window.onload = loadKomisi;
 </script>
-
 
 </body>
 </html>
