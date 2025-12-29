@@ -119,52 +119,49 @@ button:hover { opacity:.9; }
         <button type="submit">Booking</button>
     </form>
 </div>
-
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e){
-    e.preventDefault();
+  e.preventDefault();
 
-    const kodeBooking = "MT-" + Date.now().toString().slice(-6);
+  const kodeBooking = "MT-" + Date.now().toString().slice(-6);
 
-    const data = {
-        kode_booking: kodeBooking,
-        nama: nama.value.trim(),
-        no_hp: no_hp.value.trim(),
-        armada: armada.value.trim(),
-        tujuan: tujuan.value.trim(),
-        no_kursi: no_kursi.value.trim(),
-        keberangkatan: keberangkatan.value, // yyyy-mm-dd
-        jam: jam.value.trim(),
-        harga: harga.value
-    };
+  const data = {
+    kode_booking: kodeBooking,
+    nama: nama.value.trim(),
+    no_hp: no_hp.value.trim(),
+    armada: armada.value.trim(),
+    tujuan: tujuan.value.trim(),
+    no_kursi: no_kursi.value.trim(),
+    keberangkatan: keberangkatan.value, // yyyy-mm-dd
+    jam: jam.value.trim(),              // string
+    harga: harga.value
+  };
 
-    try {
-        // Kirim ke GAS
-        const res = await fetch(API_URL, {
-            method: "POST",
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-            body: JSON.stringify(data)
-        });
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(data)
+    });
 
-        const out = await res.json();
-        if(!out.status) throw out.message;
+    const out = await res.json();
+    console.log("API response:", out);
 
-        console.log("API response:", out);
-
-        // Simpan di localStorage untuk etiket
-        localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
-
-        // Redirect ke etiket
-        window.location.href = "etiket.html?kode=" + kodeBooking;
-
-    } catch(err) {
-        alert("Gagal koneksi API: " + err);
-        console.error(err);
+    if(out.status){
+      // Simpan lokal buat etiket
+      localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+      window.location.href = "etiket.html?kode=" + kodeBooking;
+    } else {
+      alert("Gagal menyimpan: " + out.message);
     }
+
+  } catch(err) {
+    alert("Gagal koneksi API");
+    console.error(err);
+  }
 });
 </script>
-
 </body>
 </html>
