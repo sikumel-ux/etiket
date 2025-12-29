@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS GLOBAL */
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 80px; display: flex; justify-content: center; }
+        .etiket-container { width: 100%; max-width: 400px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; }
+        .etiket-header { background: linear-gradient(135deg, #0066AE, #005b99); color: #fff; padding: 30px 20px; border-radius: 0 0 25px 25px; margin-bottom: 30px; }
+        
+        /* MANIFEST STYLE */
+        .content { padding: 0 20px; }
+        .date-badge { background: #eef6ff; color: #0066AE; padding: 8px 15px; border-radius: 10px; font-weight: 600; font-size: 12px; margin: 20px 0 10px 0; display: inline-block; }
+        .manifes-card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); margin-bottom: 10px; border: 1px solid #f0f0f0; display: flex; align-items: center; }
+        .manifes-card .time { width: 60px; font-weight: 800; color: #0066AE; font-size: 14px; border-right: 2px solid #eee; margin-right: 15px; }
+        .manifes-card .info .nama { font-weight: 600; font-size: 14px; display: block; }
+        .manifes-card .info .bus { font-size: 11px; color: #888; }
+        
+        /* SEARCH BAR */
+        .search-box { background: white; margin: -50px 20px 0 20px; padding: 10px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); display: flex; align-items: center; }
+        .search-box input { border: none; padding: 10px; width: 100%; outline: none; font-size: 14px; }
+        
+        .nav-bottom { position: fixed; bottom: 0; width: 100%; max-width: 400px; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 18px; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h2 style="margin:0">Manifes Penumpang</h2>
+        <p style="font-size: 12px; opacity: 0.8;">Jadwal keberangkatan Mahika Trans</p>
+    </div>
+
+    <div class="search-box">
+        <i class="fas fa-search" style="color:#ccc; margin-left: 10px;"></i>
+        <input type="text" id="searchInput" placeholder="Cari nama penumpang..." onkeyup="filterManifes()">
+    </div>
+
+    <div class="content" id="manifestContent">
+        <p style="text-align: center; color: #999; margin-top: 50px;">Memuat data...</p>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html" class="active"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec?p=manifes";
+
+    async function loadManifes() {
+        const res = await fetch(API_URL);
+        const data = await res.json();
+        const content = document.getElementById('manifestContent');
+        
+        if(data.length === 0) {
+            content.innerHTML = "<p style='text-align:center; margin-top:50px;'>Tidak ada jadwal.</p>";
+            return;
+        }
+
+        const grouped = data.reduce((acc, item) => {
+            const date = new Date(item.tanggal).toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+            if (!acc[date]) acc[date] = [];
+            acc[date].push(item);
+            return acc;
+        }, {});
+
+        let html = '';
+        for (const date in grouped) {
+            html += `<div class="date-badge">${date}</div>`;
+            grouped[date].forEach(item => {
+                html += `
+                    <div class="manifes-card">
+                        <div class="time">${item.jam}</div>
+                        <div class="info">
+                            <span class="nama">${item.nama}</span>
+                            <span class="bus">${item.armada} • ${item.tujuan}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        content.innerHTML = html;
+    }
+    loadManifes();
+</script>
+</body>
+</html>
