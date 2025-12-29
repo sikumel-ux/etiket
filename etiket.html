@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiket Mahika Trans</title>
+
+    <link rel="icon" href="m.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding: 20px 0 80px 0; display: flex; justify-content: center; }
+        
+        .etiket-container { width: 100%; max-width: 400px; background: #fff; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; display: flex; flex-direction: column; }
+
+        .etiket-header { background: linear-gradient(135deg, #0066AE, #004a80); color: #fff; padding: 20px; text-align: center; }
+        .logo { width: 150px; margin-bottom: 10px; }
+        .kode-booking { font-size: 22px; font-weight: 800; letter-spacing: 2px; margin: 0; border: 2px dashed rgba(255,255,255,0.4); padding: 5px; border-radius: 8px; }
+
+        .info-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 10px; padding: 20px; border-bottom: 1px solid #eee; }
+        .kolom p { margin: 8px 0; font-size: 12px; color: #333; font-weight: 600; display: flex; align-items: center; }
+        .kolom i { margin-right: 8px; color: #0066AE; width: 15px; text-align: center; }
+        .kolom span { font-weight: 400; color: #666; margin-left: 5px; }
+
+        .tear-line { margin: 10px 0; height: 20px; width: 100%; background-image: radial-gradient(circle at 0px 10px, transparent 10px, white 10px), radial-gradient(circle at 100% 10px, transparent 10px, white 10px); background-size: 100% 20px; display: flex; align-items: center; justify-content: center; }
+        .tear-line::after { content: ""; width: 85%; border-bottom: 2px dashed #eee; }
+
+        .barcode { text-align: center; padding: 10px 20px; }
+        #barcodeImg { width: 60%; height: auto; filter: grayscale(1); margin-bottom: 10px; }
+        .thanks { font-size: 10px; color: #888; font-style: italic; }
+
+        .keterangan { padding: 15px 20px; background: #fff9f9; font-size: 10px; color: #555; line-height: 1.5; }
+        .keterangan strong { color: #c0392b; text-transform: uppercase; }
+
+        /* NAV BOTTOM DISESUAIKAN DENGAN FILE LAIN */
+        .nav-bottom { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; z-index: 1000; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 18px; display: flex; flex-direction: column; align-items: center; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; margin-top: 4px; }
+
+        @media print { .nav-bottom { display: none; } body { padding: 0; background: white; } .etiket-container { box-shadow: none; border: 1px solid #eee; } }
+    </style>
+</head>
+
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <div class="header">
+            <h2 style="margin:0; letter-spacing:1px;">MAHIKA TRANS</h2>
+        </div>
+        <p class="kode-booking" id="kodeBooking">-</p>
+    </div>
+
+    <div class="info-grid">
+        <div class="kolom">
+            <p><i class="fas fa-user"></i> <span id="nama"></span></p>
+            <p><i class="fas fa-phone"></i> <span id="no_hp"></span></p>
+            <p><i class="fas fa-bus"></i> <span id="armada"></span></p>
+            <p><i class="fas fa-map-marker-alt"></i> <span id="tujuan"></span></p>
+        </div>
+
+        <div class="kolom">
+            <p><i class="fas fa-chair"></i> <span id="no_kursi"></span></p>
+            <p><i class="fas fa-calendar-alt"></i> <span id="tgl"></span></p>
+            <p><i class="fas fa-clock"></i> <span id="jam"></span> WIB</p>
+            <p><i class="fa-solid fa-rupiah-sign"></i> <span id="harga"></span></p>
+        </div>
+    </div>
+
+    <div class="tear-line"></div>
+
+    <div class="barcode">
+        <img id="barcodeImg" alt="Barcode Kode Booking">
+        <p class="thanks">Terimakasih atas kepercayaan Anda menggunakan jasa layanan kami.</p>
+    </div>
+
+    <div class="keterangan">
+        <p><strong>Perhatian:</strong></p>
+        <p>1. Tiket yang sudah dipesan tidak dapat dibatalkan</p>
+        <p>2. Harap datang maksimal 30 menit sebelum jadwal pemberangkatan</p>
+        <p>3. Anak usia 3 tahun atau tinggi badan 90cm wajib membeli tiket</p>
+    </div>
+
+    <div class="nav-bottom">
+        <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+        <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+        <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+        <a href="#" onclick="window.print()"><i class="fas fa-print"></i><span>Cetak</span></a>
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const kode = params.get("kode");
+
+if (!kode) {
+    document.body.innerHTML = "<h3 style='text-align:center; margin-top:50px;'>Kode booking tidak ditemukan</h3>";
+} else {
+    const data = JSON.parse(localStorage.getItem("etiket_" + kode));
+
+    if (!data) {
+        document.body.innerHTML = "<h3 style='text-align:center; margin-top:50px;'>Etiket tidak ditemukan</h3>";
+    } else {
+        document.getElementById("kodeBooking").innerText = data.kode_booking;
+        document.getElementById("nama").innerText = data.nama;
+        document.getElementById("no_hp").innerText = data.no_hp;
+        document.getElementById("armada").innerText = data.armada;
+        document.getElementById("tujuan").innerText = data.tujuan;
+        document.getElementById("no_kursi").innerText = data.no_kursi;
+
+        // Sesuaikan dengan nama properti di localStorage (tadi kita pakai 'tanggal', di scriptmu 'keberangkatan')
+        const tglData = data.tanggal || data.keberangkatan;
+        document.getElementById("tgl").innerText =
+            new Date(tglData).toLocaleDateString("id-ID", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+            });
+
+        document.getElementById("jam").innerText = data.jam;
+        document.getElementById("harga").innerText =
+            Number(data.harga).toLocaleString("id-ID");
+
+        document.getElementById("barcodeImg").src =
+            `https://barcode.tec-it.com/barcode.ashx?data=${encodeURIComponent(data.kode_booking)}&code=Code128`;
+    }
+}
+</script>
+
+</body>
+</html>
