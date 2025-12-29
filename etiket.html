@@ -37,7 +37,7 @@
         .logo-text { font-weight: 800; font-size: 24px; letter-spacing: 1px; margin: 0; }
         .sub-text { font-size: 11px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* KODE BOOKING */
+        /* KODE BOOKING ATAS */
         .kode-booking-card {
             background: white;
             margin: -35px auto 20px auto;
@@ -54,54 +54,50 @@
 
         /* INFO SECTION */
         .info-section { padding: 0 25px; }
-        .info-row { display: flex; justify-content: space-between; margin-bottom: 20px; }
-        
-        .info-item { flex: 1; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 15px; }
         .info-item label { 
-            display: block; 
-            font-size: 10px; 
-            color: #aaa; 
-            text-transform: uppercase; 
-            font-weight: 600; 
-            margin-bottom: 4px; 
+            display: block; font-size: 10px; color: #aaa; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; 
         }
         .info-item label i { margin-right: 5px; color: #aaa; font-size: 10px; }
         .info-item span { font-size: 13px; font-weight: 600; color: #333; display: block; }
 
         /* TEAR LINE */
         .tear-line {
-            margin: 10px 0;
+            margin: 5px 0;
             height: 20px;
             width: 100%;
             background-image: radial-gradient(circle at 0px 10px, transparent 10px, white 10px), 
                               radial-gradient(circle at 100% 10px, transparent 10px, white 10px);
             background-size: 100% 20px;
-            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .tear-line::after {
-            content: "";
-            width: 85%;
-            border-bottom: 2px dashed #eee;
-        }
+        .tear-line::after { content: ""; width: 85%; border-bottom: 2px dashed #eee; }
 
-        /* BARCODE AREA */
-        .barcode-section {
-            padding: 10px 25px;
-            text-align: center;
+        /* BARCODE AREA DENGAN CARD */
+        .barcode-section { padding: 10px 25px; text-align: center; }
+        .barcode-card {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 15px;
+            display: inline-block;
+            width: auto;
         }
-        .barcode-section img {
-            width: 55%;
-            filter: grayscale(1);
-            margin-bottom: 5px;
+        .barcode-card img { width: 120px; height: auto; filter: grayscale(1); }
+        .barcode-card p { 
+            margin: 5px 0 0 0; font-size: 10px; font-weight: 800; color: #333; letter-spacing: 1px;
         }
 
         /* NOTES SECTION */
-        .notes-section { padding: 15px 25px; margin-top: auto; }
-        .note-item { display: flex; align-items: flex-start; margin-bottom: 10px; font-size: 10px; color: #777; line-height: 1.5; }
-        .note-item i { color: #0066AE; margin-right: 10px; margin-top: 2px; font-size: 11px; }
+        .notes-section { padding: 10px 25px 30px 25px; }
+        .notes-title { 
+            font-size: 11px; font-weight: 800; color: #c0392b; margin-bottom: 8px; 
+            display: block; border-bottom: 1px solid #f2d7d5; padding-bottom: 3px;
+        }
+        .note-item { display: flex; align-items: flex-start; margin-bottom: 6px; font-size: 9.5px; color: #666; line-height: 1.4; }
+        .note-item i { color: #0066AE; margin-right: 8px; margin-top: 2px; font-size: 9px; }
 
         /* NAV BOTTOM */
         .nav-bottom { 
@@ -116,10 +112,7 @@
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
 
-        @media print {
-            .nav-bottom { display: none; }
-            body { padding: 0; background: white; }
-        }
+        @media print { .nav-bottom { display: none; } body { padding: 0; background: white; } }
     </style>
 </head>
 <body>
@@ -160,7 +153,7 @@
 
         <div class="info-row">
             <div class="info-item">
-                <label><i class="fas fa-calendar-alt"></i> Tanggal Berangkat</label>
+                <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
                 <span id="displayTgl" style="font-size: 12px;">-</span>
             </div>
             <div class="info-item" style="text-align: right;">
@@ -173,10 +166,14 @@
     <div class="tear-line"></div>
 
     <div class="barcode-section">
-        <img id="barcodeImg" src="" alt="Barcode">
+        <div class="barcode-card">
+            <img id="barcodeImg" src="" alt="Barcode">
+            <p id="displayKodeBawah">MT-XXXXXX</p>
+        </div>
     </div>
 
     <div class="notes-section">
+        <span class="notes-title">PERHATIAN:</span>
         <div class="note-item">
             <i class="fas fa-info-circle"></i>
             <span>Tiket yang sudah dipesan tidak dapat dibatalkan atau diuangkan kembali.</span>
@@ -207,6 +204,7 @@
     if (dataJSON) {
         const data = JSON.parse(dataJSON);
         document.getElementById('displayKode').innerText = data.kode_booking;
+        document.getElementById('displayKodeBawah').innerText = data.kode_booking;
         document.getElementById('displayNama').innerText = data.nama;
         document.getElementById('displayKursi').innerText = data.no_kursi;
         document.getElementById('displayArmada').innerText = data.armada;
@@ -217,13 +215,10 @@
         const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
         document.getElementById('displayTgl').innerText = tgl.toLocaleDateString('id-ID', options);
 
-        // Barcode kecil dan rapi (scale=2)
+        // Barcode kecil (width disesuaikan via CSS)
         const barcodeUrl = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.kode_booking}&scale=2&rotate=N&includetext=false`;
         document.getElementById('barcodeImg').src = barcodeUrl;
-    } else {
-        document.body.innerHTML = "<div style='text-align:center; padding-top:50px;'>Data tiket tidak ditemukan.</div>";
     }
 </script>
 </body>
-                                        </html>
-                                        
+</html>
