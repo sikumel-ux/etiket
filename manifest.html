@@ -3,33 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manifes Mahika Trans</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<title>Manifes Penumpang</title>
 <style>
-body { font-family:'Poppins',sans-serif; background:#f4f6f8; margin:0; padding:16px;}
-h2{text-align:center;color:#0066AE;margin-bottom:16px;}
-.card{background:#fff;border-radius:14px;padding:18px;box-shadow:0 6px 20px rgba(0,0,0,.08);margin-bottom:20px;overflow-x:auto;}
-table{width:100%;border-collapse:collapse;font-size:8px;}
-thead{background:#0066AE;color:#fff;}
-th,td{padding:8px;text-align:center;border-bottom:1px solid #ddd;}
-tbody tr:hover{background:#f1f7ff;}
-input{padding:8px;margin-bottom:12px;border-radius:8px;border:1px solid #ccc;width:100%;}
-@media(min-width:480px){input{width:auto;margin-right:10px;}}
+body { font-family: 'Poppins', sans-serif; padding:16px; background:#f4f6f8;}
+.card { background:#fff; padding:16px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.1); margin-bottom:16px; overflow-x:auto;}
+table { width:100%; border-collapse:collapse; }
+th,td { padding:8px; border-bottom:1px solid #ddd; text-align:center;}
+thead { background:#0066AE; color:#fff; }
+tbody tr:hover { background:#f1f7ff; }
 </style>
 </head>
 <body>
-
 <h2>Manifes Penumpang</h2>
-
 <div class="card">
-  <div>
-    <input type="date" id="filterTanggal">
-
-  </div>
   <table>
     <thead>
       <tr>
-        <th>No</th>
         <th>Tanggal</th>
         <th>Jam</th>
         <th>Nama</th>
@@ -37,7 +26,7 @@ input{padding:8px;margin-bottom:12px;border-radius:8px;border:1px solid #ccc;wid
         <th>Tujuan</th>
       </tr>
     </thead>
-    <tbody id="manifesBody"></tbody>
+    <tbody id="dataManifes"></tbody>
   </table>
 </div>
 
@@ -45,40 +34,27 @@ input{padding:8px;margin-bottom:12px;border-radius:8px;border:1px solid #ccc;wid
 const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
 async function loadManifes(){
-    try {
-        const res = await fetch(API_URL + "?manifest=1");
-        const data = await res.json();
-        if(!data || !data.length) return;
-
-        const tbody = document.getElementById("manifesBody");
-        const ft = document.getElementById("filterTanggal").value;
-        const fa = document.getElementById("filterArmada").value.toLowerCase();
-        tbody.innerHTML = "";
-        let no = 1;
-
-        data.filter(d=>{
-            return (!ft || d.keberangkatan===ft) &&
-                   (!fa || d.armada.toLowerCase().includes(fa));
-        }).forEach(d=>{
-            tbody.innerHTML += `<tr>
-                <td>${no++}</td>
-                <td>${d.keberangkatan}</td>
-                <td>${d.jam}</td>
-                <td>${d.nama}</td>
-                <td>${d.armada}</td>
-                <td>${d.tujuan}</td>
-            </tr>`;
-        });
-    } catch(err){
-        console.error("Load manifes error:", err);
-    }
+  try {
+    const res = await fetch(API_URL + "?manifest=1");
+    const data = await res.json();
+    const tbody = document.getElementById("dataManifes");
+    tbody.innerHTML = "";
+    data.forEach(d=>{
+      tbody.innerHTML += `<tr>
+        <td>${d.tanggal}</td>
+        <td>${d.jam}</td>
+        <td>${d.nama}</td>
+        <td>${d.armada}</td>
+        <td>${d.tujuan}</td>
+      </tr>`;
+    });
+  } catch(e) {
+    document.getElementById("dataManifes").innerHTML = `<tr><td colspan="5">Gagal memuat data</td></tr>`;
+    console.error(e);
+  }
 }
 
-document.getElementById("filterTanggal").addEventListener("change", loadManifes);
-
-
-window.onload = loadManifes;
+loadManifes();
 </script>
-
 </body>
 </html>
