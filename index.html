@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        /* Pakai CSS yang sudah kita rapikan tadi */
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url('https://www.transparenttextures.com/patterns/inspiration-geometry.png'), #f4f4f4;
+            margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; padding-bottom: 80px;
+        }
+        .etiket-container {
+            width: 100%; max-width: 400px; background: #fff; padding: 20px; display: flex; flex-direction: column;
+        }
+        .etiket-header {
+            background: linear-gradient(135deg, #0066AE, #005b99);
+            color: #fff; padding: 30px 20px; text-align: left; border-radius: 0 0 25px 25px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); margin-bottom: 20px;
+        }
+        .etiket-header h1 { font-size: 18px; margin: 0; opacity: 0.9; font-weight: 400; }
+        .etiket-header h2 { font-size: 22px; margin: 5px 0 0 0; }
+
+        /* Stat Cards */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -40px; padding: 0 10px; }
+        .stat-card {
+            background: #fff; padding: 15px; border-radius: 15px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-card i { font-size: 20px; color: #0066AE; margin-bottom: 8px; }
+        .stat-card span { display: block; font-size: 11px; color: #888; text-transform: uppercase; }
+        .stat-card strong { font-size: 14px; color: #333; }
+
+        /* Manifest Preview */
+        .section-title { margin: 25px 0 15px 0; font-size: 16px; font-weight: 600; color: #333; display: flex; justify-content: space-between; }
+        .section-title a { font-size: 12px; color: #0066AE; text-decoration: none; }
+        
+        .manifest-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        .manifest-scroll::-webkit-scrollbar { display: none; }
+        .mini-card {
+            min-width: 160px; background: #f9f9f9; padding: 12px; border-radius: 12px;
+            border-left: 4px solid #0066AE; box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .mini-card .tgl { font-size: 10px; font-weight: bold; color: #0066AE; }
+        .mini-card .nama { font-size: 13px; font-weight: 600; display: block; margin: 4px 0; }
+        .mini-card .tujuan { font-size: 11px; color: #666; }
+
+        /* Menu Grid */
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 20px; }
+        .menu-item { text-align: center; text-decoration: none; color: #333; }
+        .menu-icon { 
+            width: 50px; height: 50px; background: #eef6ff; color: #0066AE; 
+            border-radius: 12px; display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 8px auto; font-size: 20px; transition: 0.3s;
+        }
+        .menu-item span { font-size: 10px; font-weight: 600; }
+        .menu-item:active .menu-icon { transform: scale(0.9); background: #0066AE; color: #fff; }
+
+        /* Nav Bottom (Fixed) */
+        .nav-bottom {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 400px; background: #fff; display: flex;
+            justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05);
+            border-radius: 20px 20px 0 0; z-index: 1000;
+        }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 18px; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h1 id="greeting">Selamat Hari ini,</h1>
+        <h2>Mahika Trans Admin</h2>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-wallet"></i>
+            <span>Komisi Bln Ini</span>
+            <strong id="statKomisi">Rp 0</strong>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <span>Total Pax</span>
+            <strong id="statPax">0 Orang</strong>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span>Menu Utama</span>
+    </div>
+    <div class="menu-grid">
+        <a href="input.html" class="menu-item">
+            <div class="menu-icon"><i class="fas fa-plus-circle"></i></div>
+            <span>Booking</span>
+        </a>
+        <a href="manifes.html" class="menu-item">
+            <div class="menu-icon"><i class="fas fa-list-ul"></i></div>
+            <span>Manifes</span>
+        </a>
+        <a href="pendapatan.html" class="menu-item">
+            <div class="menu-icon"><i class="fas fa-chart-line"></i></div>
+            <span>Laporan</span>
+        </a>
+        <a href="#" class="menu-item" onclick="location.reload()">
+            <div class="menu-icon"><i class="fas fa-sync-alt"></i></div>
+            <span>Refresh</span>
+        </a>
+    </div>
+
+    <div class="section-title">
+        <span>Jadwal 3 Hari Kedepan</span>
+        <a href="manifes.html">Lihat Semua</a>
+    </div>
+    <div class="manifest-scroll" id="miniManifest">
+        <p style="font-size: 12px; color: #999;">Memuat jadwal...</p>
+    </div>
+
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+</div>
+
+<script>
+    const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
+    const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
+
+    // 1. Greeter Dinamis
+    const jam = new Date().getHours();
+    let salam = "Selamat Malam";
+    if (jam < 11) salam = "Selamat Pagi";
+    else if (jam < 15) salam = "Selamat Siang";
+    else if (jam < 19) salam = "Selamat Sore";
+    document.getElementById('greeting').innerText = salam + ",";
+
+    async function loadDashboardData() {
+        try {
+            // Ambil data manifes
+            const resMan = await fetch(`${API_URL}?p=manifes`);
+            const dataMan = await resMan.json();
+            
+            // Tampilkan 5 data pertama saja untuk preview
+            const miniManifest = document.getElementById('miniManifest');
+            if(dataMan.length > 0) {
+                miniManifest.innerHTML = dataMan.slice(0, 5).map(item => {
+                    const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                    return `
+                        <div class="mini-card">
+                            <div class="tgl">${tgl} • ${item.jam}</div>
+                            <span class="nama">${item.nama}</span>
+                            <div class="tujuan">${item.armada} - ${item.tujuan}</div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                miniManifest.innerHTML = "<p style='font-size:12px; color:#999;'>Belum ada jadwal.</p>";
+            }
+
+            // Ambil data pendapatan bulan ini
+            const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
+            const resRev = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
+            const dataRev = await resRev.json();
+
+            let totalKomisi = 0;
+            let totalPax = 0;
+            dataRev.forEach(row => {
+                totalPax += parseInt(row[2]);
+                totalKomisi += parseInt(row[4]);
+            });
+
+            document.getElementById('statKomisi').innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
+            document.getElementById('statPax').innerText = totalPax + " Orang";
+
+        } catch (e) {
+            console.error("Dashboard Error:", e);
+        }
+    }
+
+    loadDashboardData();
+</script>
+
+</body>
+</html>
