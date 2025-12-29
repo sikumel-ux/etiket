@@ -9,7 +9,7 @@
 *{box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
 body{background:linear-gradient(135deg,#0f4c81,#1b9aaa);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;}
 .form-container{background:#fff;width:100%;max-width:420px;padding:25px;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.2);}
-h2{text-align:center;margin-bottom:20px;color:#0f4c81;}
+.form-container h2{text-align:center;margin-bottom:20px;color:#0f4c81;}
 .input-group{margin-bottom:14px;}
 .input-group label{display:block;font-size:13px;margin-bottom:4px;color:#333;}
 .input-group input{width:100%;padding:11px;border-radius:8px;border:1px solid #ccc;font-size:14px;}
@@ -18,8 +18,8 @@ button{width:100%;padding:13px;background:linear-gradient(135deg,#1b9aaa,#0f4c81
 button:hover{opacity:.9;}
 </style>
 </head>
-
 <body>
+
 <div class="form-container">
     <h2>Booking Tiket</h2>
     <form id="bookingForm">
@@ -39,44 +39,42 @@ button:hover{opacity:.9;}
 const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
 document.getElementById("bookingForm").addEventListener("submit", async function(e){
-  e.preventDefault();
+    e.preventDefault();
 
-  const kodeBooking = "MT-" + Date.now().toString().slice(-6);
+    const kodeBooking = "MT-" + Date.now().toString().slice(-6);
 
-  const data = {
-    kode_booking: kodeBooking,
-    nama: nama.value.trim(),
-    no_hp: no_hp.value.trim(),
-    armada: armada.value.trim(),
-    tujuan: tujuan.value.trim(),
-    no_kursi: no_kursi.value.trim(),
-    keberangkatan: keberangkatan.value,
-    jam: jam.value.trim(),
-    harga: harga.value
-  };
+    const data = {
+        kode_booking: kodeBooking,
+        nama: nama.value.trim(),
+        no_hp: no_hp.value.trim(),
+        armada: armada.value.trim(),
+        tujuan: tujuan.value.trim(),
+        no_kursi: no_kursi.value.trim(),
+        keberangkatan: keberangkatan.value, // yyyy-mm-dd
+        jam: jam.value.trim(),              // string
+        harga: harga.value
+    };
 
-  try {
-    const res = await fetch(API_URL, {
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify(data)
-    });
+    try {
+        // Kirim ke GAS
+        const res = await fetch(API_URL, {
+            method: "POST",
+            mode: "no-cors", // penting supaya tidak kena CORS
+            body: JSON.stringify(data)
+        });
 
-    const out = await res.json();
-    console.log("API response:", out);
+        // Simpan lokal untuk etiket
+        localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
 
-    if(out.status){
-      localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
-      window.location.href = "etiket.html?kode=" + kodeBooking;
-    } else {
-      alert("Gagal simpan data: " + out.message);
+        // Redirect ke etiket.html
+        window.location.href = "etiket.html?kode=" + kodeBooking;
+
+    } catch (err) {
+        alert("Gagal koneksi API");
+        console.error(err);
     }
-
-  } catch(err){
-    alert("Gagal koneksi API");
-    console.error(err);
-  }
 });
 </script>
+
 </body>
 </html>
