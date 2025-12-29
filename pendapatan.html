@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendapatan Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; padding-bottom: 80px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        h3 { margin-top: 0; color: #0f4c81; border-bottom: 2px solid #1b9aaa; display: inline-block; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 13px; color: #666; }
+        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; }
+        button { width: 100%; padding: 12px; background: #0f4c81; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        
+        .summary-box { background: #0f4c81; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
+        .table-res { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .table-res th { text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
+        .table-res td { padding: 10px; border-bottom: 1px solid #eee; }
+        
+        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
+        .nav-bottom a { color: #ccc; font-size: 20px; }
+        .nav-bottom a.active { color: #0f4c81; }
+    </style>
+</head>
+<body>
+
+<div class="summary-box">
+    <small>Total Pendapatan Bulan Ini</small>
+    <h2 id="grandTotal">Rp 0</h2>
+</div>
+
+<div class="card">
+    <h3>Input Pendapatan</h3>
+    <form id="pendapatanForm">
+        <div class="form-group">
+            <label>Tanggal</label>
+            <input type="date" id="tgl" required>
+        </div>
+        <div class="form-group">
+            <label>Armada</label>
+            <input type="text" id="armada" placeholder="Murni Jaya" required>
+        </div>
+        <div class="form-group">
+            <label>No Kursi (Contoh: 1-2 atau 1,2,3)</label>
+            <input type="text" id="kursiInput" placeholder="1-2" required>
+        </div>
+        <div class="form-group">
+            <label>Komisi per Penumpang (Rp)</label>
+            <input type="number" id="komisi" value="20000" required>
+        </div>
+        <button type="submit" id="btnSimpan">Simpan Pendapatan</button>
+    </form>
+</div>
+
+<div class="card">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3>Riwayat</h3>
+        <input type="month" id="filterBulan" style="width: auto; margin: 0;">
+    </div>
+    <table class="table-res">
+        <thead>
+            <tr>
+                <th>Tgl</th>
+                <th>Bus</th>
+                <th>Pax</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+        <tbody id="listPendapatan"></tbody>
+    </table>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-edit"></i></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i></a>
+    <a href="pendapatan.html" class="active"><i class="fas fa-wallet"></i></a>
+</div>
+
+<script>
+const API_URL = "URL_WEB_APP_KAMU/exec";
+
+// Set bulan saat ini ke filter
+const skrg = new Date();
+const blnIni = skrg.getFullYear() + "-" + ("0" + (skrg.getMonth() + 1)).slice(-2);
+document.getElementById('filterBulan').value = blnIni;
+
+// Logika Hitung Jumlah Penumpang dari String
+function hitungPax(str) {
+    if (str.includes('-')) {
+        const range = str.split('-');
+        return Math.abs(parseInt(range[1]) - parseInt(range[0])) + 1;
+    } else if (str.includes(',')) {
+        return str.split(',').length;
+    }
+    return 1;
+}
+
+document.getElementById('pendapatanForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = document.getElementById('btnSimpan');
+    btn.disabled = true;
+    
+    const pax = hitungPax(document.getElementById('kursiInput').value);
+    const komisi = document.getElementById('komisi').value;
+    const data = {
+        type: 'pendapatan',
+        tanggal: document.getElementById('tgl').value,
+        armada: document.getElementById('armada').value,
+        jml_penumpang: pax,
+        komisi: komisi,
+        total: pax * komisi
+    };
+
+    await fetch(API_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: JSON.stringify(data)
+    });
+    
+    alert(`Berhasil! Terdeteksi ${pax} penumpang. Total Komisi: Rp ${data.total}`);
+    location.reload();
+});
+
+async function loadData() {
+    const bln = document.getElementById('filterBulan').value;
+    const res = await fetch(`${API_URL}?p=getPendapatan&bulan=${bln}`);
+    const data = await res.json();
+    
+    let html = '';
+    let totalBulan = 0;
+    
+    data.forEach(row => {
+        const tgl = new Date(row[0]).getDate();
+        totalBulan += row[4];
+        html += `<tr>
+            <td>${tgl}</td>
+            <td>${row[1]}</td>
+            <td>${row[2]}</td>
+            <td>${row[4].toLocaleString('id-ID')}</td>
+        </tr>`;
+    });
+    
+    document.getElementById('listPendapatan').innerHTML = html;
+    document.getElementById('grandTotal').innerText = "Rp " + totalBulan.toLocaleString('id-ID');
+}
+
+document.getElementById('filterBulan').addEventListener('change', loadData);
+loadData();
+</script>
+</body>
+</html>
