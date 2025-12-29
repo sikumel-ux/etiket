@@ -67,19 +67,46 @@
 </div>
 
 <script>
-  function handleFormSubmit(formObject) {
-    document.getElementById('btnSubmit').disabled = true;
-    document.getElementById('btnSubmit').innerText = "Sedang Menyimpan...";
-    document.getElementById('output').innerHTML = "";
+  const WEB_APP_URL = "PASANG_URL_DEPLOYMENT_KAMU_DISINI";
 
-    google.script.run
-      .withSuccessHandler(function(msg) {
-        document.getElementById('output').innerHTML = `<div class="alert alert-success">${msg}</div>`;
-        document.getElementById('inputForm').reset();
-        document.getElementById('btnSubmit').disabled = false;
-        document.getElementById('btnSubmit').innerText = "Simpan Data";
-      })
-      .processForm(formObject);
+function handleFormSubmit(event) {
+  event.preventDefault();
+  const btn = document.getElementById('btnSubmit');
+  const out = document.getElementById('output');
+  
+  btn.disabled = true;
+  btn.innerText = "Sedang Menyimpan...";
+
+  // Ambil data dari form
+  const formData = new FormData(event.target);
+  const data = Object.fromEntries(formData.entries());
+
+  // Kirim ke Google Apps Script
+  fetch(WEB_APP_URL, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  })
+  .then(res => res.json())
+  .then(res => {
+    if(res.result === 'success') {
+      out.innerHTML = `<div class="alert alert-success">Data Berhasil Disimpan!</div>`;
+      event.target.reset();
+    } else {
+      throw new Error(res.error);
+    }
+  })
+  .catch(err => {
+    out.innerHTML = `<div class="alert alert-danger">Gagal: ${err.message}</div>`;
+  })
+  .finally(() => {
+    btn.disabled = false;
+    btn.innerText = "Simpan Data";
+  });
+}
+
+// Pasang event listener ke form
+document.getElementById('inputForm').addEventListener('submit', handleFormSubmit);
+
   }
 </script>
 
