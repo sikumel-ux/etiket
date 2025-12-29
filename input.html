@@ -6,124 +6,31 @@
 <title>Input Etiket | Mahika Trans</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-body {
-    background: linear-gradient(135deg, #0f4c81, #1b9aaa);
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-}
-
-.form-container {
-    background: #fff;
-    width: 100%;
-    max-width: 420px;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 20px 40px rgba(0,0,0,.2);
-}
-
-.form-container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #0f4c81;
-}
-
-.input-group {
-    margin-bottom: 14px;
-}
-
-.input-group label {
-    display: block;
-    font-size: 13px;
-    margin-bottom: 4px;
-    color: #333;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 11px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #1b9aaa;
-}
-
-button {
-    width: 100%;
-    padding: 13px;
-    background: linear-gradient(135deg, #1b9aaa, #0f4c81);
-    border: none;
-    border-radius: 10px;
-    color: #fff;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover {
-    opacity: .9;
-}
+*{box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+body{background:linear-gradient(135deg,#0f4c81,#1b9aaa);min-height:100vh;display:flex;justify-content:center;align-items:center;margin:0;}
+.form-container{background:#fff;width:100%;max-width:420px;padding:25px;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,.2);}
+h2{text-align:center;margin-bottom:20px;color:#0f4c81;}
+.input-group{margin-bottom:14px;}
+.input-group label{display:block;font-size:13px;margin-bottom:4px;color:#333;}
+.input-group input{width:100%;padding:11px;border-radius:8px;border:1px solid #ccc;font-size:14px;}
+.input-group input:focus{outline:none;border-color:#1b9aaa;}
+button{width:100%;padding:13px;background:linear-gradient(135deg,#1b9aaa,#0f4c81);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:bold;cursor:pointer;margin-top:10px;}
+button:hover{opacity:.9;}
 </style>
 </head>
 
 <body>
-
 <div class="form-container">
     <h2>Booking Tiket</h2>
-
     <form id="bookingForm">
-        <div class="input-group">
-            <label>Nama</label>
-            <input type="text" id="nama" required>
-        </div>
-
-        <div class="input-group">
-            <label>No. HP</label>
-            <input type="text" id="no_hp" required>
-        </div>
-
-        <div class="input-group">
-            <label>Armada</label>
-            <input type="text" id="armada" required>
-        </div>
-
-        <div class="input-group">
-            <label>Tujuan</label>
-            <input type="text" id="tujuan" required>
-        </div>
-
-        <div class="input-group">
-            <label>No. Kursi</label>
-            <input type="text" id="no_kursi" required>
-        </div>
-
-        <div class="input-group">
-            <label>Tanggal Keberangkatan</label>
-            <input type="date" id="keberangkatan" required>
-        </div>
-
-        <div class="input-group">
-            <label>Jam Keberangkatan</label>
-            <input type="text" id="jam" placeholder="08:30 WIB" required>
-        </div>
-
-        <div class="input-group">
-            <label>Harga (Rp)</label>
-            <input type="number" id="harga" required>
-        </div>
-
+        <div class="input-group"><label>Nama</label><input type="text" id="nama" required></div>
+        <div class="input-group"><label>No. HP</label><input type="text" id="no_hp" required></div>
+        <div class="input-group"><label>Armada</label><input type="text" id="armada" required></div>
+        <div class="input-group"><label>Tujuan</label><input type="text" id="tujuan" required></div>
+        <div class="input-group"><label>No. Kursi</label><input type="text" id="no_kursi" required></div>
+        <div class="input-group"><label>Tanggal Keberangkatan</label><input type="date" id="keberangkatan" required></div>
+        <div class="input-group"><label>Jam Keberangkatan</label><input type="text" id="jam" placeholder="08:30 WIB" required></div>
+        <div class="input-group"><label>Harga (Rp)</label><input type="number" id="harga" required></div>
         <button type="submit">Booking</button>
     </form>
 </div>
@@ -143,35 +50,33 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     armada: armada.value.trim(),
     tujuan: tujuan.value.trim(),
     no_kursi: no_kursi.value.trim(),
-    keberangkatan: keberangkatan.value, // yyyy-mm-dd STRING
-    jam: jam.value.trim(),              // STRING
+    keberangkatan: keberangkatan.value,
+    jam: jam.value.trim(),
     harga: harga.value
   };
 
   try {
     const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "text/plain;charset=utf-8"
-      },
-      body: JSON.stringify(data)
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify(data)
     });
 
-    const out = await res.text();
+    const out = await res.json();
     console.log("API response:", out);
 
-    // simpan lokal buat etiket
-    localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+    if(out.status){
+      localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+      window.location.href = "etiket.html?kode=" + kodeBooking;
+    } else {
+      alert("Gagal simpan data: " + out.message);
+    }
 
-    // redirect
-    window.location.href = "etiket.html?kode=" + kodeBooking;
-
-  } catch (err) {
+  } catch(err){
     alert("Gagal koneksi API");
     console.error(err);
   }
 });
 </script>
 </body>
-
 </html>
