@@ -39,8 +39,8 @@
             position: fixed;
             bottom: 90px; /* Di atas navigasi bawah */
             right: 25px;
-            width: 65px;
-            height: 65px;
+            width: 45px;
+            height: 45px;
             background: linear-gradient(135deg, #0066AE, #004a80);
             color: white;
             border-radius: 50%;
@@ -96,35 +96,53 @@
 </div>
 
 <script>
-    // URL API LANGSUNG DIMASUKKAN
+    // URL API TETAP SAMA
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
     async function hitungPendapatan() {
         const totalElement = document.getElementById('totalTiket');
-        totalElement.innerText = "Memuat...";
+        totalElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Menghitung...';
 
         try {
-            const response = await fetch(API_URL);
-            const data = await response.json();
-            
-            let total = 0;
-            data.forEach(item => {
-                // Menghapus karakter non-angka dan hitung total
-                let harga = parseInt(String(item.harga).replace(/[^0-9]/g, '')) || 0;
-                total += harga;
+            // Kita gunakan fetch dengan tambahan mode cors dan cache-control
+            const response = await fetch(API_URL, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
 
+            if (!response.ok) throw new Error('Respon Server Tidak Bagus');
+
+            const data = await response.json();
+            
+            if (!data || data.length === 0) {
+                totalElement.innerText = "Rp 0";
+                return;
+            }
+
+            let total = 0;
+            data.forEach(item => {
+                // Pastikan harga adalah angka murni
+                let hargaStr = String(item.harga || "0").replace(/[^0-9]/g, '');
+                let hargaNominal = parseInt(hargaStr) || 0;
+                total += hargaNominal;
+            });
+
+            // Animasi angka berjalan (optional but cool)
             totalElement.innerText = "Rp " + total.toLocaleString('id-ID');
+
         } catch (error) {
-            console.error("Error Fetching Finance Data:", error);
-            totalElement.innerText = "Gagal Muat";
-            totalElement.style.color = "red";
+            console.error("Detail Error:", error);
+            totalElement.innerHTML = '<span style="font-size:14px; color:#e74c3c;">Gagal memuat data.<br><button onclick="hitungPendapatan()" style="background:none; border:1px solid #e74c3c; color:#e74c3c; padding:5px 10px; border-radius:5px; margin-top:10px; cursor:pointer;">Coba Lagi</button></span>';
         }
     }
 
-    // Jalankan hitung otomatis saat halaman dibuka
+    // Jalankan otomatis
     window.onload = hitungPendapatan;
 </script>
+
 
 </body>
 </html>
