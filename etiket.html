@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Etiket | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #f4f4f4; 
+            margin: 0; 
+            padding: 20px 0 80px 0; /* Tambah padding atas agar container tidak nempel layar */
+            display: flex; 
+            justify-content: center; 
+        }
+        .etiket-container { 
+            width: 100%; 
+            max-width: 400px; 
+            background: #fff; 
+            border-radius: 15px; /* Biar ujung container ikut melengkung */
+            display: flex; 
+            flex-direction: column; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        /* HEADER REQUEST KAMU */
+        .etiket-header { 
+            background: linear-gradient(135deg, #0066AE, #004a80);
+            color: #fff;
+            padding: 20px 10px 45px 10px; /* Padding bawah ditambah untuk ruang kartu booking */
+            border-radius: 10px 10px 0 0;
+            text-align: center;
+            position: relative;
+        }
+        .logo-text { font-weight: 800; font-size: 22px; letter-spacing: 2px; margin: 0; }
+        .sub-text { font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* KODE BOOKING */
+        .kode-booking-card {
+            background: white;
+            margin: -30px auto 20px auto;
+            width: 85%;
+            padding: 12px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            z-index: 10;
+            border: 1px solid #eee;
+        }
+        .kode-booking-card small { color: #aaa; font-size: 9px; font-weight: 700; letter-spacing: 1px; }
+        .kode-booking-card h3 { margin: 3px 0 0 0; color: #0066AE; font-size: 22px; font-weight: 800; letter-spacing: 2px; }
+
+        /* INFO SECTION */
+        .info-section { padding: 0 20px; }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 18px; }
+        .info-item { flex: 1; }
+        .info-item label { 
+            display: block; font-size: 10px; color: #aaa; text-transform: uppercase; font-weight: 600; margin-bottom: 4px; 
+        }
+        .info-item label i { margin-right: 5px; color: #aaa; }
+        .info-item span { font-size: 13px; font-weight: 600; color: #333; display: block; }
+
+        /* TEAR LINE */
+        .tear-line {
+            margin: 5px 0;
+            height: 20px;
+            width: 100%;
+            background-image: radial-gradient(circle at 0px 10px, transparent 10px, white 10px), 
+                              radial-gradient(circle at 100% 10px, transparent 10px, white 10px);
+            background-size: 100% 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tear-line::after { content: ""; width: 85%; border-bottom: 2px dashed #eee; }
+
+        /* BARCODE AREA */
+        .barcode-section { padding: 10px 20px; text-align: center; }
+        .barcode-card {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px;
+            display: inline-block;
+        }
+        .barcode-card img { width: 110px; height: auto; filter: grayscale(1); }
+        .barcode-card p { margin: 5px 0 0 0; font-size: 10px; font-weight: 800; color: #333; }
+
+        /* NOTES SECTION */
+        .notes-section { padding: 15px 20px 30px 20px; }
+        .notes-title { 
+            font-size: 11px; font-weight: 800; color: #c0392b; margin-bottom: 10px; 
+            display: block; border-bottom: 1px solid #f2d7d5; padding-bottom: 3px;
+        }
+        .note-item { display: flex; align-items: flex-start; margin-bottom: 8px; font-size: 9.5px; color: #666; line-height: 1.4; }
+        .note-item i { color: #0066AE; margin-right: 8px; margin-top: 2px; font-size: 9px; }
+
+        /* NAV BOTTOM */
+        .nav-bottom { 
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 400px; 
+            background: #fff; display: flex; justify-content: space-around; 
+            padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); 
+            border-radius: 20px 20px 0 0; z-index: 1000;
+        }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom i { font-size: 18px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { display: block; font-size: 9px; font-weight: 600; }
+
+        @media print { .nav-bottom { display: none; } body { padding: 0; background: white; } }
+    </style>
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <p class="logo-text">MAHIKA TRANS</p>
+        <p class="sub-text">Digital Passenger Ticket</p>
+    </div>
+
+    <div class="kode-booking-card">
+        <small>KODE BOOKING</small>
+        <h3 id="displayKode">-------</h3>
+    </div>
+
+    <div class="info-section">
+        <div class="info-row">
+            <div class="info-item">
+                <label><i class="fas fa-user"></i> Nama Penumpang</label>
+                <span id="displayNama">-</span>
+            </div>
+            <div class="info-item" style="text-align: right;">
+                <label><i class="fas fa-chair"></i> No. Kursi</label>
+                <span id="displayKursi">-</span>
+            </div>
+        </div>
+        <div class="info-row">
+            <div class="info-item">
+                <label><i class="fas fa-bus"></i> Armada</label>
+                <span id="displayArmada">-</span>
+            </div>
+            <div class="info-item" style="text-align: right;">
+                <label><i class="fas fa-map-marker-alt"></i> Kota Tujuan</label>
+                <span id="displayTujuan">-</span>
+            </div>
+        </div>
+        <div class="info-row">
+            <div class="info-item">
+                <label><i class="fas fa-calendar-alt"></i> Tanggal Berangkat</label>
+                <span id="displayTgl">-</span>
+            </div>
+            <div class="info-item" style="text-align: right;">
+                <label><i class="fas fa-clock"></i> Jam</label>
+                <span id="displayJam">-</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="tear-line"></div>
+
+    <div class="barcode-section">
+        <div class="barcode-card">
+            <img id="barcodeImg" src="" alt="Barcode">
+            <p id="displayKodeBawah">MT-XXXXXX</p>
+        </div>
+    </div>
+
+    <div class="notes-section">
+        <span class="notes-title">PERHATIAN:</span>
+        <div class="note-item">
+            <i class="fas fa-info-circle"></i>
+            <span>Tiket yang sudah dipesan tidak dapat dibatalkan atau diuangkan kembali.</span>
+        </div>
+        <div class="note-item">
+            <i class="fas fa-clock"></i>
+            <span>Harap datang di terminal/check-in point 30 menit sebelum jam keberangkatan.</span>
+        </div>
+        <div class="note-item">
+            <i class="fas fa-child"></i>
+            <span>Anak usia 3 tahun ke atas wajib memiliki satu tiket sendiri.</span>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+</div>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const kode = urlParams.get('kode');
+    const dataJSON = localStorage.getItem("etiket_" + kode);
+
+    if (dataJSON) {
+        const data = JSON.parse(dataJSON);
+        document.getElementById('displayKode').innerText = data.kode_booking;
+        document.getElementById('displayKodeBawah').innerText = data.kode_booking;
+        document.getElementById('displayNama').innerText = data.nama;
+        document.getElementById('displayKursi').innerText = data.no_kursi;
+        document.getElementById('displayArmada').innerText = data.armada;
+        document.getElementById('displayTujuan').innerText = data.tujuan;
+        document.getElementById('displayJam').innerText = data.jam;
+        
+        const tgl = new Date(data.tanggal);
+        const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('displayTgl').innerText = tgl.toLocaleDateString('id-ID', options);
+
+        const barcodeUrl = `https://bwipjs-api.metafloor.com/?bcid=code128&text=${data.kode_booking}&scale=2&rotate=N&includetext=false`;
+        document.getElementById('barcodeImg').src = barcodeUrl;
+    }
+</script>
+</body>
+</html>
