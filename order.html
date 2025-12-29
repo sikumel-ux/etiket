@@ -4,70 +4,88 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Input Etiket | Mahika Trans</title>
-
 <style>
-* { box-sizing:border-box; font-family:'Poppins',sans-serif; }
-body { background:#e0f0ff; margin:0; padding:16px; display:flex; justify-content:center; }
-.form-container { background:#fff; padding:20px; border-radius:16px; box-shadow:0 10px 20px rgba(0,0,0,.15); max-width:500px; width:100%; }
-h2 { text-align:center; color:#004a80; margin-bottom:20px; }
-.form-wrapper { display:grid; grid-template-columns:1fr; gap:12px; }
-@media(min-width:480px){ .form-wrapper { grid-template-columns:1fr 1fr; } }
-.form-group { display:flex; flex-direction:column; }
-label { font-size:13px; margin-bottom:4px; font-weight:600; color:#333; }
-input { padding:10px; border-radius:8px; border:1px solid #ccc; font-size:14px; }
-button { grid-column:1/-1; padding:12px; background:linear-gradient(135deg,#004a80,#ffcc00); border:none; border-radius:10px; color:#fff; font-weight:bold; cursor:pointer; }
-button:hover { opacity:.9; }
+body{
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#0066AE,#FFD700);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin:0;
+}
+.form-container{
+    background:#fff;
+    width:100%;
+    max-width:450px;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+h2{text-align:center;color:#0066AE;margin-bottom:20px;}
+.input-group{margin-bottom:14px;}
+label{display:block;font-size:13px;margin-bottom:4px;}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px;}
+button{
+    width:100%;padding:12px;background:#0066AE;color:#fff;font-weight:bold;border:none;border-radius:10px;cursor:pointer;
+}
+button:hover{opacity:.9;}
 </style>
 </head>
-
 <body>
 
 <div class="form-container">
 <h2>Booking Tiket</h2>
 
-<form id="bookingForm" class="form-wrapper">
-    <div class="form-group">
+<form id="bookingForm">
+    <div class="input-group">
         <label>Nama</label>
         <input type="text" id="nama" required>
     </div>
-    <div class="form-group">
-        <label>No. HP</label>
-        <input type="text" id="no_hp" required>
+
+    <div class="input-group">
+        <label>No HP</label>
+        <input type="text" id="no_hp" placeholder="08123456789" required>
     </div>
-    <div class="form-group">
+
+    <div class="input-group">
         <label>Armada</label>
         <input type="text" id="armada" required>
     </div>
-    <div class="form-group">
+
+    <div class="input-group">
         <label>Tujuan</label>
         <input type="text" id="tujuan" required>
     </div>
-    <div class="form-group">
-        <label>No. Kursi</label>
-        <input type="text" id="no_kursi" required>
+
+    <div class="input-group">
+        <label>No Kursi</label>
+        <input type="text" id="no_kursi" placeholder="11-12" required>
     </div>
-    <div class="form-group">
+
+    <div class="input-group">
         <label>Tanggal Keberangkatan</label>
         <input type="date" id="keberangkatan" required>
     </div>
-    <div class="form-group">
+
+    <div class="input-group">
         <label>Jam Keberangkatan</label>
-        <input type="text" id="jam" placeholder="08:30" required>
+        <input type="text" id="jam" placeholder="08:30 WIB" required>
     </div>
-    <div class="form-group">
+
+    <div class="input-group">
         <label>Harga (Rp)</label>
         <input type="number" id="harga" required>
     </div>
+
     <button type="submit">Booking</button>
 </form>
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
-
 document.getElementById("bookingForm").addEventListener("submit", async function(e){
     e.preventDefault();
-
+    
     const kodeBooking = "MT-" + Date.now().toString().slice(-6);
 
     const data = {
@@ -77,28 +95,16 @@ document.getElementById("bookingForm").addEventListener("submit", async function
         armada: armada.value.trim(),
         tujuan: tujuan.value.trim(),
         no_kursi: no_kursi.value.trim(),
-        keberangkatan: keberangkatan.value,
-        jam: jam.value,
+        keberangkatan: keberangkatan.value, // yyyy-mm-dd
+        jam: jam.value.trim(),
         harga: harga.value
     };
 
-    try {
-        // Kirim ke GAS
-        const res = await fetch(API_URL, {
-            method:"POST",
-            body: JSON.stringify(data)
-        });
-        const result = await res.json();
-        if(result.status){
-            // redirect ke etiket
-            window.location.href = "etiket.html?kode="+kodeBooking;
-        } else {
-            alert("Gagal menyimpan: "+result.message);
-        }
-    } catch(err){
-        console.error(err);
-        alert("Terjadi kesalahan koneksi API");
-    }
+    // Simpan ke LocalStorage untuk etiket.html
+    localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+
+    // Redirect ke etiket
+    window.location.href = "etiket.html?kode=" + kodeBooking;
 });
 </script>
 
