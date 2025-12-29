@@ -7,75 +7,123 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* CSS GLOBAL DARI DASHBOARD */
+        /* CSS GLOBAL */
         * { box-sizing: border-box; }
         body { font-family: 'Poppins', sans-serif; background: #f4f4f4; margin: 0; padding-bottom: 80px; display: flex; justify-content: center; }
         .etiket-container { width: 100%; max-width: 400px; background: #fff; min-height: 100vh; display: flex; flex-direction: column; }
-        .etiket-header { background: linear-gradient(135deg, #0066AE, #005b99); color: #fff; padding: 30px 20px; border-radius: 0 0 25px 25px; margin-bottom: 20px; }
-        .etiket-header h2 { margin: 0; font-size: 20px; }
         
-        /* FORM STYLING */
-        .card-form { background: white; margin: -40px 15px 15px 15px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 1px solid #eee; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; margin-bottom: 5px; }
-        input, select { width: 100%; padding: 12px; border: 1.5px solid #eee; border-radius: 12px; font-family: 'Poppins'; font-size: 14px; transition: 0.3s; }
-        input:focus { border-color: #0066AE; outline: none; background: #f0f7ff; }
-        button { width: 100%; padding: 15px; background: #0066AE; color: white; border: none; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; transition: 0.3s; }
-        button:active { transform: scale(0.98); opacity: 0.9; }
+        .etiket-header { 
+            background: linear-gradient(135deg, #0066AE, #005b99); 
+            color: #fff; padding: 40px 20px 60px 20px; 
+            border-radius: 0 0 30px 30px; 
+            margin-bottom: 0; 
+        }
+        .etiket-header h2 { margin: 0; font-size: 22px; font-weight: 600; }
+        .etiket-header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.8; }
+        
+        /* FORM CARD */
+        .card-form { 
+            background: white; 
+            margin: -40px 20px 20px 20px; 
+            padding: 25px 20px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            border: 1px solid #f0f0f0; 
+            z-index: 10;
+        }
+        
+        .input-group { margin-bottom: 18px; }
+        label { display: block; font-size: 11px; font-weight: 700; color: #0066AE; text-transform: uppercase; margin-bottom: 6px; letter-spacing: 0.5px; }
+        
+        input { 
+            width: 100%; padding: 12px 15px; 
+            border: 1.5px solid #eee; border-radius: 12px; 
+            font-family: 'Poppins'; font-size: 14px; color: #333;
+            transition: 0.3s; background: #fafafa;
+        }
+        input:focus { border-color: #0066AE; outline: none; background: #fff; box-shadow: 0 0 0 3px rgba(0,102,174,0.1); }
+        input::placeholder { color: #ccc; }
+
+        .row { display: flex; gap: 12px; }
+        .col { flex: 1; }
+
+        button { 
+            width: 100%; padding: 16px; 
+            background: linear-gradient(135deg, #0066AE, #004a80); 
+            color: white; border: none; border-radius: 15px; 
+            font-weight: 600; font-size: 16px; cursor: pointer; 
+            margin-top: 10px; transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,102,174,0.3);
+        }
+        button:active { transform: scale(0.97); }
+        button:disabled { background: #ccc; box-shadow: none; }
 
         /* NAV BOTTOM */
-        .nav-bottom { position: fixed; bottom: 0; width: 100%; max-width: 400px; background: #fff; display: flex; justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 18px; }
+        .nav-bottom { 
+            position: fixed; bottom: 0; width: 100%; max-width: 400px; 
+            background: #fff; display: flex; justify-content: space-around; 
+            padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); 
+            border-radius: 20px 20px 0 0; z-index: 1000;
+        }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; transition: 0.3s; }
         .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
     </style>
 </head>
 <body>
+
 <div class="etiket-container">
     <div class="etiket-header">
-        <h2>Booking Tiket Baru</h2>
-        <p style="font-size: 12px; opacity: 0.8;">Input data penumpang Mahika Trans</p>
+        <h2>Booking Tiket</h2>
+        <p>Input data penumpang dengan teliti</p>
     </div>
 
     <div class="card-form">
         <form id="bookingForm">
             <div class="input-group">
-                <label>Nama Penumpang</label>
-                <input type="text" id="nama" placeholder="Masukkan nama" required>
+                <label><i class="fas fa-user"></i> Nama Penumpang</label>
+                <input type="text" id="nama" placeholder="Contoh: Budi Santoso" required>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="input-group" style="flex: 1;">
-                    <label>No HP</label>
+
+            <div class="row">
+                <div class="input-group" style="flex: 2;">
+                    <label><i class="fas fa-phone"></i> No HP</label>
                     <input type="tel" id="no_hp" value="08" required>
                 </div>
-                <div class="input-group" style="width: 100px;">
-                    <label>No Kursi</label>
-                    <input type="text" id="no_kursi" placeholder="01" required>
+                <div class="input-group" style="flex: 1;">
+                    <label><i class="fas fa-chair"></i> Kursi</label>
+                    <input type="text" id="no_kursi" placeholder="A1" required>
                 </div>
             </div>
+
             <div class="input-group">
-                <label>Armada / Bus</label>
-                <input type="text" id="armada" placeholder="Contoh: Murni Jaya" required>
+                <label><i class="fas fa-bus"></i> Armada / Bus</label>
+                <input type="text" id="armada" placeholder="Murni Jaya / Sinar Jaya" required>
             </div>
+
             <div class="input-group">
-                <label>Tujuan</label>
-                <input type="text" id="tujuan" placeholder="Contoh: Jakarta" required>
+                <label><i class="fas fa-map-marker-alt"></i> Kota Tujuan</label>
+                <input type="text" id="tujuan" placeholder="Contoh: Wonosobo" required>
             </div>
-            <div style="display: flex; gap: 10px;">
-                <div class="input-group" style="flex: 1;">
-                    <label>Tanggal</label>
+
+            <div class="row">
+                <div class="input-group" style="flex: 1.2;">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
                     <input type="date" id="tanggal" required>
                 </div>
-                <div class="input-group" style="flex: 1;">
-                    <label>Jam</label>
-                    <input type="time" id="jam" required>
+                <div class="input-group" style="flex: 0.8;">
+                    <label><i class="fas fa-clock"></i> Jam</label>
+                    <input type="text" id="jam" placeholder="Contoh: 08.00" required>
                 </div>
             </div>
+
             <div class="input-group">
-                <label>Harga Tiket (Rp)</label>
-                <input type="number" id="harga" placeholder="250000" required>
+                <label><i class="fas fa-money-bill-wave"></i> Harga Tiket (Rp)</label>
+                <input type="number" id="harga" placeholder="Contoh: 150000" required>
             </div>
-            <button type="submit" id="btnSimpan">Proses & Cetak Etiket</button>
+
+            <button type="submit" id="btnSimpan">Proses & Cetak Tiket</button>
         </form>
     </div>
 </div>
@@ -93,7 +141,7 @@
     document.getElementById('bookingForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('btnSimpan');
-        btn.innerText = "Memproses...";
+        btn.innerText = "Mengirim Data...";
         btn.disabled = true;
 
         const formData = {
@@ -108,16 +156,24 @@
             kode_booking: "MT-" + Math.random().toString(36).substr(2, 6).toUpperCase()
         };
 
-        await fetch(API_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify(formData)
-        });
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(formData)
+            });
 
-        // Simpan ke localStorage untuk halaman etiket
-        localStorage.setItem("etiket_" + formData.kode_booking, JSON.stringify(formData));
-        window.location.href = "etiket.html?kode=" + formData.kode_booking;
+            localStorage.setItem("etiket_" + formData.kode_booking, JSON.stringify(formData));
+            window.location.href = "etiket.html?kode=" + formData.kode_booking;
+        } catch (error) {
+            alert("Terjadi kesalahan koneksi!");
+            btn.disabled = false;
+            btn.innerText = "Proses & Cetak Tiket";
+        }
     });
+
+    // Otomatis isi tanggal hari ini
+    document.getElementById('tanggal').valueAsDate = new Date();
 </script>
 </body>
 </html>
