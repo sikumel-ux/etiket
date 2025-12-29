@@ -5,71 +5,100 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pendapatan Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Poppins', sans-serif; background: #f4f7f6; margin: 0; padding: 15px; padding-bottom: 80px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        h3 { margin-top: 0; color: #0f4c81; border-bottom: 2px solid #1b9aaa; display: inline-block; }
-        .form-group { margin-bottom: 12px; }
-        label { display: block; font-size: 13px; color: #666; }
-        input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; margin-top: 5px; }
-        button { width: 100%; padding: 12px; background: #0f4c81; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: #f4f7f6; margin: 0; padding: 15px; padding-bottom: 80px; }
         
-        .summary-box { background: #0f4c81; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px; }
-        .table-res { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .table-res th { text-align: left; padding: 10px; border-bottom: 2px solid #eee; }
-        .table-res td { padding: 10px; border-bottom: 1px solid #eee; }
+        .container { max-width: 500px; margin: auto; }
+        .summary-box { 
+            background: linear-gradient(135deg, #0f4c81, #1b9aaa); 
+            color: white; padding: 20px; border-radius: 15px; 
+            text-align: center; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(15,76,129,0.3);
+        }
+        .summary-box small { opacity: 0.8; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .summary-box h2 { margin: 5px 0 0 0; font-size: 28px; }
+
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        h3 { margin-top: 0; color: #0f4c81; font-size: 16px; margin-bottom: 15px; border-left: 4px solid #1b9aaa; padding-left: 10px; }
         
-        .nav-bottom { position: fixed; bottom: 0; left: 0; right: 0; background: white; display: flex; justify-content: space-around; padding: 15px; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); }
-        .nav-bottom a { color: #ccc; font-size: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-size: 12px; color: #666; margin-bottom: 5px; font-weight: 600; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-size: 14px; transition: 0.3s; }
+        input:focus { outline: none; border-color: #1b9aaa; background: #f9ffff; }
+        
+        button { 
+            width: 100%; padding: 14px; background: #0f4c81; color: white; 
+            border: none; border-radius: 10px; font-weight: bold; 
+            cursor: pointer; font-size: 15px; transition: 0.3s;
+        }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        
+        .table-res { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .table-res th { text-align: left; padding: 10px; border-bottom: 2px solid #eee; font-size: 11px; color: #999; }
+        .table-res td { padding: 12px 10px; border-bottom: 1px solid #f9f9f9; font-size: 13px; color: #333; }
+        .pax-badge { background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+
+        .nav-bottom { 
+            position: fixed; bottom: 0; left: 0; right: 0; background: white; 
+            display: flex; justify-content: space-around; padding: 15px; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
+        }
+        .nav-bottom a { color: #ccc; font-size: 22px; transition: 0.3s; }
         .nav-bottom a.active { color: #0f4c81; }
+
+        #loader { text-align: center; color: #666; font-size: 13px; padding: 20px; }
     </style>
 </head>
 <body>
 
-<div class="summary-box">
-    <small>Total Pendapatan Bulan Ini</small>
-    <h2 id="grandTotal">Rp 0</h2>
-</div>
-
-<div class="card">
-    <h3>Input Pendapatan</h3>
-    <form id="pendapatanForm">
-        <div class="form-group">
-            <label>Tanggal</label>
-            <input type="date" id="tgl" required>
-        </div>
-        <div class="form-group">
-            <label>Armada</label>
-            <input type="text" id="armada" placeholder="Murni Jaya" required>
-        </div>
-        <div class="form-group">
-            <label>No Kursi (Contoh: 1-2 atau 1,2,3)</label>
-            <input type="text" id="kursiInput" placeholder="1-2" required>
-        </div>
-        <div class="form-group">
-            <label>Komisi per Penumpang (Rp)</label>
-            <input type="number" id="komisi" value="20000" required>
-        </div>
-        <button type="submit" id="btnSimpan">Simpan Pendapatan</button>
-    </form>
-</div>
-
-<div class="card">
-    <div style="display:flex; justify-content:space-between; align-items:center;">
-        <h3>Riwayat</h3>
-        <input type="month" id="filterBulan" style="width: auto; margin: 0;">
+<div class="container">
+    <div class="summary-box">
+        <small>Total Komisi Bulan Ini</small>
+        <h2 id="grandTotal">Rp 0</h2>
     </div>
-    <table class="table-res">
-        <thead>
-            <tr>
-                <th>Tgl</th>
-                <th>Bus</th>
-                <th>Pax</th>
-                <th>Total</th>
-            </tr>
-        </thead>
-        <tbody id="listPendapatan"></tbody>
-    </table>
+
+    <div class="card">
+        <h3>Input Pendapatan Baru</h3>
+        <form id="pendapatanForm">
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="tgl" required>
+            </div>
+            <div class="form-group">
+                <label>Nama Armada</label>
+                <input type="text" id="armada" placeholder="Contoh: Murni Jaya" required>
+            </div>
+            <div class="form-group">
+                <label>No. Kursi (Contoh: 1-2 atau 1,2,5)</label>
+                <input type="text" id="kursiInput" placeholder="Ketik 1-5 jika ada 5 orang" required>
+            </div>
+            <div class="form-group">
+                <label>Komisi Per Kursi (Rp)</label>
+                <input type="number" id="komisi" value="20000" required>
+            </div>
+            <button type="submit" id="btnSimpan">Simpan ke Laporan</button>
+        </form>
+    </div>
+
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 15px;">
+            <h3 style="margin-bottom:0">Riwayat Laporan</h3>
+            <input type="month" id="filterBulan" style="width: auto; padding: 5px; margin:0; height: 35px;">
+        </div>
+        <div id="loader">Memuat data...</div>
+        <table class="table-res" id="tabelData" style="display:none;">
+            <thead>
+                <tr>
+                    <th>TGL</th>
+                    <th>ARMADA</th>
+                    <th>PAX</th>
+                    <th>TOTAL</th>
+                </tr>
+            </thead>
+            <tbody id="listPendapatan"></tbody>
+        </table>
+    </div>
 </div>
 
 <div class="nav-bottom">
@@ -79,31 +108,41 @@
 </div>
 
 <script>
-const API_URL = "URL_WEB_APP_KAMU/exec";
+// API URL dengan ID yang kamu berikan
+const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
+const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
 
-// Set bulan saat ini ke filter
+// Inisialisasi Bulan & Tanggal Saat Ini
 const skrg = new Date();
 const blnIni = skrg.getFullYear() + "-" + ("0" + (skrg.getMonth() + 1)).slice(-2);
 document.getElementById('filterBulan').value = blnIni;
+document.getElementById('tgl').valueAsDate = new Date();
 
-// Logika Hitung Jumlah Penumpang dari String
+// Logika Hitung Jumlah Penumpang
 function hitungPax(str) {
+    str = str.replace(/\s/g, ''); // Hapus semua spasi
     if (str.includes('-')) {
         const range = str.split('-');
-        return Math.abs(parseInt(range[1]) - parseInt(range[0])) + 1;
+        const awal = parseInt(range[0]);
+        const akhir = parseInt(range[1]);
+        if (!isNaN(awal) && !isNaN(akhir)) return Math.abs(akhir - awal) + 1;
     } else if (str.includes(',')) {
-        return str.split(',').length;
+        return str.split(',').filter(x => x !== "").length;
     }
     return 1;
 }
 
+// Handler Simpan Data
 document.getElementById('pendapatanForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('btnSimpan');
+    const kursiVal = document.getElementById('kursiInput').value;
+    const pax = hitungPax(kursiVal);
+    const komisi = parseInt(document.getElementById('komisi').value);
+
     btn.disabled = true;
-    
-    const pax = hitungPax(document.getElementById('kursiInput').value);
-    const komisi = document.getElementById('komisi').value;
+    btn.innerText = "Menyimpan...";
+
     const data = {
         type: 'pendapatan',
         tanggal: document.getElementById('tgl').value,
@@ -113,37 +152,67 @@ document.getElementById('pendapatanForm').addEventListener('submit', async (e) =
         total: pax * komisi
     };
 
-    await fetch(API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(data)
-    });
-    
-    alert(`Berhasil! Terdeteksi ${pax} penumpang. Total Komisi: Rp ${data.total}`);
-    location.reload();
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(data)
+        });
+        
+        alert(`Berhasil! Data tersimpan dengan hitungan ${pax} penumpang.`);
+        location.reload();
+    } catch (err) {
+        alert("Gagal koneksi server.");
+        btn.disabled = false;
+        btn.innerText = "Simpan ke Laporan";
+    }
 });
 
+// Handler Muat Riwayat
 async function loadData() {
+    const loader = document.getElementById('loader');
+    const tabel = document.getElementById('tabelData');
+    const list = document.getElementById('listPendapatan');
+    const grandTotalLabel = document.getElementById('grandTotal');
     const bln = document.getElementById('filterBulan').value;
-    const res = await fetch(`${API_URL}?p=getPendapatan&bulan=${bln}`);
-    const data = await res.json();
-    
-    let html = '';
-    let totalBulan = 0;
-    
-    data.forEach(row => {
-        const tgl = new Date(row[0]).getDate();
-        totalBulan += row[4];
-        html += `<tr>
-            <td>${tgl}</td>
-            <td>${row[1]}</td>
-            <td>${row[2]}</td>
-            <td>${row[4].toLocaleString('id-ID')}</td>
-        </tr>`;
-    });
-    
-    document.getElementById('listPendapatan').innerHTML = html;
-    document.getElementById('grandTotal').innerText = "Rp " + totalBulan.toLocaleString('id-ID');
+
+    loader.innerText = "Memuat data...";
+    loader.style.display = "block";
+    tabel.style.display = "none";
+
+    try {
+        const res = await fetch(`${API_URL}?p=getPendapatan&bulan=${bln}`);
+        const data = await res.json();
+        
+        let html = '';
+        let totalBulan = 0;
+        
+        if (data.length === 0) {
+            loader.innerText = "Tidak ada data di bulan ini.";
+        } else {
+            data.forEach(row => {
+                // row[0] = tanggal, row[1] = armada, row[2] = jml_pax, row[4] = total
+                const tglObj = new Date(row[0]);
+                const tglTampil = tglObj.getDate();
+                const nominal = row[4] || 0;
+                totalBulan += nominal;
+                
+                html += `<tr>
+                    <td>${tglTampil}</td>
+                    <td>${row[1]}</td>
+                    <td><span class="pax-badge">${row[2]} Pax</span></td>
+                    <td>${nominal.toLocaleString('id-ID')}</td>
+                </tr>`;
+            });
+            list.innerHTML = html;
+            loader.style.display = "none";
+            tabel.style.display = "table";
+        }
+        grandTotalLabel.innerText = "Rp " + totalBulan.toLocaleString('id-ID');
+    } catch (err) {
+        loader.innerText = "Gagal memuat riwayat. Cek koneksi.";
+    }
 }
 
 document.getElementById('filterBulan').addEventListener('change', loadData);
