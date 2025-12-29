@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Input Etiket | Mahika Trans</title>
+<style>
+*{box-sizing:border-box;font-family:'Poppins',sans-serif;margin:0;padding:0}
+body{background:#f4f4f4;min-height:100vh;display:flex;justify-content:center;align-items:center;padding:16px}
+.card{background:#fff;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.15);max-width:500px;width:100%;padding:20px}
+h2{text-align:center;color:#0066AE;margin-bottom:20px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:480px){.form-grid{grid-template-columns:1fr}}
+.input-group{display:flex;flex-direction:column}
+label{font-size:13px;margin-bottom:4px;color:#333;font-weight:600}
+input{padding:10px;border-radius:8px;border:1px solid #ccc;font-size:14px}
+input:focus{outline:none;border-color:#FFBF00} /* kuning emas */
+button{grid-column:1 / -1;padding:13px;border:none;border-radius:10px;background:linear-gradient(135deg,#0066AE,#FFBF00);color:#fff;font-weight:bold;font-size:15px;cursor:pointer;margin-top:10px;transition:0.3s}
+button:hover{opacity:.9}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h2>Booking Tiket</h2>
+<form id="bookingForm" class="form-grid">
+
+    <div class="input-group">
+        <label>Nama</label>
+        <input type="text" id="nama" required>
+    </div>
+    <div class="input-group">
+        <label>No HP</label>
+        <input type="text" id="no_hp" required>
+    </div>
+    <div class="input-group">
+        <label>Armada</label>
+        <input type="text" id="armada" required>
+    </div>
+    <div class="input-group">
+        <label>Tujuan</label>
+        <input type="text" id="tujuan" required>
+    </div>
+    <div class="input-group">
+        <label>No Kursi</label>
+        <input type="text" id="no_kursi" required>
+    </div>
+    <div class="input-group">
+        <label>Tanggal Keberangkatan</label>
+        <input type="date" id="keberangkatan" required>
+    </div>
+    <div class="input-group">
+        <label>Jam Keberangkatan</label>
+        <input type="text" id="jam" placeholder="08:30 WIB" required>
+    </div>
+    <div class="input-group">
+        <label>Harga (Rp)</label>
+        <input type="number" id="harga" required>
+    </div>
+
+    <button type="submit">Booking & Cetak Etiket</button>
+</form>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
+
+document.getElementById("bookingForm").addEventListener("submit", async e=>{
+    e.preventDefault();
+
+    const data = {
+        nama: nama.value.trim(),
+        no_hp: no_hp.value.trim(),
+        armada: armada.value.trim(),
+        tujuan: tujuan.value.trim(),
+        no_kursi: no_kursi.value.trim(),
+        keberangkatan: keberangkatan.value,
+        jam: jam.value.trim(),
+        harga: harga.value
+    };
+
+    try {
+        const res = await fetch(API_URL,{
+            method:"POST",
+            body:JSON.stringify(data)
+        });
+        const json = await res.json();
+
+        if(json.status){
+            const kodeBooking = json.kode;
+            localStorage.setItem("etiket_"+kodeBooking, JSON.stringify(data));
+            window.location.href = "etiket.html?kode="+kodeBooking;
+        } else {
+            alert("Gagal kirim data: "+json.message);
+        }
+    } catch(err){
+        console.error(err);
+        alert("Gagal koneksi ke API");
+    }
+});
+</script>
+
+</body>
+</html>
