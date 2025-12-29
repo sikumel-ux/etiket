@@ -3,73 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manifes Mahika Trans</title>
-
+<title>Manifes Penumpang | Mahika Trans</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <style>
 body { font-family: 'Poppins', sans-serif; margin:0; padding:16px; background:#f4f6f8; }
-h2 { text-align:center; color:#0f4c81; margin-bottom:16px; }
-.table-wrapper { overflow-x:auto; background:#fff; padding:12px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,.08);}
+h2 { text-align:center; color:#0066AE; margin-bottom:16px; }
+.card { background:#fff; border-radius:14px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,.08); margin-bottom:20px; overflow:hidden; }
+.table-wrapper { overflow-x:auto; }
 table { width:100%; border-collapse:collapse; min-width:480px; }
-th, td { padding:8px; text-align:center; border-bottom:1px solid #ddd; font-size:14px; }
 thead { background:#0066AE; color:#fff; }
+th, td { padding:8px; border-bottom:1px solid #ddd; text-align:center; font-size:14px; }
 tbody tr:hover { background:#f1f7ff; }
-@media(max-width:480px){ th,td{ font-size:12px; padding:6px; } }
 </style>
 </head>
 <body>
 
 <h2>Manifes Penumpang</h2>
 
-<div class="table-wrapper">
-<table>
-  <thead>
-    <tr>
-      <th>No</th>
-      <th>Tanggal</th>
-      <th>Jam</th>
-      <th>Nama</th>
-      <th>Armada</th>
-      <th>Tujuan</th>
-    </tr>
-  </thead>
-  <tbody id="manifesBody"></tbody>
-</table>
+<div class="card table-wrapper">
+  <table>
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Tanggal</th>
+        <th>Jam</th>
+        <th>Nama</th>
+        <th>Armada</th>
+        <th>Tujuan</th>
+      </tr>
+    </thead>
+    <tbody id="manifesData">
+      <tr><td colspan="6">Memuat data...</td></tr>
+    </tbody>
+  </table>
 </div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
-fetch(API_URL + "?manifest=1")
-.then(res => res.json())
-.then(res => {
-    if(!res.status) throw new Error(res.message);
+async function loadManifes() {
+  try {
+    const res = await fetch(API_URL);
+    const result = await res.json();
 
-    const tbody = document.getElementById("manifesBody");
-    let no = 1;
+    const tbody = document.getElementById("manifesData");
+    tbody.innerHTML = "";
 
-    res.data.forEach(d => {
-        const tgl = d.keberangkatan ? new Date(d.keberangkatan).toLocaleDateString("id-ID", {day:"2-digit", month:"short", year:"numeric"}) : "-";
-        const jam = d.jam || "-";
-        const nama = d.nama || "-";
-        const armada = d.armada || "-";
-        const tujuan = d.tujuan || "-";
+    if (!result.status || !result.data.length) {
+      tbody.innerHTML = `<tr><td colspan="6">Data tidak tersedia</td></tr>`;
+      return;
+    }
 
-        tbody.innerHTML += `
+    result.data.forEach((d, i) => {
+      const tanggal = d.tanggal ? new Date(d.tanggal).toLocaleDateString("id-ID", {day:"2-digit", month:"short", year:"numeric"}) : "-";
+      const jam = d.jam || "-";
+      tbody.innerHTML += `
         <tr>
-          <td>${no++}</td>
-          <td>${tgl}</td>
+          <td>${i+1}</td>
+          <td>${tanggal}</td>
           <td>${jam}</td>
-          <td>${nama}</td>
-          <td>${armada}</td>
-          <td>${tujuan}</td>
+          <td>${d.nama || "-"}</td>
+          <td>${d.armada || "-"}</td>
+          <td>${d.tujuan || "-"}</td>
         </tr>`;
     });
-})
-.catch(err=>{
-    document.body.innerHTML = "<h3 style='text-align:center'>Gagal memuat data</h3>";
+
+  } catch(err) {
+    document.getElementById("manifesData").innerHTML = `<tr><td colspan="6">Gagal memuat data</td></tr>`;
     console.error(err);
-});
+  }
+}
+
+loadManifes();
 </script>
 
 </body>
