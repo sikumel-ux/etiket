@@ -145,7 +145,16 @@ input:focus,select:focus{
 
     <div class="form-group">
       <label>Jam</label>
-      <input type="time" id="jam">
+      <input
+    type="text"
+    id="jam"
+    placeholder="08:30"
+    pattern="^([01]\d|2[0-3]):[0-5]\d$"
+    required
+  >
+  <small style="font-size:11px;color:#666">
+    Format: HH:MM (contoh 08:30)
+  </small>
     </div>
 
     <div class="form-group">
