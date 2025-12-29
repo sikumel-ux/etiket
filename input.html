@@ -128,41 +128,48 @@ button:hover {
     </form>
 </div>
 
-
 <script>
-document.getElementById("bookingForm").addEventListener("submit", function(e){
+const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
+
+document.getElementById("bookingForm").addEventListener("submit", async function(e){
   e.preventDefault();
 
+  const kodeBooking = "MT-" + Date.now().toString().slice(-6);
+
   const data = {
-    nama: document.getElementById("nama").value.trim(),
-    no_hp: document.getElementById("no_hp").value.trim(),
-    armada: document.getElementById("armada").value.trim(),
-    tujuan: document.getElementById("tujuan").value.trim(),
-    no_kursi: document.getElementById("no_kursi").value.trim(),
-    tanggal: document.getElementById("keberangkatan").value, // yyyy-mm-dd
-    jam: document.getElementById("jam").value.trim(),
-    harga: document.getElementById("harga").value
+    kode_booking: kodeBooking,
+    nama: nama.value.trim(),
+    no_hp: no_hp.value.trim(),
+    armada: armada.value.trim(),
+    tujuan: tujuan.value.trim(),
+    no_kursi: no_kursi.value.trim(),
+    keberangkatan: keberangkatan.value, // yyyy-mm-dd STRING
+    jam: jam.value.trim(),              // STRING
+    harga: harga.value
   };
 
-  fetch("https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(res => res.json())
-  .then(res => {
-    if (res.status === "ok") {
-      window.location.href = "etiket.html?kode=" + res.kode;
-    } else {
-      alert("Gagal simpan data");
-    }
-  })
-  .catch(err => {
+  try {
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "text/plain;charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    });
+
+    const out = await res.text();
+    console.log("API response:", out);
+
+    // simpan lokal buat etiket
+    localStorage.setItem("etiket_" + kodeBooking, JSON.stringify(data));
+
+    // redirect
+    window.location.href = "etiket.html?kode=" + kodeBooking;
+
+  } catch (err) {
+    alert("Gagal koneksi API");
     console.error(err);
-    alert("ERROR koneksi API");
-  });
+  }
 });
 </script>
 </body>
