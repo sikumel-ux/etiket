@@ -11,7 +11,7 @@
         body { 
             font-family: 'Poppins', sans-serif; 
             background: #f4f7f9; 
-            margin: 0; padding-bottom: 80px; 
+            margin: 0; padding-bottom: 90px; 
             display: flex; justify-content: center; 
         }
         .container { width: 100%; max-width: 450px; background: #f4f7f9; min-height: 100vh; }
@@ -19,9 +19,9 @@
         /* HEADER */
         .top-bar {
             background: linear-gradient(135deg, #0066AE, #004a80);
-            padding: 30px 20px 50px;
+            padding: 30px 20px 60px;
             color: #fff;
-            border-radius: 0 0 30px 30px;
+            border-radius: 0 0 35px 35px;
         }
         .top-bar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
         .top-bar p { margin: 5px 0 0; font-size: 12px; opacity: 0.8; }
@@ -32,35 +32,35 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             padding: 0 20px;
-            margin-top: -30px;
+            margin-top: -35px;
         }
         .stat-card {
             background: #fff;
             padding: 15px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
             display: flex;
             flex-direction: column;
         }
-        .stat-card i { color: #0066AE; font-size: 20px; margin-bottom: 10px; }
-        .stat-card span { font-size: 11px; color: #888; font-weight: 500; }
-        .stat-card b { font-size: 16px; color: #333; margin-top: 2px; }
+        .stat-card i { color: #0066AE; font-size: 20px; margin-bottom: 8px; }
+        .stat-card span { font-size: 10px; color: #888; font-weight: 600; text-transform: uppercase; }
+        .stat-card b { font-size: 16px; color: #333; margin-top: 4px; }
 
         /* JADWAL TABLE SECTION */
         .section-header {
-            padding: 25px 20px 10px;
+            padding: 30px 20px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .section-header h3 { margin: 0; font-size: 15px; font-weight: 700; color: #333; }
+        .section-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #333; }
         
         .table-container {
             margin: 0 20px;
             background: #fff;
-            padding: 15px;
+            padding: 10px 15px;
             border-radius: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.03);
         }
         .schedule-table {
             width: 100%;
@@ -68,27 +68,28 @@
         }
         .schedule-table th {
             text-align: left;
-            font-size: 11px;
+            font-size: 10px;
             color: #bbb;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            padding-bottom: 10px;
+            padding: 15px 0 10px;
             border-bottom: 1px solid #f0f0f0;
         }
         .schedule-table td {
-            padding: 12px 0;
+            padding: 15px 0;
             font-size: 13px;
             border-bottom: 1px solid #f9f9f9;
             color: #444;
         }
+        .schedule-table tr { cursor: pointer; transition: 0.2s; }
+        .schedule-table tr:active { background: #f0f7ff; }
         .schedule-table tr:last-child td { border-bottom: none; }
         
         .tgl-txt { font-weight: 700; color: #0066AE; }
         .pax-badge {
             background: #eef2f7;
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 8px;
-            font-weight: 700;
+            font-weight: 800;
             color: #004a80;
             font-size: 12px;
         }
@@ -98,10 +99,10 @@
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 450px; 
             background: #fff; display: flex; justify-content: space-around; 
-            padding: 15px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); 
-            border-radius: 25px 25px 0 0; 
+            padding: 15px 0; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); 
+            border-radius: 25px 25px 0 0; z-index: 100;
         }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; transition: 0.3s; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
         .nav-bottom a.active { color: #0066AE; }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-bottom span { font-size: 10px; font-weight: 600; display: block; }
@@ -129,8 +130,8 @@
     </div>
 
     <div class="section-header">
-        <h3>Jadwal Keberangkatan</h3>
-        <a href="manifes.html" style="font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 600;">Lihat Semua</a>
+        <h3>Jadwal 7 Hari Ke Depan</h3>
+        <a href="manifes.html" style="font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 700;">LIHAT SEMUA</a>
     </div>
 
     <div class="table-container">
@@ -144,7 +145,10 @@
             </thead>
             <tbody id="tabelJadwal">
                 <tr>
-                    <td colspan="3" style="text-align: center; color: #ccc; padding: 20px;">Memuat data...</td>
+                    <td colspan="3" style="text-align: center; color: #ccc; padding: 30px;">
+                        <i class="fas fa-circle-notch fa-spin"></i><br>
+                        <span style="font-size: 11px; margin-top: 10px; display: block;">Sinkronisasi Data...</span>
+                    </td>
                 </tr>
             </tbody>
         </table>
@@ -159,7 +163,6 @@
 </div>
 
 <script>
-    // URL API Google Sheets kamu
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
     async function loadDashboardData() {
@@ -167,37 +170,48 @@
             const now = new Date();
             const bulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
-            // 1. Ambil Data Pendapatan/Komisi
+            // 1. Fetch Data Pendapatan (Untuk Statistik)
             const resp = await fetch(`${API_URL}?p=getPendapatan&bulan=${bulanIni}`);
             const dataKomisi = await resp.json();
 
             let totalIDR = 0;
             let totalPaxBulan = 0;
-
             dataKomisi.forEach(row => {
-                totalPaxBulan += parseInt(row[2]) || 0; // Kolom Pax
-                totalIDR += parseInt(row[4]) || 0;      // Kolom Komisi
+                totalPaxBulan += parseInt(row[2]) || 0;
+                totalIDR += parseInt(row[4]) || 0;
             });
 
             document.getElementById("totalKomisi").innerText = "Rp " + totalIDR.toLocaleString('id-ID');
             document.getElementById("totalPax").innerText = totalPaxBulan + " Orang";
 
-            // 2. Ambil Data Jadwal (Simulasi dari Sheet atau LocalStorage)
-            // Di sini saya asumsikan mengambil data 5 teratas dari data yang ada
+            // 2. Filter Jadwal 7 Hari Ke Depan
             const tabelBody = document.getElementById("tabelJadwal");
             tabelBody.innerHTML = "";
 
-            if (dataKomisi.length === 0) {
-                tabelBody.innerHTML = "<tr><td colspan='3' style='text-align:center;'>Belum ada jadwal</td></tr>";
+            // Menentukan batas tanggal (hari ini s/d 7 hari lagi)
+            const sevenDaysLater = new Date();
+            sevenDaysLater.setDate(now.getDate() + 7);
+            
+            // Filter data dari sheet yang masuk rentang 7 hari
+            const jadwalSeminggu = dataKomisi.filter(row => {
+                const tglRow = new Date(row[0]);
+                return tglRow >= now.setHours(0,0,0,0) && tglRow <= sevenDaysLater;
+            });
+
+            if (jadwalSeminggu.length === 0) {
+                tabelBody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding:20px; color:#999;'>Tidak ada jadwal dlm 7 hari</td></tr>";
             } else {
-                dataKomisi.slice(0, 5).forEach(row => {
+                jadwalSeminggu.forEach(row => {
                     const d = new Date(row[0]);
                     const tglIndo = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
                     
                     const tr = document.createElement("tr");
+                    // Tambahkan fungsi klik untuk ke manifes
+                    tr.onclick = () => window.location.href = `manifes.html?tgl=${row[0]}`;
+                    
                     tr.innerHTML = `
                         <td class="tgl-txt">${tglIndo}</td>
-                        <td>${row[1]}</td>
+                        <td style="font-weight:500;">${row[1]}</td>
                         <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
                     `;
                     tabelBody.appendChild(tr);
@@ -205,15 +219,13 @@
             }
 
         } catch (error) {
-            console.error("Gagal memuat data:", error);
-            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>Gagal terhubung ke server</td></tr>";
+            console.error("Gagal load:", error);
+            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red; padding:20px;'>Koneksi Terputus</td></tr>";
         }
     }
 
-    // Jalankan saat startup
     window.onload = loadDashboardData;
 </script>
 
 </body>
-                                                                               </html>
-                                                                               
+</html>
