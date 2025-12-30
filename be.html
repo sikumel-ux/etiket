@@ -111,61 +111,74 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
+    // Fungsi sakti untuk bikin list tanggal 3 hari kedepan (Format: YYYY-MM-DD)
+    function getDatesArray() {
+        let dates = [];
+        for (let i = 0; i < 3; i++) {
+            let d = new Date();
+            d.setDate(d.getDate() + i);
+            let year = d.getFullYear();
+            let month = ("0" + (d.getMonth() + 1)).slice(-2);
+            let day = ("0" + d.getDate()).slice(-2);
+            dates.push(`${year}-${month}-${day}`);
+        }
+        return dates;
+    }
+
     async function loadDashboard() {
         try {
-            // 1. Ambil Data Pendapatan/Jadwal
+            const targetDates = getDatesArray(); // [Hari Ini, Besok, Lusa]
+            const now = new Date();
+            const currentMonthKey = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
+
+            // 1. Ambil Data Jadwal & Statistik
             const resJadwal = await fetch(`${API_URL}?p=getPendapatan`);
             const dataJadwal = await resJadwal.json();
-
-            // Logic Filter 3 Hari
-            const now = new Date();
-            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
-            const limitDay = today + (3 * 24 * 60 * 60 * 1000);
-            const currentMonth = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
             let htmlJadwal = "";
             let komisiBulan = 0;
             let paxBulan = 0;
 
-            dataJadwal.sort((a,b) => new Date(a[0]) - new Date(b[0]));
+            // Sortir dulu biar urut tanggal
+            dataJadwal.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             dataJadwal.forEach(row => {
-                const tglObj = new Date(row[0]);
-                const tglTime = new Date(tglObj.getFullYear(), tglObj.getMonth(), tglObj.getDate()).getTime();
-                const tglString = row[0].split('T')[0];
+                const tglFull = row[0].split('T')[0]; // Ambil YYYY-MM-DD dari data Sheet
 
-                // Hitung Statistik Bulan Ini
-                if(tglString.startsWith(currentMonth)) {
+                // Statistik Bulanan
+                if (tglFull.startsWith(currentMonthKey)) {
                     paxBulan += parseInt(row[2]) || 0;
                     komisiBulan += parseInt(row[4]) || 0;
                 }
 
-                // Masukkan ke Tabel 3 Hari
-                if(tglTime >= today && tglTime < limitDay) {
-                    const tglIndo = tglObj.toLocaleDateString('id-ID', {day:'2-digit', month:'short'});
-                    htmlJadwal += `<tr onclick="location.href='manifes.html?tgl=${tglString}'">
-                        <td class="tgl-txt">${tglIndo}</td>
-                        <td style="font-weight:600;">${row[1]}</td>
-                        <td style="text-align:right;"><span class="pax-badge">${row[2]}</span></td>
-                    </tr>`;
+                // Filter 3 Hari (Pakai String Matching - Anti Gagal)
+                if (targetDates.includes(tglFull)) {
+                    const dObj = new Date(row[0]);
+                    const tglIndo = dObj.toLocaleDateString('id-ID', {day:'2-digit', month:'short'});
+                    htmlJadwal += `
+                        <tr onclick="location.href='manifes.html?tgl=${tglFull}'">
+                            <td class="tgl-txt">${tglIndo}</td>
+                            <td style="font-weight:600;">${row[1]}</td>
+                            <td style="text-align:right;"><span class="pax-badge">${row[2]}</span></td>
+                        </tr>`;
                 }
             });
 
             document.getElementById("totalKomisi").innerText = "Rp " + komisiBulan.toLocaleString('id-ID');
             document.getElementById("totalPax").innerText = paxBulan + " Orang";
-            document.getElementById("tabelJadwal").innerHTML = htmlJadwal || "<tr><td colspan='3' style='text-align:center; padding:15px; color:#999;'>Tidak ada jadwal.</td></tr>";
+            document.getElementById("tabelJadwal").innerHTML = htmlJadwal || "<tr><td colspan='3' style='text-align:center; padding:15px; color:#999;'>Tidak ada jadwal 3 hari ke depan</td></tr>";
 
-            // 2. Ambil Data Manifes (Compact List)
+            // 2. Ambil Data Antrean Penumpang (Manifes)
             const resMan = await fetch(`${API_URL}?p=manifes`);
             const dataMan = await resMan.json();
             const containerMan = document.getElementById('miniManifest');
 
-            if(dataMan && dataMan.length > 0) {
+            if (dataMan && dataMan.length > 0) {
                 containerMan.innerHTML = dataMan.slice(0, 6).map(item => {
                     const jam = item.jam ? item.jam.substring(0, 5) : "--:--";
-                    const tglParam = item.tanggal.split('T')[0];
+                    const tglP = item.tanggal.split('T')[0];
                     return `
-                        <div class="manifest-item" onclick="location.href='manifes.html?tgl=${tglParam}'">
+                        <div class="manifest-item" onclick="location.href='manifes.html?tgl=${tglP}'">
                             <div class="time-box">${jam}<br><span style="font-size:8px; opacity:0.6;">WIB</span></div>
                             <div class="info-box">
                                 <div class="pax-name">${item.nama}</div>
@@ -187,6 +200,7 @@
 
     window.onload = loadDashboard;
 </script>
+
 
 </body>
 </html>
