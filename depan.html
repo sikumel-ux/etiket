@@ -30,7 +30,7 @@
         .etiket-header h1 { font-size: 20px; margin: 0; opacity: 0.8; font-weight: 300; }
         .etiket-header h2 { font-size: 30px; margin: 8px 0 0 0; font-weight: 800; letter-spacing: -1px; }
 
-        /* Stat Cards - Melayang */
+        /* Stat Cards */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -40px; padding: 0 20px; }
         .stat-card {
             background: #fff; padding: 20px 15px; border-radius: 20px; 
@@ -43,44 +43,30 @@
         /* Section Titles */
         .section-title { padding: 30px 20px 15px 20px; font-size: 17px; font-weight: 800; color: #333; display: flex; justify-content: space-between; align-items: center; }
         .section-title a { font-size: 12px; color: #0066AE; text-decoration: none; font-weight: 700; background: #eef6ff; padding: 6px 14px; border-radius: 12px; }
-        
-        /* Jadwal Scroll */
-        .manifest-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 10px 20px; scrollbar-width: none; }
-        .manifest-scroll::-webkit-scrollbar { display: none; }
-        .mini-card {
-            min-width: 195px; background: #fff; padding: 18px; border-radius: 20px;
-            border-left: 6px solid #0066AE; box-shadow: 0 8px 20px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
-        }
-        .mini-card .tgl { font-size: 11px; font-weight: 800; color: #0066AE; }
-        .mini-card .nama { font-size: 15px; font-weight: 800; display: block; margin: 6px 0; color: #222; }
-        .mini-card .tujuan { font-size: 11px; color: #777; font-weight: 500; }
 
         /* Antrean List */
         .antrean-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
         .antrean-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
+            display: flex; align-items: center; gap: 15px; padding: 12px;
             background: #fff; border-radius: 20px; border: 1px solid #f0f0f0; cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.02);
         }
-        .info-badge {
-            background: #f0f7ff; color: #0066AE; padding: 10px; border-radius: 15px;
-            font-size: 11px; font-weight: 800; min-width: 80px; text-align: center; line-height: 1.4;
+        
+        /* Tanggal Badge (Warna Header) */
+        .tgl-badge {
+            background: #0066AE; color: #fff; padding: 10px; border-radius: 15px;
+            font-size: 12px; font-weight: 800; min-width: 65px; text-align: center; line-height: 1.2;
         }
+
         .antrean-info { flex: 1; }
         .antrean-info b { font-size: 14px; color: #222; display: block; margin-bottom: 2px; }
         .antrean-info span { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 600; }
-        .pax-count { background: #0066AE; color: #fff; font-size: 11px; font-weight: 800; padding: 6px 14px; border-radius: 14px; }
 
-        /* Menu Grid */
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 0 20px; }
-        .menu-item { text-align: center; text-decoration: none; color: #333; }
-        .menu-icon { 
-            width: 58px; height: 58px; background: #fff; color: #0066AE; 
-            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
-            margin: 0 auto 8px auto; font-size: 24px; box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-            border: 1px solid #f8f8f8;
+        /* Jam Badge (Turunan Warna Header) */
+        .jam-badge-right { 
+            background: #004577; color: #fff; font-size: 12px; font-weight: 800; 
+            padding: 8px 12px; border-radius: 14px; min-width: 65px; text-align: center;
         }
-        .menu-item span { font-size: 11px; font-weight: 700; color: #555; }
 
         /* Nav Bottom */
         .nav-bottom {
@@ -117,36 +103,28 @@
     </div>
 
     <div class="section-title"><span>Menu Utama</span></div>
-    <div class="menu-grid">
-        <a href="input.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-ticket-alt"></i></div>
-            <span>Booking</span>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 0 20px;">
+        <a href="input.html" style="text-align: center; text-decoration: none;">
+            <div style="width: 55px; height: 55px; background: #fff; color: #0066AE; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;"><i class="fas fa-ticket-alt"></i></div>
+            <span style="font-size: 11px; font-weight: 700; color: #555;">Booking</span>
         </a>
-        <a href="manifes.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-clipboard-list"></i></div>
-            <span>Manifes</span>
+        <a href="manifes.html" style="text-align: center; text-decoration: none;">
+            <div style="width: 55px; height: 55px; background: #fff; color: #0066AE; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;"><i class="fas fa-clipboard-list"></i></div>
+            <span style="font-size: 11px; font-weight: 700; color: #555;">Manifes</span>
         </a>
-        <a href="pendapatan.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-wallet"></i></div>
-            <span>Finance</span>
+        <a href="pendapatan.html" style="text-align: center; text-decoration: none;">
+            <div style="width: 55px; height: 55px; background: #fff; color: #0066AE; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;"><i class="fas fa-wallet"></i></div>
+            <span style="font-size: 11px; font-weight: 700; color: #555;">Finance</span>
         </a>
-        <a href="#" class="menu-item" onclick="location.reload()">
-            <div class="menu-icon"><i class="fas fa-sync-alt"></i></div>
-            <span>Refresh</span>
+        <a href="#" onclick="location.reload()" style="text-align: center; text-decoration: none;">
+            <div style="width: 55px; height: 55px; background: #fff; color: #0066AE; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px auto; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); border: 1px solid #f0f0f0;"><i class="fas fa-sync-alt"></i></div>
+            <span style="font-size: 11px; font-weight: 700; color: #555;">Refresh</span>
         </a>
     </div>
 
-    <div class="section-title">
-        <span>Jadwal 3 Hari</span>
-        <a href="manifes.html">Semua</a>
-    </div>
-    <div class="manifest-scroll" id="miniManifest">
-        <p style="font-size: 11px; color: #999;">Loading...</p>
-    </div>
-
-    <div class="section-title"><span>Antrean Terkini</span></div>
+    <div class="section-title"><span>Antrean Penumpang</span></div>
     <div class="antrean-list" id="antreanList" style="margin-bottom: 30px;">
-        <p style="font-size: 11px; color: #999;">Loading...</p>
+        <p style="font-size: 11px; color: #999; padding: 20px;">Memuat antrean...</p>
     </div>
 </div>
 
@@ -161,79 +139,62 @@
     const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
     const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
 
-    // LOGIKA PERBAIKAN: Deteksi Jumlah Pax dari No Kursi (Pemisah: koma, spasi, dash)
-    function hitungPaxDariKursi(kursi) {
-        if (!kursi) return 1; // Minimal 1 jika kolom ada tapi format aneh
-        let str = kursi.toString().trim();
-        if (str === "" || str === "-") return 0;
-        
-        // Memecah berdasarkan simbol pemisah yang mungkin di-input admin
-        let daftarKursi = str.split(/[, \-;]+/).filter(x => x.trim().length > 0);
-        return daftarKursi.length > 0 ? daftarKursi.length : 1;
-    }
-
-    const jam = new Date().getHours();
+    // Salam Dinamis
+    const jamSekarang = new Date().getHours();
     let salam = "Selamat Malam";
-    if (jam < 11) salam = "Selamat Pagi";
-    else if (jam < 15) salam = "Selamat Siang";
-    else if (jam < 19) salam = "Selamat Sore";
+    if (jamSekarang < 11) salam = "Selamat Pagi";
+    else if (jamSekarang < 15) salam = "Selamat Siang";
+    else if (jamSekarang < 19) salam = "Selamat Sore";
     document.getElementById('greeting').innerText = salam + ",";
 
-    async function loadDashboardData() {
+    async function loadDashboard() {
         try {
-            const resMan = await fetch(`${API_URL}?p=manifes`);
-            const dataMan = await resMan.json();
-            
-            const miniManifest = document.getElementById('miniManifest');
-            const antreanList = document.getElementById('antreanList');
+            const res = await fetch(`${API_URL}?p=manifes`);
+            const data = await res.json();
+            const list = document.getElementById('antreanList');
 
-            if(dataMan && dataMan.length > 0) {
-                // 1. Render Horizontal Scroll
-                miniManifest.innerHTML = dataMan.slice(0, 5).map(item => {
+            if(data && data.length > 0) {
+                list.innerHTML = data.slice(0, 10).map(item => {
                     const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-                    return `
-                        <div class="mini-card">
-                            <div class="tgl">${tgl} • ${item.jam.substring(0,5)}</div>
-                            <span class="nama">${item.nama}</span>
-                            <div class="tujuan">${item.armada} - ${item.tujuan}</div>
-                        </div>
-                    `;
-                }).join('');
-
-                // 2. Render Vertical List (DENGAN PAX YANG AKURAT)
-                antreanList.innerHTML = dataMan.slice(0, 8).map(item => {
-                    const realPax = hitungPaxDariKursi(item.no_kursi);
-                    const tglIndo = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                    const jamBrkt = item.jam ? item.jam.substring(0, 5) : "--:--";
+                    
                     return `
                         <div class="antrean-item" onclick="location.href='manifes.html?tgl=${item.tanggal.split('T')[0]}'">
-                            <div class="info-badge">${tglIndo}<br>${item.jam.substring(0,5)} WIB</div>
+                            <div class="tgl-badge">${tgl}</div>
                             <div class="antrean-info">
-                                <b>${item.nama}</b>
-                                <span>${item.armada} ➔ ${item.tujuan}</span>
+                                <b>${item.nama || 'Tanpa Nama'}</b>
+                                <span>${item.armada || '-'} ➔ ${item.tujuan || '-'}</span>
                             </div>
-                            <div class="pax-count">${realPax} PAX</div>
+                            <div class="jam-badge-right">${jamBrkt}</div>
                         </div>
                     `;
                 }).join('');
+            } else {
+                list.innerHTML = "<p style='text-align:center; font-size:12px; color:#999;'>Antrean kosong.</p>";
             }
 
-            // 3. Load Stats Komisi & Total Pax
+            // Load Stats Komisi & Pax Bulan Ini
             const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
-            const resRev = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
-            const dataRev = await resRev.json();
+            const resStats = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
+            const dataStats = await resStats.json();
 
-            let totalKomisi = 0, totalPaxBulan = 0;
-            dataRev.forEach(row => {
-                totalPaxBulan += parseInt(row[2]) || 0;
+            let totalKomisi = 0, totalPax = 0;
+            dataStats.forEach(row => {
+                totalPax += parseInt(row[2]) || 0;
                 totalKomisi += parseInt(row[4]) || 0;
             });
 
             document.getElementById('statKomisi').innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
-            document.getElementById('statPax').innerText = totalPaxBulan + " Orang";
+            document.getElementById('statPax').innerText = totalPax + " Orang";
 
-        } catch (e) { console.error("Error Bro:", e); }
+        } catch (e) {
+            console.error(e);
+            document.getElementById('antreanList').innerHTML = "<p style='text-align:center; color:red;'>Gagal sinkron data.</p>";
+        }
     }
-    loadDashboardData();
+
+    loadDashboard();
 </script>
+
 </body>
 </html>
