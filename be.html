@@ -11,98 +11,106 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: #f4f4f4;
-            margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; padding-bottom: 90px;
+            margin: 0; padding: 0; display: flex; justify-content: center; min-height: 100vh; padding-bottom: 100px;
         }
         .etiket-container {
-            width: 100%; max-width: 400px; background: #fff; padding: 20px; display: flex; flex-direction: column;
+            width: 100%; max-width: 400px; background: #fff; display: flex; flex-direction: column;
         }
-        .etiket-header {
-            background: linear-gradient(135deg, #0066AE, #005b99);
-            color: #fff; padding: 30px 20px; text-align: left; border-radius: 0 0 25px 25px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); margin-bottom: 20px;
-        }
-        .etiket-header h1 { font-size: 18px; margin: 0; opacity: 0.9; font-weight: 400; }
-        .etiket-header h2 { font-size: 22px; margin: 5px 0 0 0; }
 
-        /* Stat Cards */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -45px; padding: 0 10px; }
-        .stat-card {
-            background: #fff; padding: 15px; border-radius: 15px; 
-            box-shadow: 0 10px 20px rgba(0,0,0,0.08); text-align: center;
+        /* HEADER FULL - MEPET ATAS */
+        .etiket-header {
+            background: linear-gradient(135deg, #0066AE, #004577);
+            color: #fff; 
+            padding: 45px 25px 65px 25px; /* Padding atas digedein */
+            text-align: left; 
+            border-radius: 0 0 40px 40px;
+            box-shadow: 0 10px 30px rgba(0, 74, 128, 0.2); 
+            margin: 0; /* Pastikan 0 biar mepet */
         }
-        .stat-card i { font-size: 20px; color: #0066AE; margin-bottom: 8px; }
-        .stat-card span { display: block; font-size: 10px; color: #888; text-transform: uppercase; font-weight: 600; }
-        .stat-card strong { font-size: 15px; color: #333; }
+        .etiket-header h1 { font-size: 20px; margin: 0; opacity: 0.8; font-weight: 300; }
+        .etiket-header h2 { font-size: 28px; margin: 8px 0 0 0; font-weight: 800; letter-spacing: -0.5px; }
+
+        /* Stat Cards - Melayang di atas header */
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -35px; padding: 0 20px; }
+        .stat-card {
+            background: #fff; padding: 18px 15px; border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); text-align: center;
+        }
+        .stat-card i { font-size: 22px; color: #0066AE; margin-bottom: 10px; }
+        .stat-card span { display: block; font-size: 10px; color: #888; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
+        .stat-card strong { font-size: 16px; color: #222; font-weight: 800; }
 
         /* Section Titles */
-        .section-title { margin: 25px 0 15px 0; font-size: 15px; font-weight: 700; color: #333; display: flex; justify-content: space-between; align-items: center; }
-        .section-title a { font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 700; }
+        .section-title { padding: 30px 20px 15px 20px; font-size: 17px; font-weight: 800; color: #333; display: flex; justify-content: space-between; align-items: center; }
+        .section-title a { font-size: 12px; color: #0066AE; text-decoration: none; font-weight: 700; background: #eef6ff; padding: 5px 12px; border-radius: 10px; }
         
-        /* Jadwal Scroll (Horizontal) */
-        .manifest-scroll { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+        /* Jadwal Scroll */
+        .manifest-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 0 20px 10px 20px; scrollbar-width: none; }
         .manifest-scroll::-webkit-scrollbar { display: none; }
         .mini-card {
-            min-width: 180px; background: #f9f9f9; padding: 15px; border-radius: 15px;
-            border-top: 4px solid #0066AE; box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            min-width: 190px; background: #fff; padding: 18px; border-radius: 20px;
+            border-left: 5px solid #0066AE; box-shadow: 0 8px 20px rgba(0,0,0,0.04); border: 1px solid #f0f0f0;
         }
-        .mini-card .tgl { font-size: 10px; font-weight: 800; color: #0066AE; text-transform: uppercase; }
-        .mini-card .nama { font-size: 14px; font-weight: 700; display: block; margin: 5px 0; color: #222; }
-        .mini-card .tujuan { font-size: 11px; color: #666; font-weight: 500; }
+        .mini-card .tgl { font-size: 11px; font-weight: 800; color: #0066AE; }
+        .mini-card .nama { font-size: 15px; font-weight: 800; display: block; margin: 6px 0; color: #222; }
+        .mini-card .tujuan { font-size: 11px; color: #777; font-weight: 500; }
 
-        /* Antrean List (Vertical Compact) */
-        .antrean-list { display: flex; flex-direction: column; gap: 10px; }
+        /* Antrean List */
+        .antrean-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
         .antrean-item {
-            display: flex; align-items: center; gap: 12px; padding: 12px;
-            background: #fff; border-radius: 12px; border: 1px solid #eee; cursor: pointer;
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            background: #fff; border-radius: 18px; border: 1px solid #f0f0f0; cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
         }
         .info-badge {
-            background: #eef6ff; color: #0066AE; padding: 8px; border-radius: 10px;
-            font-size: 10px; font-weight: 800; min-width: 65px; text-align: center; line-height: 1.3;
+            background: #f0f7ff; color: #0066AE; padding: 10px; border-radius: 15px;
+            font-size: 11px; font-weight: 800; min-width: 75px; text-align: center; line-height: 1.4;
         }
         .antrean-info { flex: 1; }
-        .antrean-info b { font-size: 13px; color: #333; display: block; }
-        .antrean-info span { font-size: 10px; color: #888; text-transform: uppercase; }
-        .pax-count { background: #0066AE; color: #fff; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 20px; }
+        .antrean-info b { font-size: 14px; color: #222; display: block; margin-bottom: 2px; }
+        .antrean-info span { font-size: 10px; color: #999; text-transform: uppercase; font-weight: 600; }
+        .pax-count { background: #0066AE; color: #fff; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 12px; }
 
         /* Menu Grid */
-        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 5px; }
+        .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 0 20px; }
         .menu-item { text-align: center; text-decoration: none; color: #333; }
         .menu-icon { 
-            width: 48px; height: 48px; background: #eef6ff; color: #0066AE; 
-            border-radius: 14px; display: flex; align-items: center; justify-content: center; 
-            margin: 0 auto 6px auto; font-size: 18px; transition: 0.2s;
+            width: 55px; height: 55px; background: #fff; color: #0066AE; 
+            border-radius: 18px; display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 8px auto; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.05);
         }
-        .menu-item span { font-size: 10px; font-weight: 600; }
+        .menu-item span { font-size: 11px; font-weight: 700; color: #555; }
 
         /* Nav Bottom */
         .nav-bottom {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 400px; background: #fff; display: flex;
-            justify-content: space-around; padding: 12px 0; box-shadow: 0 -5px 20px rgba(0,0,0,0.08);
-            border-radius: 20px 20px 0 0; z-index: 1000;
+            justify-content: space-around; padding: 15px 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.08);
+            border-radius: 30px 30px 0 0; z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a { text-decoration: none; color: #ccc; text-align: center; flex: 1; }
         .nav-bottom a.active { color: #0066AE; }
-        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+        .nav-bottom i { font-size: 20px; margin-bottom: 4px; display: block; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 700; }
     </style>
 </head>
 <body>
 
 <div class="etiket-container">
     <div class="etiket-header">
-        <h1 id="greeting">Selamat Hari ini,</h1>
-        <h2>Mahika Trans Admin</h2>
+        <h1 id="greeting">Halo,</h1>
+        <h2>Mahika Trans</h2>
     </div>
 
     <div class="stats-grid">
         <div class="stat-card">
             <i class="fas fa-wallet"></i>
-            <span>Komisi Bln Ini</span>
+            <span>KOMISI BULAN INI</span>
             <strong id="statKomisi">Rp 0</strong>
         </div>
         <div class="stat-card">
             <i class="fas fa-users"></i>
-            <span>Total Pax</span>
+            <span>TOTAL PAX</span>
             <strong id="statPax">0 Orang</strong>
         </div>
     </div>
@@ -110,16 +118,16 @@
     <div class="section-title"><span>Menu Utama</span></div>
     <div class="menu-grid">
         <a href="input.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-plus-circle"></i></div>
+            <div class="menu-icon"><i class="fas fa-ticket-alt"></i></div>
             <span>Booking</span>
         </a>
         <a href="manifes.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-list-ul"></i></div>
+            <div class="menu-icon"><i class="fas fa-clipboard-list"></i></div>
             <span>Manifes</span>
         </a>
         <a href="pendapatan.html" class="menu-item">
-            <div class="menu-icon"><i class="fas fa-chart-line"></i></div>
-            <span>Laporan</span>
+            <div class="menu-icon"><i class="fas fa-wallet"></i></div>
+            <span>Finance</span>
         </a>
         <a href="#" class="menu-item" onclick="location.reload()">
             <div class="menu-icon"><i class="fas fa-sync-alt"></i></div>
@@ -128,40 +136,37 @@
     </div>
 
     <div class="section-title">
-        <span>Jadwal 3 Hari Kedepan</span>
-        <a href="manifes.html">Lihat Semua</a>
+        <span>Jadwal 3 Hari</span>
+        <a href="manifes.html">Semua</a>
     </div>
     <div class="manifest-scroll" id="miniManifest">
-        <p style="font-size: 11px; color: #999;">Memuat jadwal...</p>
+        <p style="font-size: 11px; color: #999;">Loading...</p>
     </div>
 
-    <div class="section-title"><span>Antrean Penumpang</span></div>
-    <div class="antrean-list" id="antreanList">
-        <p style="font-size: 11px; color: #999;">Memuat antrean...</p>
+    <div class="section-title"><span>Antrean Terkini</span></div>
+    <div class="antrean-list" id="antreanList" style="margin-bottom: 20px;">
+        <p style="font-size: 11px; color: #999;">Loading...</p>
     </div>
 </div>
 
 <div class="nav-bottom">
     <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
-    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
-    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+    <a href="input.html"><i class="fas fa-plus-circle"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-list-ul"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-chart-line"></i><span>Laporan</span></a>
 </div>
 
 <script>
     const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
     const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
 
-    // Fungsi Hitung Pax dari Nomor Kursi
     function hitungPaxDariKursi(kursi) {
         if (!kursi) return 0;
         let str = kursi.toString();
         let pemisah = /[, \-;]+/;
-        let daftarKursi = str.split(pemisah).filter(x => x.trim().length > 0);
-        return daftarKursi.length;
+        return str.split(pemisah).filter(x => x.trim().length > 0).length;
     }
 
-    // Greeter Dinamis
     const jam = new Date().getHours();
     let salam = "Selamat Malam";
     if (jam < 11) salam = "Selamat Pagi";
@@ -178,7 +183,6 @@
             const antreanList = document.getElementById('antreanList');
 
             if(dataMan.length > 0) {
-                // Tampilan Horizontal Scroll
                 miniManifest.innerHTML = dataMan.slice(0, 5).map(item => {
                     const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
                     return `
@@ -190,17 +194,12 @@
                     `;
                 }).join('');
 
-                // Tampilan Antrean List (DENGAN TANGGAL INDONESIA)
                 antreanList.innerHTML = dataMan.slice(0, 8).map(item => {
                     const realPax = hitungPaxDariKursi(item.no_kursi) || item.pax || 1;
                     const tglIndo = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
-                    const jamIndo = item.jam.substring(0,5);
-                    
                     return `
                         <div class="antrean-item" onclick="location.href='manifes.html?tgl=${item.tanggal.split('T')[0]}'">
-                            <div class="info-badge">
-                                ${tglIndo}<br>${jamIndo} WIB
-                            </div>
+                            <div class="info-badge">${tglIndo}<br>${item.jam.substring(0,5)} WIB</div>
                             <div class="antrean-info">
                                 <b>${item.nama}</b>
                                 <span>${item.armada} ➔ ${item.tujuan}</span>
@@ -209,18 +208,13 @@
                         </div>
                     `;
                 }).join('');
-            } else {
-                miniManifest.innerHTML = "<p>Belum ada jadwal.</p>";
-                antreanList.innerHTML = "<p>Antrean kosong.</p>";
             }
 
-            // Load Stats
             const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
             const resRev = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
             const dataRev = await resRev.json();
 
-            let totalKomisi = 0;
-            let totalPaxBulan = 0;
+            let totalKomisi = 0, totalPaxBulan = 0;
             dataRev.forEach(row => {
                 totalPaxBulan += parseInt(row[2]) || 0;
                 totalKomisi += parseInt(row[4]) || 0;
@@ -229,12 +223,10 @@
             document.getElementById('statKomisi').innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
             document.getElementById('statPax').innerText = totalPaxBulan + " Orang";
 
-        } catch (e) {
-            console.error("Dashboard Error:", e);
-        }
+        } catch (e) { console.error(e); }
     }
-
     loadDashboardData();
 </script>
 </body>
-</html>
+    </html>
+    
