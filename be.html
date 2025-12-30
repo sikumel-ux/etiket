@@ -3,61 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahika Trans - Dashboard</title>
+    <title>Mahika Trans - Dashboard Admin</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: #f4f7f9; margin: 0; padding-bottom: 90px; display: flex; justify-content: center; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f9; margin: 0; padding-bottom: 100px; display: flex; justify-content: center; }
         .container { width: 100%; max-width: 450px; background: #f4f7f9; min-height: 100vh; }
+
+        /* HEADER SECTION */
         .top-bar { background: linear-gradient(135deg, #0066AE, #004a80); padding: 30px 20px 60px; color: #fff; border-radius: 0 0 35px 35px; }
         .top-bar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
         .top-bar p { margin: 5px 0 0; font-size: 12px; opacity: 0.8; }
+
+        /* SUMMARY CARDS */
         .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-top: -35px; }
-        .stat-card { background: #fff; padding: 15px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .stat-card { background: #fff; padding: 15px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .stat-card i { color: #0066AE; font-size: 20px; margin-bottom: 8px; }
-        .stat-card span { font-size: 10px; color: #888; font-weight: 600; text-transform: uppercase; }
-        .stat-card b { font-size: 16px; color: #333; margin-top: 4px; }
-        .section-header { padding: 30px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
-        .section-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #333; }
-        .table-container { margin: 0 20px; background: #fff; padding: 10px 15px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+        .stat-card span { font-size: 10px; color: #888; font-weight: 600; display: block; text-transform: uppercase; }
+        .stat-card b { font-size: 16px; color: #333; margin-top: 4px; display: block; }
+
+        /* SECTION TITLES */
+        .section-header { padding: 25px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .section-header h3 { margin: 0; font-size: 15px; font-weight: 700; color: #333; }
+        .section-header a { font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 700; }
+
+        /* JADWAL TABLE STYLE (TOP) */
+        .white-box { margin: 0 20px; background: #fff; padding: 10px 15px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
         .schedule-table { width: 100%; border-collapse: collapse; }
-        .schedule-table th { text-align: left; font-size: 10px; color: #bbb; text-transform: uppercase; padding: 15px 0 10px; border-bottom: 1px solid #f0f0f0; }
-        .schedule-table td { padding: 15px 0; font-size: 13px; border-bottom: 1px solid #f9f9f9; color: #444; }
+        .schedule-table th { text-align: left; font-size: 10px; color: #bbb; text-transform: uppercase; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+        .schedule-table td { padding: 12px 0; font-size: 13px; border-bottom: 1px solid #f9f9f9; color: #444; }
         .tgl-txt { font-weight: 700; color: #0066AE; }
-        .pax-badge { background: #eef2f7; padding: 4px 12px; border-radius: 8px; font-weight: 800; color: #004a80; font-size: 12px; }
+        .pax-badge { background: #eef2f7; padding: 4px 10px; border-radius: 8px; font-weight: 800; color: #004a80; font-size: 11px; }
+
+        /* COMPACT MANIFEST LIST STYLE (BOTTOM) */
+        .manifest-item { display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f2f2f2; cursor: pointer; }
+        .manifest-item:last-child { border-bottom: none; }
+        .time-box { background: #f0f4f8; color: #0066AE; padding: 6px; border-radius: 10px; min-width: 55px; text-align: center; font-size: 10px; font-weight: 800; }
+        .info-box { flex: 1; }
+        .pax-name { font-size: 13px; font-weight: 700; color: #333; }
+        .route-info { font-size: 10px; color: #999; text-transform: uppercase; margin-top: 2px; }
+        .pax-tag { background: #0066AE; color: #fff; font-size: 9px; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+
+        /* NAVIGATION BOTTOM */
         .nav-bottom { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; background: #fff; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); border-radius: 25px 25px 0 0; z-index: 100; }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; transition: 0.3s; }
         .nav-bottom a.active { color: #0066AE; }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-bottom span { font-size: 10px; font-weight: 600; display: block; }
+        .nav-bottom span { font-size: 10px; font-weight: 600; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="top-bar">
-        <p>Selamat Datang,</p>
-        <h2>Mahika Trans Admin</h2>
+        <p>Dashboard Operasional</p>
+        <h2>Mahika Trans</h2>
     </div>
 
     <div class="stats-grid">
-        <div class="stat-card"><i class="fas fa-wallet"></i><span>Komisi Bulan Ini</span><b id="totalKomisi">Rp 0</b></div>
-        <div class="stat-card"><i class="fas fa-users"></i><span>Total Pax</span><b id="totalPax">0 Orang</b></div>
+        <div class="stat-card">
+            <i class="fas fa-wallet"></i>
+            <span>Komisi Bulan Ini</span>
+            <b id="totalKomisi">Rp 0</b>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <span>Total Penumpang</span>
+            <b id="totalPax">0 Orang</b>
+        </div>
     </div>
 
     <div class="section-header">
-        <h3>Jadwal 7 Hari Ke Depan</h3>
-        <a href="manifes.html" style="font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 700;">LIHAT SEMUA</a>
+        <h3>Jadwal 3 Hari Kedepan</h3>
+        <a href="manifes.html">LIHAT SEMUA</a>
     </div>
-
-    <div class="table-container">
+    <div class="white-box">
         <table class="schedule-table">
-            <thead><tr><th>Tanggal</th><th>Armada</th><th style="text-align: right;">Pax</th></tr></thead>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Armada</th>
+                    <th style="text-align: right;">Pax</th>
+                </tr>
+            </thead>
             <tbody id="tabelJadwal">
-                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Memuat Data...</td></tr>
+                <tr><td colspan="3" style="text-align:center; padding:20px; color:#ccc;">Memuat jadwal...</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="section-header">
+        <h3>Antrean Penumpang Terkini</h3>
+    </div>
+    <div id="miniManifest" class="white-box" style="margin-bottom: 20px;">
+        <div style="text-align:center; padding:20px; color:#ccc;">Memuat antrean...</div>
     </div>
 </div>
 
@@ -71,63 +111,82 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
-    async function loadDashboardData() {
-        const tabelBody = document.getElementById("tabelJadwal");
+    async function loadDashboard() {
         try {
-            const resp = await fetch(`${API_URL}?p=getPendapatan`);
-            const dataSheet = await resp.json();
+            // 1. Ambil Data Pendapatan/Jadwal
+            const resJadwal = await fetch(`${API_URL}?p=getPendapatan`);
+            const dataJadwal = await resJadwal.json();
 
-            // 1. Ambil Waktu Lokal Hari Ini (Murni Tanggal)
-            const today = new Date();
-            const todayTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
-            
-            // 7 Hari kedepan
-            const maxTime = todayTime + (7 * 24 * 60 * 60 * 1000);
+            // Logic Filter 3 Hari
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const limitDay = today + (3 * 24 * 60 * 60 * 1000);
+            const currentMonth = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
-            let totalIDR = 0, totalPaxBulan = 0, barisHtml = "";
+            let htmlJadwal = "";
+            let komisiBulan = 0;
+            let paxBulan = 0;
 
-            // Urutkan data berdasarkan tanggal terkecil
-            dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+            dataJadwal.sort((a,b) => new Date(a[0]) - new Date(b[0]));
 
-            dataSheet.forEach(row => {
-                // Konversi data Sheet ke Date Object
-                const rawDate = new Date(row[0]);
-                
-                // Ambil murni Y-M-D untuk statistik & filter
-                const rowYear = rawDate.getFullYear();
-                const rowMonth = rawDate.getMonth();
-                const rowDay = rawDate.getDate();
-                const rowTimeClean = new Date(rowYear, rowMonth, rowDay).getTime();
+            dataJadwal.forEach(row => {
+                const tglObj = new Date(row[0]);
+                const tglTime = new Date(tglObj.getFullYear(), tglObj.getMonth(), tglObj.getDate()).getTime();
+                const tglString = row[0].split('T')[0];
 
-                // A. Statistik Bulan Berjalan (Lokal)
-                if (rowYear === today.getFullYear() && rowMonth === today.getMonth()) {
-                    totalPaxBulan += parseInt(row[2]) || 0;
-                    totalIDR += parseInt(row[4]) || 0;
+                // Hitung Statistik Bulan Ini
+                if(tglString.startsWith(currentMonth)) {
+                    paxBulan += parseInt(row[2]) || 0;
+                    komisiBulan += parseInt(row[4]) || 0;
                 }
 
-                // B. Filter Jadwal 7 Hari (Pengecekan angka mentah, bukan string)
-                if (rowTimeClean >= todayTime && rowTimeClean <= maxTime) {
-                    const tglTeks = rawDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-                    const tglISO = `${rowYear}-${("0"+(rowMonth+1)).slice(-2)}-${("0"+rowDay).slice(-2)}`;
-                    
-                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${tglISO}'">
-                        <td class="tgl-txt">${tglTeks}</td>
+                // Masukkan ke Tabel 3 Hari
+                if(tglTime >= today && tglTime < limitDay) {
+                    const tglIndo = tglObj.toLocaleDateString('id-ID', {day:'2-digit', month:'short'});
+                    htmlJadwal += `<tr onclick="location.href='manifes.html?tgl=${tglString}'">
+                        <td class="tgl-txt">${tglIndo}</td>
                         <td style="font-weight:600;">${row[1]}</td>
-                        <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
+                        <td style="text-align:right;"><span class="pax-badge">${row[2]}</span></td>
                     </tr>`;
                 }
             });
 
-            document.getElementById("totalKomisi").innerText = "Rp " + totalIDR.toLocaleString('id-ID');
-            document.getElementById("totalPax").innerText = totalPaxBulan + " Orang";
-            tabelBody.innerHTML = barisHtml || "<tr><td colspan='3' style='text-align:center; padding:20px; color:#999;'>Tidak ada jadwal dlm 7 hari</td></tr>";
+            document.getElementById("totalKomisi").innerText = "Rp " + komisiBulan.toLocaleString('id-ID');
+            document.getElementById("totalPax").innerText = paxBulan + " Orang";
+            document.getElementById("tabelJadwal").innerHTML = htmlJadwal || "<tr><td colspan='3' style='text-align:center; padding:15px; color:#999;'>Tidak ada jadwal.</td></tr>";
 
-        } catch (error) {
-            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Gagal Memuat: ${error.message}</td></tr>`;
+            // 2. Ambil Data Manifes (Compact List)
+            const resMan = await fetch(`${API_URL}?p=manifes`);
+            const dataMan = await resMan.json();
+            const containerMan = document.getElementById('miniManifest');
+
+            if(dataMan && dataMan.length > 0) {
+                containerMan.innerHTML = dataMan.slice(0, 6).map(item => {
+                    const jam = item.jam ? item.jam.substring(0, 5) : "--:--";
+                    const tglParam = item.tanggal.split('T')[0];
+                    return `
+                        <div class="manifest-item" onclick="location.href='manifes.html?tgl=${tglParam}'">
+                            <div class="time-box">${jam}<br><span style="font-size:8px; opacity:0.6;">WIB</span></div>
+                            <div class="info-box">
+                                <div class="pax-name">${item.nama}</div>
+                                <div class="route-info">${item.armada} ➔ ${item.tujuan}</div>
+                            </div>
+                            <div class="pax-tag">${item.pax} PAX</div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                containerMan.innerHTML = "<p style='text-align:center; font-size:12px; color:#999; padding:20px;'>Antrean kosong.</p>";
+            }
+
+        } catch (err) {
+            console.error(err);
+            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>Gagal sinkron data.</td></tr>";
         }
     }
 
-    window.onload = loadDashboardData;
+    window.onload = loadDashboard;
 </script>
+
 </body>
 </html>
