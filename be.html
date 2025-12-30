@@ -111,7 +111,6 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
-    // Fungsi sakti untuk bikin list tanggal 3 hari kedepan (Format: YYYY-MM-DD)
     function getDatesArray() {
         let dates = [];
         for (let i = 0; i < 3; i++) {
@@ -127,11 +126,11 @@
 
     async function loadDashboard() {
         try {
-            const targetDates = getDatesArray(); // [Hari Ini, Besok, Lusa]
+            const targetDates = getDatesArray();
             const now = new Date();
             const currentMonthKey = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
-            // 1. Ambil Data Jadwal & Statistik
+            // 1. LOAD JADWAL & STATS
             const resJadwal = await fetch(`${API_URL}?p=getPendapatan`);
             const dataJadwal = await resJadwal.json();
 
@@ -139,62 +138,64 @@
             let komisiBulan = 0;
             let paxBulan = 0;
 
-            // Sortir dulu biar urut tanggal
-            dataJadwal.sort((a, b) => new Date(a[0]) - new Date(b[0]));
-
             dataJadwal.forEach(row => {
-                const tglFull = row[0].split('T')[0]; // Ambil YYYY-MM-DD dari data Sheet
+                // Asumsi urutan kolom: [0]Tanggal, [1]Armada, [2]Pax, [3]Tujuan, [4]Komisi
+                const tglFull = row[0] ? row[0].split('T')[0] : "";
 
-                // Statistik Bulanan
                 if (tglFull.startsWith(currentMonthKey)) {
                     paxBulan += parseInt(row[2]) || 0;
                     komisiBulan += parseInt(row[4]) || 0;
                 }
 
-                // Filter 3 Hari (Pakai String Matching - Anti Gagal)
                 if (targetDates.includes(tglFull)) {
                     const dObj = new Date(row[0]);
                     const tglIndo = dObj.toLocaleDateString('id-ID', {day:'2-digit', month:'short'});
                     htmlJadwal += `
                         <tr onclick="location.href='manifes.html?tgl=${tglFull}'">
                             <td class="tgl-txt">${tglIndo}</td>
-                            <td style="font-weight:600;">${row[1]}</td>
-                            <td style="text-align:right;"><span class="pax-badge">${row[2]}</span></td>
+                            <td style="font-weight:600;">${row[1] || '-'}</td>
+                            <td style="text-align:right;"><span class="pax-badge">${row[2] || 0}</span></td>
                         </tr>`;
                 }
             });
 
             document.getElementById("totalKomisi").innerText = "Rp " + komisiBulan.toLocaleString('id-ID');
             document.getElementById("totalPax").innerText = paxBulan + " Orang";
-            document.getElementById("tabelJadwal").innerHTML = htmlJadwal || "<tr><td colspan='3' style='text-align:center; padding:15px; color:#999;'>Tidak ada jadwal 3 hari ke depan</td></tr>";
+            document.getElementById("tabelJadwal").innerHTML = htmlJadwal || "<tr><td colspan='3' style='text-align:center; padding:15px;'>Tidak ada jadwal.</td></tr>";
 
-            // 2. Ambil Data Antrean Penumpang (Manifes)
+            // 2. LOAD ANTREAN (MANIFES)
             const resMan = await fetch(`${API_URL}?p=manifes`);
             const dataMan = await resMan.json();
             const containerMan = document.getElementById('miniManifest');
 
             if (dataMan && dataMan.length > 0) {
                 containerMan.innerHTML = dataMan.slice(0, 6).map(item => {
-                    const jam = item.jam ? item.jam.substring(0, 5) : "--:--";
-                    const tglP = item.tanggal.split('T')[0];
+                    // Gunakan Object.values jika data dikirim dalam bentuk array, 
+                    // atau pastikan key-nya benar (nama, armada, tujuan, pax, jam)
+                    const nama = item.nama || item[1] || "Tanpa Nama";
+                    const armada = item.armada || item[2] || "-";
+                    const tujuan = item.tujuan || item[3] || "-";
+                    const pax = item.pax || item[4] || 0; // Perbaikan undefined PAX
+                    const jam = item.jam || item[5] || "--:--";
+                    const tglP = item.tanggal ? item.tanggal.split('T')[0] : "";
+
                     return `
                         <div class="manifest-item" onclick="location.href='manifes.html?tgl=${tglP}'">
-                            <div class="time-box">${jam}<br><span style="font-size:8px; opacity:0.6;">WIB</span></div>
+                            <div class="time-box">${jam.substring(0,5)}<br><span style="font-size:8px; opacity:0.6;">WIB</span></div>
                             <div class="info-box">
-                                <div class="pax-name">${item.nama}</div>
-                                <div class="route-info">${item.armada} ➔ ${item.tujuan}</div>
+                                <div class="pax-name">${nama}</div>
+                                <div class="route-info">${armada} ➔ ${tujuan}</div>
                             </div>
-                            <div class="pax-tag">${item.pax} PAX</div>
+                            <div class="pax-tag">${pax} PAX</div>
                         </div>
                     `;
                 }).join('');
             } else {
-                containerMan.innerHTML = "<p style='text-align:center; font-size:12px; color:#999; padding:20px;'>Antrean kosong.</p>";
+                containerMan.innerHTML = "<p style='text-align:center; padding:20px;'>Antrean kosong.</p>";
             }
 
         } catch (err) {
             console.error(err);
-            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red;'>Gagal sinkron data.</td></tr>";
         }
     }
 
