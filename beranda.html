@@ -81,6 +81,7 @@
             color: #444;
         }
         .schedule-table tr { cursor: pointer; transition: 0.2s; }
+        .schedule-table tr:hover { background: #f8fbff; }
         .schedule-table tr:active { background: #f0f7ff; }
         .schedule-table tr:last-child td { border-bottom: none; }
         
@@ -147,7 +148,7 @@
                 <tr>
                     <td colspan="3" style="text-align: center; color: #ccc; padding: 30px;">
                         <i class="fas fa-circle-notch fa-spin"></i><br>
-                        <span style="font-size: 11px; margin-top: 10px; display: block;">Sinkronisasi Data...</span>
+                        <span style="font-size: 11px; margin-top: 10px; display: block;">Menghubungkan ke Sheets...</span>
                     </td>
                 </tr>
             </tbody>
@@ -168,59 +169,68 @@
     async function loadDashboardData() {
         try {
             const now = new Date();
+            // Set ke jam 00:00:00 agar perbandingan tanggal murni hari ini
+            const hariIni = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            
+            const tujuhHariLagi = new Date(hariIni);
+            tujuhHariLagi.setDate(tujuhHariLagi.getDate() + 7);
+
             const bulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
-            // 1. Fetch Data Pendapatan (Untuk Statistik)
             const resp = await fetch(`${API_URL}?p=getPendapatan&bulan=${bulanIni}`);
-            const dataKomisi = await resp.json();
+            const dataSheet = await resp.json();
+
+            // URUTKAN DATA BERDASARKAN TANGGAL
+            dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             let totalIDR = 0;
             let totalPaxBulan = 0;
-            dataKomisi.forEach(row => {
-                totalPaxBulan += parseInt(row[2]) || 0;
-                totalIDR += parseInt(row[4]) || 0;
-            });
-
-            document.getElementById("totalKomisi").innerText = "Rp " + totalIDR.toLocaleString('id-ID');
-            document.getElementById("totalPax").innerText = totalPaxBulan + " Orang";
-
-            // 2. Filter Jadwal 7 Hari Ke Depan
+            
             const tabelBody = document.getElementById("tabelJadwal");
             tabelBody.innerHTML = "";
+            let adaJadwal = false;
 
-            // Menentukan batas tanggal (hari ini s/d 7 hari lagi)
-            const sevenDaysLater = new Date();
-            sevenDaysLater.setDate(now.getDate() + 7);
-            
-            // Filter data dari sheet yang masuk rentang 7 hari
-            const jadwalSeminggu = dataKomisi.filter(row => {
+            dataSheet.forEach(row => {
+                // Hitung Statistik (Bulan Berjalan)
+                totalPaxBulan += parseInt(row[2]) || 0;
+                totalIDR += parseInt(row[4]) || 0;
+
+                // FILTER JADWAL (HARI INI s/d 7 HARI KE DEPAN)
                 const tglRow = new Date(row[0]);
-                return tglRow >= now.setHours(0,0,0,0) && tglRow <= sevenDaysLater;
-            });
+                // Set tglRow ke 00:00:00 juga biar matching
+                const tglRowClean = new Date(tglRow.getFullYear(), tglRow.getMonth(), tglRow.getDate());
 
-            if (jadwalSeminggu.length === 0) {
-                tabelBody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding:20px; color:#999;'>Tidak ada jadwal dlm 7 hari</td></tr>";
-            } else {
-                jadwalSeminggu.forEach(row => {
-                    const d = new Date(row[0]);
-                    const tglIndo = d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+                if (tglRowClean >= hariIni && tglRowClean <= tujuhHariLagi) {
+                    adaJadwal = true;
+                    const tglIndo = tglRow.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
                     
                     const tr = document.createElement("tr");
-                    // Tambahkan fungsi klik untuk ke manifes
-                    tr.onclick = () => window.location.href = `manifes.html?tgl=${row[0]}`;
+                    // Navigasi ke Manifes berdasarkan tanggal baris tersebut
+                    tr.onclick = () => {
+                        const tglParam = tglRow.toISOString().split('T')[0];
+                        window.location.href = `manifes.html?tgl=${tglParam}`;
+                    };
                     
                     tr.innerHTML = `
                         <td class="tgl-txt">${tglIndo}</td>
-                        <td style="font-weight:500;">${row[1]}</td>
+                        <td style="font-weight:600;">${row[1]}</td>
                         <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
                     `;
                     tabelBody.appendChild(tr);
-                });
+                }
+            });
+
+            // Update Statistik Card
+            document.getElementById("totalKomisi").innerText = "Rp " + totalIDR.toLocaleString('id-ID');
+            document.getElementById("totalPax").innerText = totalPaxBulan + " Orang";
+
+            if (!adaJadwal) {
+                tabelBody.innerHTML = "<tr><td colspan='3' style='text-align:center; padding:30px; color:#999; font-size:12px;'>Tidak ada jadwal untuk 7 hari ke depan.</td></tr>";
             }
 
         } catch (error) {
             console.error("Gagal load:", error);
-            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red; padding:20px;'>Koneksi Terputus</td></tr>";
+            document.getElementById("tabelJadwal").innerHTML = "<tr><td colspan='3' style='text-align:center; color:red; padding:20px;'>Gagal Memuat Data</td></tr>";
         }
     }
 
