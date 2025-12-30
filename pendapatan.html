@@ -38,9 +38,9 @@
         table { width: 100%; border-collapse: collapse; font-size: 12px; }
         thead { background: #f8f9fa; }
         th { padding: 12px 10px; text-align: left; color: #0066AE; border-bottom: 2px solid #eee; }
-        td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; color: #444; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; color: #444; vertical-align: middle; }
         
-        .text-komisi { font-weight: 700; color: #27ae60; }
+        .text-komisi { font-weight: 600; color: #444; } /* Warna disamakan (abu tua/hitam) */
         .text-pax { color: #888; font-size: 11px; }
 
         /* FAB */
@@ -74,14 +74,14 @@
         <h2 id="totalKomisi">Rp 0</h2>
     </div>
 
-    <div class="source-title"><i class="fas fa-history"></i> Rincian Sumber Pendapatan</div>
+    <div class="source-title"><i class="fas fa-history"></i> Rincian Pendapatan</div>
     <div class="table-responsive">
         <table>
             <thead>
                 <tr>
-                    <th>Tgl / Armada</th>
-                    <th>Pax</th>
-                    <th>Komisi</th>
+                    <th>Tanggal / Armada</th>
+                    <th style="text-align: center;">Pax</th>
+                    <th style="text-align: right;">Komisi</th>
                 </tr>
             </thead>
             <tbody id="listPendapatan">
@@ -102,6 +102,15 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
+    function formatTglIndo(tglStr) {
+        if(!tglStr) return "-";
+        const d = new Date(tglStr);
+        const tgl = String(d.getDate()).padStart(2, '0');
+        const bln = String(d.getMonth() + 1).padStart(2, '0');
+        const thn = d.getFullYear();
+        return `${tgl}-${bln}-${thn}`;
+    }
+
     async function loadFinance() {
         const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
         const listBody = document.getElementById('listPendapatan');
@@ -115,14 +124,12 @@
             listBody.innerHTML = "";
 
             if (dataRev.length === 0) {
-                listBody.innerHTML = "<tr><td colspan='3' style='text-align:center'>Belum ada data bulan ini</td></tr>";
+                listBody.innerHTML = "<tr><td colspan='3' style='text-align:center'>Belum ada data</td></tr>";
                 return;
             }
 
-            // dataRev: [0:Tgl, 1:Armada, 2:Pax, 3:Keterangan(?), 4:Komisi]
-            // Sesuai index yang kamu pakai di index.html (row[4] komisi, row[2] pax)
             dataRev.reverse().forEach(row => {
-                const tgl = row[0].split('T')[0]; // Format tanggal
+                const tglFormatted = formatTglIndo(row[0]);
                 const armada = row[1];
                 const pax = row[2];
                 const komisi = parseInt(row[4]) || 0;
@@ -130,9 +137,9 @@
 
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td><strong>${tgl}</strong><br><small style="color:#888">${armada}</small></td>
-                    <td>${pax} <span class="text-pax">Pax</span></td>
-                    <td class="text-komisi">Rp ${komisi.toLocaleString('id-ID')}</td>
+                    <td><strong>${tglFormatted}</strong><br><small style="color:#888">${armada}</small></td>
+                    <td style="text-align: center;">${pax} <span class="text-pax">Pax</span></td>
+                    <td style="text-align: right;" class="text-komisi">Rp ${komisi.toLocaleString('id-ID')}</td>
                 `;
                 listBody.appendChild(tr);
             });
