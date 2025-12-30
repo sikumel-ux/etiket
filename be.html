@@ -55,7 +55,7 @@
         <table class="schedule-table">
             <thead><tr><th>Tanggal</th><th>Armada</th><th style="text-align: right;">Pax</th></tr></thead>
             <tbody id="tabelJadwal">
-                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Menarik Data...</td></tr>
+                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Memuat Data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -71,56 +71,47 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
-    // Konversi tanggal ke string "YYYY-MM-DD" murni tanpa gangguan zona waktu
-    function formatDateToString(date) {
-        let d = new Date(date);
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-        let year = d.getFullYear();
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
-        return [year, month, day].join('-');
-    }
-
     async function loadDashboardData() {
         const tabelBody = document.getElementById("tabelJadwal");
         try {
-            // Tarik data mentah
             const resp = await fetch(`${API_URL}?p=getPendapatan`);
             const dataSheet = await resp.json();
 
-            // Buat daftar 7 hari kedepan dalam bentuk String YYYY-MM-DD
-            const targetDates = [];
-            for (let i = 0; i <= 7; i++) {
-                let d = new Date();
-                d.setDate(d.getDate() + i);
-                targetDates.push(formatDateToString(d));
-            }
-
-            const now = new Date();
-            const currentMonthKey = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
+            // 1. Ambil Waktu Lokal Hari Ini (Murni Tanggal)
+            const today = new Date();
+            const todayTime = new Date(today.getFullYear(), today.getMonth(), today.getDate()).getTime();
+            
+            // 7 Hari kedepan
+            const maxTime = todayTime + (7 * 24 * 60 * 60 * 1000);
 
             let totalIDR = 0, totalPaxBulan = 0, barisHtml = "";
 
-            // Urutkan data berdasarkan tanggal
+            // Urutkan data berdasarkan tanggal terkecil
             dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             dataSheet.forEach(row => {
-                const rowDateStr = formatDateToString(row[0]);
+                // Konversi data Sheet ke Date Object
+                const rawDate = new Date(row[0]);
                 
-                // 1. Hitung Statistik Bulan Berjalan
-                if (rowDateStr.startsWith(currentMonthKey)) {
+                // Ambil murni Y-M-D untuk statistik & filter
+                const rowYear = rawDate.getFullYear();
+                const rowMonth = rawDate.getMonth();
+                const rowDay = rawDate.getDate();
+                const rowTimeClean = new Date(rowYear, rowMonth, rowDay).getTime();
+
+                // A. Statistik Bulan Berjalan (Lokal)
+                if (rowYear === today.getFullYear() && rowMonth === today.getMonth()) {
                     totalPaxBulan += parseInt(row[2]) || 0;
                     totalIDR += parseInt(row[4]) || 0;
                 }
 
-                // 2. Filter 7 Hari (Cek apakah string tanggal ada di daftar target)
-                if (targetDates.includes(rowDateStr)) {
-                    const dObj = new Date(row[0]);
-                    const tglDisplay = dObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+                // B. Filter Jadwal 7 Hari (Pengecekan angka mentah, bukan string)
+                if (rowTimeClean >= todayTime && rowTimeClean <= maxTime) {
+                    const tglTeks = rawDate.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+                    const tglISO = `${rowYear}-${("0"+(rowMonth+1)).slice(-2)}-${("0"+rowDay).slice(-2)}`;
                     
-                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${rowDateStr}'">
-                        <td class="tgl-txt">${tglDisplay}</td>
+                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${tglISO}'">
+                        <td class="tgl-txt">${tglTeks}</td>
                         <td style="font-weight:600;">${row[1]}</td>
                         <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
                     </tr>`;
@@ -132,7 +123,7 @@
             tabelBody.innerHTML = barisHtml || "<tr><td colspan='3' style='text-align:center; padding:20px; color:#999;'>Tidak ada jadwal dlm 7 hari</td></tr>";
 
         } catch (error) {
-            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Koneksi Gagal.</td></tr>`;
+            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Gagal Memuat: ${error.message}</td></tr>`;
         }
     }
 
