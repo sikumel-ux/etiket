@@ -16,70 +16,81 @@
             border-radius: 0 0 30px 30px;
         }
         .header-finance h2 { margin: 0; font-weight: 800; letter-spacing: 2px; font-size: 24px; }
-        .header-finance p { margin: 5px 0 0 0; font-size: 11px; opacity: 0.8; letter-spacing: 1px; }
 
-        .container { padding: 0 20px; }
+        .container { padding: 0 15px; }
 
+        /* CARD RINGKASAN */
         .card-summary {
             background: white;
-            padding: 30px 20px;
+            padding: 25px 20px;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.08);
             margin-top: -35px;
             text-align: center;
-            border: 1px solid #fff;
+            margin-bottom: 25px;
         }
-        .card-summary small { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1.5px; }
-        .card-summary h2 { margin: 10px 0 0 0; color: #0066AE; font-size: 34px; font-weight: 800; }
+        .card-summary small { color: #aaa; font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 1px; }
+        .card-summary h2 { margin: 5px 0 0 0; color: #0066AE; font-size: 30px; font-weight: 800; }
 
+        /* TABEL RINCIAN PENDAPATAN */
+        .source-title { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 10px; padding-left: 5px; }
+        .table-responsive { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        table { width: 100%; border-collapse: collapse; font-size: 12px; }
+        thead { background: #f8f9fa; }
+        th { padding: 12px 10px; text-align: left; color: #0066AE; border-bottom: 2px solid #eee; }
+        td { padding: 12px 10px; border-bottom: 1px solid #f0f0f0; color: #444; }
+        
+        .text-komisi { font-weight: 700; color: #27ae60; }
+        .text-pax { color: #888; font-size: 11px; }
+
+        /* FAB */
         .fab-add {
-            position: fixed;
-            bottom: 90px;
-            right: 25px;
-            width: 65px;
-            height: 65px;
+            position: fixed; bottom: 85px; right: 20px; width: 60px; height: 60px;
             background: linear-gradient(135deg, #0066AE, #004a80);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 8px 20px rgba(0, 102, 174, 0.4);
-            text-decoration: none;
-            z-index: 999;
+            color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 24px; box-shadow: 0 6px 15px rgba(0, 102, 174, 0.4); text-decoration: none; z-index: 999;
         }
 
+        /* NAV BOTTOM */
         .nav-bottom { 
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 400px; 
-            background: #fff; display: flex; justify-content: space-around; 
-            padding: 12px 0; box-shadow: 0 -5px 25px rgba(0,0,0,0.07); 
-            border-radius: 25px 25px 0 0; z-index: 1000;
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; 
+            background: #fff; display: flex; justify-content: space-around; padding: 12px 0; 
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-radius: 20px 20px 0 0; z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; font-size: 10px; font-weight: 600; }
         .nav-bottom a.active { color: #0066AE; }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
-        .nav-bottom span { font-size: 9px; font-weight: 700; display: block; }
     </style>
 </head>
 <body>
 
 <div class="header-finance">
     <h2>KEUANGAN</h2>
-    <p>MANAJEMEN KOMISI MANUAL</p>
 </div>
 
 <div class="container">
     <div class="card-summary">
-        <small>Komisi Bulan Ini</small>
+        <small>Total Komisi Bulan Ini</small>
         <h2 id="totalKomisi">Rp 0</h2>
+    </div>
+
+    <div class="source-title"><i class="fas fa-history"></i> Rincian Sumber Pendapatan</div>
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tgl / Armada</th>
+                    <th>Pax</th>
+                    <th>Komisi</th>
+                </tr>
+            </thead>
+            <tbody id="listPendapatan">
+                </tbody>
+        </table>
     </div>
 </div>
 
-<a href="komisi.html" class="fab-add">
-    <i class="fas fa-plus"></i>
-</a>
+<a href="komisi.html" class="fab-add"><i class="fas fa-plus"></i></a>
 
 <div class="nav-bottom">
     <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
@@ -91,33 +102,50 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec"; 
 
-    async function loadFinanceData() {
-        const display = document.getElementById('totalKomisi');
-        display.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    async function loadFinance() {
+        const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
+        const listBody = document.getElementById('listPendapatan');
+        const totalDisplay = document.getElementById('totalKomisi');
 
         try {
-            // Logika filter bulan sama dengan index.html
-            const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
-            
-            // Memanggil API dengan parameter yang sudah terbukti jalan di Index
             const response = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
             const dataRev = await response.json();
 
             let totalKomisi = 0;
-            dataRev.forEach(row => {
-                // Sesuai kode index kamu: row[4] adalah kolom komisi di sheet pendapatan
-                totalKomisi += parseInt(row[4]) || 0;
+            listBody.innerHTML = "";
+
+            if (dataRev.length === 0) {
+                listBody.innerHTML = "<tr><td colspan='3' style='text-align:center'>Belum ada data bulan ini</td></tr>";
+                return;
+            }
+
+            // dataRev: [0:Tgl, 1:Armada, 2:Pax, 3:Keterangan(?), 4:Komisi]
+            // Sesuai index yang kamu pakai di index.html (row[4] komisi, row[2] pax)
+            dataRev.reverse().forEach(row => {
+                const tgl = row[0].split('T')[0]; // Format tanggal
+                const armada = row[1];
+                const pax = row[2];
+                const komisi = parseInt(row[4]) || 0;
+                totalKomisi += komisi;
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td><strong>${tgl}</strong><br><small style="color:#888">${armada}</small></td>
+                    <td>${pax} <span class="text-pax">Pax</span></td>
+                    <td class="text-komisi">Rp ${komisi.toLocaleString('id-ID')}</td>
+                `;
+                listBody.appendChild(tr);
             });
 
-            display.innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
+            totalDisplay.innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
 
         } catch (error) {
-            console.error("Error Load Finance:", error);
-            display.innerText = "Gagal Muat";
+            console.error(error);
+            listBody.innerHTML = "<tr><td colspan='3' style='text-align:center; color:red'>Gagal memuat data</td></tr>";
         }
     }
 
-    window.onload = loadFinanceData;
+    window.onload = loadFinance;
 </script>
 
 </body>
