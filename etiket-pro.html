@@ -60,12 +60,30 @@
         .note-section ol { padding-left: 15px; margin: 0; }
         .note-section li { margin-bottom: 8px; }
 
-        /* NAV BOTTOM */
+        
         .nav-bottom { 
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; 
-            background: #004a80; display: flex; justify-content: space-around; padding: 12px 0; 
-            box-shadow: 0 -5px 15px rgba(0,0,0,0.2); border-radius: 20px 20px 0 0; z-index: 1000;
-        }
+    position: fixed; 
+    bottom: 0; 
+    left: 50%; 
+    transform: translateX(-50%); 
+    width: 100%; 
+    max-width: 400px; 
+    background: #004a80; 
+    display: flex; 
+    justify-content: space-around; 
+    padding: 12px 0; 
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.2); 
+    border-radius: 20px 20px 0 0; 
+    z-index: 1000;
+    /* Tambahkan transition di bawah ini */
+    transition: bottom 0.3s ease-in-out; 
+}
+
+/* Class tambahan untuk menyembunyikan nav */
+.nav-hidden {
+    bottom: -100px !important; /* Dorong ke bawah layar */
+}
+        
         .nav-bottom a { text-decoration: none; color: #fff; opacity: 0.6; text-align: center; flex: 1; }
         .nav-bottom a.active { opacity: 1; }
         .nav-bottom i { font-size: 18px; display: block; margin-bottom: 3px; }
@@ -155,6 +173,23 @@
             alert("Data tiket tidak ditemukan!");
         }
     }
+    let lastScrollTop = 0;
+const navBottom = document.querySelector('.nav-bottom');
+
+window.addEventListener('scroll', function() {
+    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    
+    if (scrollTop > lastScrollTop && scrollTop > 50) {
+        // Scroll ke BAWAH - Sembunyikan Navigasi
+        navBottom.classList.add('nav-hidden');
+    } else {
+        // Scroll ke ATAS - Tampilkan Navigasi
+        navBottom.classList.remove('nav-hidden');
+    }
+    
+    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Untuk menangani mobile scroll
+}, false);
+    
 </script>
 </body>
 </html>
