@@ -55,7 +55,7 @@
         <table class="schedule-table">
             <thead><tr><th>Tanggal</th><th>Armada</th><th style="text-align: right;">Pax</th></tr></thead>
             <tbody id="tabelJadwal">
-                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Sinkronisasi Data...</td></tr>
+                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Sinkronisasi...</td></tr>
             </tbody>
         </table>
     </div>
@@ -71,58 +71,55 @@
 <script>
     const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
 
-    // Fungsi pembantu untuk memastikan tanggal terbaca dengan benar
-    function parseDate(input) {
-        if (!input) return null;
+    // Helper untuk mengubah apa pun menjadi YYYY-MM-DD string murni
+    function toISODate(input) {
+        if (!input) return "";
         let d = new Date(input);
-        // Jika format bawaan gagal (Invalid Date), coba manual
-        if (isNaN(d.getTime())) {
-            let parts = input.split(/[-T :]/);
-            d = new Date(parts[0], parts[1] - 1, parts[2]);
-        }
-        return d;
+        if (isNaN(d.getTime())) return "";
+        let year = d.getFullYear();
+        let month = ("0" + (d.getMonth() + 1)).slice(-2);
+        let day = ("0" + d.getDate()).slice(-2);
+        return `${year}-${month}-${day}`;
     }
 
     async function loadDashboardData() {
         const tabelBody = document.getElementById("tabelJadwal");
         try {
-            const now = new Date();
-            now.setHours(0, 0, 0, 0); // Reset ke 00:00 hari ini
-            const hariIni = now.getTime();
-            const tujuhHariLagi = hariIni + (7 * 24 * 60 * 60 * 1000);
-            
-            const stringBulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
-
-            // Fetch data (Pastikan parameter 'p' sesuai dengan Apps Script kamu)
             const resp = await fetch(`${API_URL}?p=getPendapatan`);
             const dataSheet = await resp.json();
 
-            if (!Array.isArray(dataSheet)) throw new Error("Data bukan array");
+            // Range Tanggal murni string (YYYY-MM-DD)
+            const dates = [];
+            for(let i=0; i<8; i++) {
+                let d = new Date();
+                d.setDate(d.getDate() + i);
+                dates.push(toISODate(d));
+            }
+
+            const now = new Date();
+            const currentMonthStr = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
             let totalIDR = 0, totalPaxBulan = 0, barisHtml = "";
 
-            // Sortir data berdasarkan tanggal
-            dataSheet.sort((a, b) => parseDate(a[0]) - parseDate(b[0]));
+            // Sorting
+            dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             dataSheet.forEach(row => {
-                const tglObj = parseDate(row[0]);
-                if (!tglObj) return;
-
-                const tglClean = new Date(tglObj.getFullYear(), tglObj.getMonth(), tglObj.getDate()).getTime();
-                const tglBulan = tglObj.getFullYear() + "-" + ("0" + (tglObj.getMonth() + 1)).slice(-2);
+                const rowDateISO = toISODate(row[0]);
+                if (!rowDateISO) return;
 
                 // 1. Statistik Bulan Berjalan
-                if (tglBulan === stringBulanIni) {
+                if (rowDateISO.startsWith(currentMonthStr)) {
                     totalPaxBulan += parseInt(row[2]) || 0;
                     totalIDR += parseInt(row[4]) || 0;
                 }
 
-                // 2. Filter 7 Hari (Termasuk hari ini)
-                if (tglClean >= hariIni && tglClean <= tujuhHariLagi) {
-                    const tglTeks = tglObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-                    const tglISO = tglObj.toISOString().split('T')[0];
+                // 2. Filter 7 Hari ke Depan (Check if row date is in our array)
+                if (dates.includes(rowDateISO)) {
+                    const dObj = new Date(row[0]);
+                    const tglTeks = dObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
                     
-                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${tglISO}'">
+                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${rowDateISO}'">
                         <td class="tgl-txt">${tglTeks}</td>
                         <td style="font-weight:600;">${row[1]}</td>
                         <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
@@ -135,8 +132,7 @@
             tabelBody.innerHTML = barisHtml || "<tr><td colspan='3' style='text-align:center; padding:20px; color:#999;'>Tidak ada jadwal dlm 7 hari</td></tr>";
 
         } catch (error) {
-            console.error(error);
-            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Gagal memuat data: ${error.message}</td></tr>`;
+            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Error: ${error.message}</td></tr>`;
         }
     }
 
