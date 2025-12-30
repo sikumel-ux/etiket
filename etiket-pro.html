@@ -8,17 +8,29 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; background: #eef2f7; margin: 0; padding-bottom: 80px; display: flex; justify-content: center; }
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: #eef2f7; 
+            margin: 0; padding-bottom: 80px; 
+            display: flex; justify-content: center;
+            overflow-x: hidden;
+        }
         
         .etiket-container { 
-            width: 100%; max-width: 400px; background: #fff; min-height: 100vh; 
-            display: flex; flex-direction: column; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            width: 100%; max-width: 400px; 
+            background: #fff; min-height: 100vh; 
+            display: flex; flex-direction: column; 
+            position: relative; 
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            overflow: visible; /* Penting agar lingkaran sobekan tidak terpotong */
         }
 
         /* HEADER */
         .header { 
             background: linear-gradient(135deg, #0066AE, #004a80); 
-            color: #fff; padding: 40px 20px 60px 20px; border-radius: 0 0 40px 40px; text-align: center; position: relative;
+            color: #fff; padding: 40px 20px 60px 20px; 
+            border-radius: 0 0 40px 40px; text-align: center; 
+            position: relative;
         }
         .header h1 { margin: 0; font-size: 26px; letter-spacing: 2px; font-weight: 800; }
         .header p { margin: 5px 0 0 0; font-size: 10px; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; }
@@ -34,60 +46,55 @@
         /* GRID INFO */
         .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 45px 20px 20px 20px; }
         .info-box {
-            background: #ffffff; padding: 12px 15px; border-radius: 10px; display: flex; align-items: center;
+            background: #ffffff; padding: 12px 15px; border-radius: 10px; 
+            display: flex; align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.06); border: 1px solid #f5f5f5;
         }
         .info-box i, .info-box b { font-size: 16px; color: #333; margin-right: 12px; width: 20px; text-align: center; font-style: normal; }
         .info-box span { font-size: 12px; font-weight: 500; color: #333; }
 
         /* TEAR LINE DENGAN EFEK SOBEKAN SAMPING */
-        .tear-container { position: relative; display: flex; align-items: center; justify-content: center; margin: 10px 0; }
+        .tear-container { position: relative; display: flex; align-items: center; justify-content: center; margin: 15px 0; }
         .tear-line { width: 90%; border-top: 2px dashed #ddd; }
         .tear-circle-l, .tear-circle-r {
-            position: absolute; width: 24px; height: 24px; background: #eef2f7; border-radius: 50%; top: -12px; z-index: 5;
+            position: absolute; width: 26px; height: 26px; 
+            background: #eef2f7; border-radius: 50%; top: -13px; z-index: 5;
         }
-        .tear-circle-l { left: -12px; }
-        .tear-circle-r { right: -12px; }
+        .tear-circle-l { left: -13px; }
+        .tear-circle-r { right: -13px; }
 
         /* BARCODE SECTION */
-        .barcode-section { margin: 10px 20px; background: #fff; border-radius: 15px; padding: 15px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f9f9f9; }
-        .barcode-section img { width: 65%; max-width: 180px; }
+        .barcode-section { 
+            margin: 10px 20px; background: #fff; border-radius: 15px; 
+            padding: 15px; text-align: center; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04); border: 1px solid #f9f9f9; 
+        }
+        .barcode-section img { width: 60%; max-width: 160px; } /* Ukuran dikecilkan */
         .barcode-section p { margin-top: 10px; font-size: 11px; font-weight: 600; color: #555; line-height: 1.4; }
 
         /* PERHATIAN */
-        .note-section { background: #f2f2f2; margin: 10px 20px 30px 20px; padding: 20px; border-radius: 10px; font-size: 11px; color: #333; }
+        .note-section { 
+            background: #f2f2f2; margin: 10px 20px 30px 20px; 
+            padding: 20px; border-radius: 10px; font-size: 11px; color: #333; 
+        }
         .note-section h5 { margin: 0 0 10px 0; font-size: 13px; font-weight: 700; }
         .note-section ol { padding-left: 15px; margin: 0; }
         .note-section li { margin-bottom: 8px; }
 
-        
+        /* NAV BOTTOM */
         .nav-bottom { 
-    position: fixed; 
-    bottom: 0; 
-    left: 50%; 
-    transform: translateX(-50%); 
-    width: 100%; 
-    max-width: 400px; 
-    background: #004a80; 
-    display: flex; 
-    justify-content: space-around; 
-    padding: 12px 0; 
-    box-shadow: 0 -5px 15px rgba(0,0,0,0.2); 
-    border-radius: 20px 20px 0 0; 
-    z-index: 1000;
-    /* Tambahkan transition di bawah ini */
-    transition: bottom 0.3s ease-in-out; 
-}
-
-/* Class tambahan untuk menyembunyikan nav */
-.nav-hidden {
-    bottom: -100px !important; /* Dorong ke bawah layar */
-}
-        
-        .nav-bottom a { text-decoration: none; color: #fff; opacity: 0.6; text-align: center; flex: 1; }
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 400px; 
+            background: #004a80; display: flex; justify-content: space-around; padding: 12px 0; 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2); border-radius: 20px 20px 0 0; 
+            z-index: 1000; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .nav-bottom a { text-decoration: none; color: #fff; opacity: 0.7; text-align: center; flex: 1; }
         .nav-bottom a.active { opacity: 1; }
         .nav-bottom i { font-size: 18px; display: block; margin-bottom: 3px; }
         .nav-bottom span { font-size: 9px; font-weight: 600; display: block; }
+
+        /* Mode Screenshot (Navigasi Sembunyi) */
+        .screenshot-mode { bottom: -100px !important; opacity: 0; pointer-events: none; }
 
         @media print { .nav-bottom, .tear-circle-l, .tear-circle-r { display: none; } body { background: white; } }
     </style>
@@ -141,14 +148,20 @@
 </div>
 
 <script>
-    // FUNGSI UTAMA AMBIL DATA
+    // 1. Fitur Ketuk Layar untuk Screenshot Mode
+    const navBottom = document.querySelector('.nav-bottom');
+    document.body.addEventListener('click', function(e) {
+        if (!navBottom.contains(e.target)) {
+            navBottom.classList.toggle('screenshot-mode');
+        }
+    });
+
+    // 2. Load Data dari LocalStorage
     const params = new URLSearchParams(window.location.search);
     const kode = params.get("kode");
 
     if (kode) {
-        // Ambil data dari LocalStorage yang di-set saat klik "E-Etiket" di manifes
         const data = JSON.parse(localStorage.getItem("etiket_" + kode));
-        
         if (data) {
             document.getElementById("displayNama").innerText = data.nama || "-";
             document.getElementById("displayKursi").innerText = data.no_kursi || "-";
@@ -156,40 +169,17 @@
             document.getElementById("displayArmada").innerText = data.armada || "-";
             document.getElementById("displayTujuan").innerText = data.tujuan || "-";
             document.getElementById("displayJam").innerText = data.jam || "-";
-            
-            // Format Harga
-            const harga = parseInt(data.harga) || 0;
-            document.getElementById("displayHarga").innerText = harga.toLocaleString('id-ID');
+            document.getElementById("displayHarga").innerText = (parseInt(data.harga) || 0).toLocaleString('id-ID');
 
-            // Format Tanggal Indo
             const d = new Date(data.tanggal);
             const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
             document.getElementById("displayTgl").innerText = d.toLocaleDateString('id-ID', opsi);
 
-            // Generate Barcode otomatis pakai Kode Booking
+            // Barcode
             const codeStr = encodeURIComponent(data.kode_booking);
             document.getElementById("barcodeImg").src = `https://barcode.tec-it.com/barcode.ashx?data=${codeStr}&code=Code128&dpi=96`;
-        } else {
-            alert("Data tiket tidak ditemukan!");
         }
     }
-    let lastScrollTop = 0;
-const navBottom = document.querySelector('.nav-bottom');
-
-window.addEventListener('scroll', function() {
-    let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
-    if (scrollTop > lastScrollTop && scrollTop > 50) {
-        // Scroll ke BAWAH - Sembunyikan Navigasi
-        navBottom.classList.add('nav-hidden');
-    } else {
-        // Scroll ke ATAS - Tampilkan Navigasi
-        navBottom.classList.remove('nav-hidden');
-    }
-    
-    lastScrollTop = scrollTop <= 0 ? 0 : scrollTop; // Untuk menangani mobile scroll
-}, false);
-    
 </script>
 </body>
 </html>
