@@ -56,7 +56,7 @@
         <table class="schedule-table">
             <thead><tr><th>Tanggal</th><th>Armada</th><th style="text-align: right;">Pax</th></tr></thead>
             <tbody id="tabelJadwal">
-                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Loading...</td></tr>
+                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Memuat Jadwal...</td></tr>
             </tbody>
         </table>
     </div>
@@ -76,33 +76,35 @@
         const tabelBody = document.getElementById("tabelJadwal");
         try {
             const now = new Date();
-            // Ambil waktu hari ini jam 00:00:00
             const hariIni = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
             const tujuhHariLagi = hariIni + (7 * 24 * 60 * 60 * 1000);
+            const stringBulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
 
-            const bulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
-            
-            const resp = await fetch(`${API_URL}?p=getPendapatan&bulan=${bulanIni}`);
+            // Kita tarik data TANPA filter bulan di URL agar data lusa (Januari) terbawa
+            const resp = await fetch(`${API_URL}?p=getPendapatan`);
             const dataSheet = await resp.json();
 
-            // Statistik
-            let totalIDR = 0, totalPaxBulan = 0;
-            let barisHtml = "";
+            let totalIDR = 0, totalPaxBulan = 0, barisHtml = "";
 
-            // Sortir data berdasarkan tanggal
+            // Sortir data berdasarkan tanggal terkecil
             dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
 
             dataSheet.forEach(row => {
-                totalPaxBulan += parseInt(row[2]) || 0;
-                totalIDR += parseInt(row[4]) || 0;
-
-                // LOGIC FILTER TANGGAL YANG LEBIH LONGGAR
                 const tglRow = new Date(row[0]);
-                const tglRowTime = new Date(tglRow.getFullYear(), tglRow.getMonth(), tglRow.getDate()).getTime();
+                const tglRowClean = new Date(tglRow.getFullYear(), tglRow.getMonth(), tglRow.getDate());
+                const tglRowTime = tglRowClean.getTime();
+                const tglRowBulan = tglRow.getFullYear() + "-" + ("0" + (tglRow.getMonth() + 1)).slice(-2);
 
+                // 1. Hitung Statistik Khusus Bulan Ini saja
+                if (tglRowBulan === stringBulanIni) {
+                    totalPaxBulan += parseInt(row[2]) || 0;
+                    totalIDR += parseInt(row[4]) || 0;
+                }
+
+                // 2. Filter Jadwal 7 Hari ke Depan (Tidak peduli ganti bulan)
                 if (tglRowTime >= hariIni && tglRowTime <= tujuhHariLagi) {
                     const tglIndo = tglRow.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
-                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${row[0]}'">
+                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${row[0].split('T')[0]}'">
                         <td class="tgl-txt">${tglIndo}</td>
                         <td style="font-weight:600;">${row[1]}</td>
                         <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
@@ -115,7 +117,7 @@
             tabelBody.innerHTML = barisHtml || "<tr><td colspan='3' style='text-align:center; padding:20px;'>Tidak ada jadwal dlm 7 hari</td></tr>";
 
         } catch (error) {
-            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Error: ${error.message}</td></tr>`;
+            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Gagal memuat data.</td></tr>`;
         }
     }
 
