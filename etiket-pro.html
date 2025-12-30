@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Etiket Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; }
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: #eef2f7; 
+            background: #fdfdfd; 
             margin: 0; padding-bottom: 80px; 
             display: flex; justify-content: center; 
         }
@@ -18,146 +18,158 @@
             width: 100%; max-width: 400px; 
             background: #fff; min-height: 100vh; 
             display: flex; flex-direction: column; 
-            box-shadow: 0 0 30px rgba(0,0,0,0.1);
-            position: relative; overflow: hidden;
+            position: relative;
         }
 
-        /* HEADER SEMULA */
-        .etiket-header { 
+        /* HEADER */
+        .header { 
             background: linear-gradient(135deg, #0066AE, #004a80); 
-            color: #fff; padding: 40px 20px 60px 20px; 
-            border-radius: 0 0 40px 40px; text-align: center;
+            color: #fff; padding: 30px 20px 45px 20px; 
+            border-radius: 0 0 35px 35px; text-align: center;
         }
-        .logo-text { font-weight: 800; font-size: 26px; letter-spacing: 2px; margin: 0; }
-        .sub-text { font-size: 11px; opacity: 0.9; text-transform: uppercase; letter-spacing: 1.5px; }
+        .header h1 { margin: 0; font-size: 24px; letter-spacing: 2px; font-weight: 800; }
+        .header p { margin: 5px 0 0 0; font-size: 10px; opacity: 0.9; letter-spacing: 1px; }
 
-        /* KODE BOOKING */
-        .kode-booking-card {
-            background: white; margin: -35px auto 20px auto;
-            width: 85%; padding: 15px; border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center; z-index: 10; border: 1px solid #f0f0f0;
+        /* GRID INFO PENUMPANG (SEPERTI GAMBAR) */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 20px;
+            margin-top: -25px; /* Biar box pertama naik dikit ke header */
         }
-        .kode-booking-card h3 { margin: 5px 0 0 0; color: #0066AE; font-size: 24px; font-weight: 800; }
-
-        /* INFO SECTION DENGAN CARD PER ITEM */
-        .info-section { padding: 10px 20px; }
-        .info-row { display: flex; gap: 10px; margin-bottom: 12px; }
-        
         .info-box {
-            background: #fff; flex: 1; padding: 12px;
-            border-radius: 12px; border: 1px solid #f8f9fa;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.04); /* Shadow Halus */
+            background: #ffffff;
+            padding: 12px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Shadow halus sesuai gambar */
+            border: 1px solid #f0f0f0;
         }
-        .info-box label { 
-            display: block; font-size: 9px; color: #aaa; 
-            text-transform: uppercase; font-weight: 700; margin-bottom: 4px; 
+        .info-box i { 
+            font-size: 16px; 
+            color: #333; 
+            margin-right: 12px;
+            width: 20px;
+            text-align: center;
         }
-        .info-box label i { margin-right: 5px; color: #0066AE; }
-        .info-box span { font-size: 13px; font-weight: 600; color: #333; display: block; }
-
-        /* TEAR LINE DENGAN LENGKUNGAN SAMPING */
-        .tear-line-container {
-            position: relative; margin: 15px 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .tear-line { width: 85%; border-bottom: 2px dashed #ddd; }
-        .circle-left, .circle-right {
-            position: absolute; width: 24px; height: 24px; 
-            background: #eef2f7; border-radius: 50%; top: 50%; transform: translateY(-50%);
-        }
-        .circle-left { left: -12px; }
-        .circle-right { right: -12px; }
-
-        /* BARCODE */
-        .barcode-section { padding: 10px 25px; text-align: center; }
-        .barcode-box { display: inline-block; padding: 10px; }
-        .barcode-box img { width: 140px; }
-
-        .keterangan { 
-            padding: 20px 25px; font-size: 10px; color: #888; 
-            line-height: 1.6; background: #fafafa; border-top: 1px solid #eee;
+        .info-box span { 
+            font-size: 13px; 
+            font-weight: 500; 
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
-        /* PRINT BUTTON */
-        .btn-cetak {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: #0066AE; color: #fff; padding: 12px 40px; 
-            border-radius: 30px; text-decoration: none; font-weight: 600;
-            box-shadow: 0 5px 15px rgba(0,102,174,0.3); z-index: 100;
+        /* TEAR LINE DENGAN LENGKUNGAN BOLONG */
+        .tear-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px 0;
         }
+        .tear-line { width: 90%; border-top: 2px dashed #eee; }
+        .tear-circle-l, .tear-circle-r {
+            position: absolute; width: 20px; height: 20px; 
+            background: #fdfdfd; border-radius: 50%; top: -10px;
+        }
+        .tear-circle-l { left: -10px; }
+        .tear-circle-r { right: -10px; }
 
-        @media print { .btn-cetak { display: none; } body { background: #fff; padding: 0; } }
+        /* BARCODE SECTION */
+        .barcode-section {
+            margin: 15px 20px;
+            background: #fff;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid #f9f9f9;
+        }
+        .barcode-section img { width: 100%; max-width: 250px; }
+        .barcode-section h4 { margin: 10px 0; font-size: 16px; letter-spacing: 2px; }
+        .barcode-section p { font-size: 12px; font-weight: 600; color: #333; line-height: 1.4; }
+
+        /* PERHATIAN (GREY AREA) */
+        .note-section {
+            background: #f2f2f2;
+            margin: 10px 20px 20px 20px;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #333;
+        }
+        .note-section h5 { margin: 0 0 10px 0; font-size: 13px; font-weight: 700; }
+        .note-section ol { padding-left: 15px; margin: 0; }
+        .note-section li { margin-bottom: 8px; line-height: 1.5; }
+
+        /* NAV BOTTOM */
+        .nav-bottom { 
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 400px; 
+            background: #fff; display: flex; justify-content: space-around; 
+            padding: 12px 0; box-shadow: 0 -5px 15px rgba(0,0,0,0.05); 
+            border-radius: 20px 20px 0 0; z-index: 1000;
+        }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom i { font-size: 18px; display: block; margin-bottom: 3px; }
+        .nav-bottom span { font-size: 9px; font-weight: 600; display: block; }
+
+        @media print { .nav-bottom, .tear-circle-l, .tear-circle-r { display: none; } }
     </style>
 </head>
 <body>
 
 <div class="etiket-container">
-    <div class="etiket-header">
-        <p class="logo-text">MAHIKA TRANS</p>
-        <p class="sub-text">Travel & Leisure Digital Ticket</p>
+    <div class="header">
+        <h1>MAHIKA TRANS</h1>
+        <p>TRAVEL & LEISURE DIGITAL TICKET</p>
     </div>
 
-    <div class="kode-booking-card">
-        <small style="font-size: 10px; color: #aaa; font-weight: 600;">KODE BOOKING</small>
-        <h3 id="displayKode">MT-0000</h3>
+    <div class="info-grid">
+        <div class="info-box"><i class="fas fa-user"></i><span id="displayNama">Aulia</span></div>
+        <div class="info-box"><i class="fas fa-chair"></i><span id="displayKursi">23 - 24</span></div>
+        <div class="info-box"><i class="fas fa-phone"></i><span id="displayNoHP">0895...</span></div>
+        <div class="info-box"><i class="fas fa-calendar-alt"></i><span id="displayTgl">02 Jan 2026</span></div>
+        <div class="info-box"><i class="fas fa-bus"></i><span id="displayArmada">Murni Jaya</span></div>
+        <div class="info-box"><i class="fas fa-clock"></i><span id="displayJam">17:30 WIB</span></div>
+        <div class="info-box"><i class="fas fa-map-marker-alt"></i><span id="displayTujuan">Lippo Cikarang</span></div>
+        <div class="info-box"><i class="fas fa-wallet"></i><span id="displayHarga">Rp 480.000</span></div>
     </div>
 
-    <div class="info-section">
-        <div class="info-row">
-            <div class="info-box">
-                <label><i class="fas fa-user"></i> Penumpang</label>
-                <span id="displayNama">-</span>
-            </div>
-            <div class="info-box" style="flex: 0 0 35%;">
-                <label><i class="fas fa-chair"></i> Kursi</label>
-                <span id="displayKursi">-</span>
-            </div>
-        </div>
-        <div class="info-row">
-            <div class="info-box">
-                <label><i class="fas fa-bus"></i> Armada</label>
-                <span id="displayArmada">-</span>
-            </div>
-            <div class="info-box">
-                <label><i class="fas fa-map-marker-alt"></i> Tujuan</label>
-                <span id="displayTujuan">-</span>
-            </div>
-        </div>
-        <div class="info-row">
-            <div class="info-box">
-                <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
-                <span id="displayTgl">-</span>
-            </div>
-            <div class="info-box">
-                <label><i class="fas fa-clock"></i> Jam</label>
-                <span id="displayJam">-</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="tear-line-container">
-        <div class="circle-left"></div>
+    <div class="tear-container">
+        <div class="tear-circle-l"></div>
         <div class="tear-line"></div>
-        <div class="circle-right"></div>
+        <div class="tear-circle-r"></div>
     </div>
 
     <div class="barcode-section">
-        <div class="barcode-box">
-            <img id="barcodeImg" src="" alt="Barcode">
-            <p id="displayKodeBawah" style="font-size: 11px; font-weight: 700; margin: 5px 0 0 0; color: #333; letter-spacing: 2px;"></p>
-        </div>
+        <img id="barcodeImg" src="" alt="Barcode">
+        <h4 id="displayKode">MT-921033</h4>
+        <p>Terimakasih atas kepercayaan Anda menggunakan jasa layanan kami.</p>
     </div>
 
-    <div class="keterangan">
-        <strong>PENTING:</strong>
-        Tunjukkan e-tiket ini kepada petugas Mahika Trans saat akan naik ke armada. Harap standby di titik jemput 30 menit sebelum jam keberangkatan.
+    <div class="note-section">
+        <h5>Perhatian:</h5>
+        <ol>
+            <li>Tiket yang sudah dipesan, tidak dapat dibatalkan</li>
+            <li>Harap datang maksimal 30 menit sebelum jadwal pemberangkatan</li>
+            <li>Anak usia 3 tahun atau tinggi badan 90cm, wajib membeli tiket</li>
+        </ol>
     </div>
 </div>
 
-<a href="#" class="btn-cetak" onclick="window.print()">
-    <i class="fas fa-print" style="margin-right: 8px;"></i> CETAK TIKET
-</a>
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+    <a href="#" onclick="window.print()"><i class="fas fa-print"></i><span>Cetak</span></a>
+</div>
 
 <script>
     const params = new URLSearchParams(window.location.search);
@@ -167,17 +179,20 @@
         const data = JSON.parse(localStorage.getItem("etiket_" + kode));
         if (data) {
             document.getElementById("displayKode").innerText = data.kode_booking;
-            document.getElementById("displayKodeBawah").innerText = data.kode_booking;
             document.getElementById("displayNama").innerText = data.nama;
             document.getElementById("displayKursi").innerText = data.no_kursi;
+            document.getElementById("displayNoHP").innerText = data.no_hp || "-";
             document.getElementById("displayArmada").innerText = data.armada;
             document.getElementById("displayTujuan").innerText = data.tujuan;
             document.getElementById("displayJam").innerText = data.jam;
+            document.getElementById("displayHarga").innerText = "Rp " + (parseInt(data.harga) || 0).toLocaleString('id-ID');
 
-            const tgl = new Date(data.tanggal);
+            // Format Tanggal
+            const d = new Date(data.tanggal);
             const opsi = { day: '2-digit', month: 'short', year: 'numeric' };
-            document.getElementById("displayTgl").innerText = tgl.toLocaleDateString('id-ID', opsi);
+            document.getElementById("displayTgl").innerText = d.toLocaleDateString('id-ID', opsi);
 
+            // Barcode
             const codeStr = encodeURIComponent(data.kode_booking);
             document.getElementById("barcodeImg").src = `https://barcode.tec-it.com/barcode.ashx?data=${codeStr}&code=Code128`;
         }
