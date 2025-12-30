@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mahika Trans - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; background: #f4f7f9; margin: 0; padding-bottom: 90px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 450px; background: #f4f7f9; min-height: 100vh; }
+        .top-bar { background: linear-gradient(135deg, #0066AE, #004a80); padding: 30px 20px 60px; color: #fff; border-radius: 0 0 35px 35px; }
+        .top-bar h2 { margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 1px; }
+        .top-bar p { margin: 5px 0 0; font-size: 12px; opacity: 0.8; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 0 20px; margin-top: -35px; }
+        .stat-card { background: #fff; padding: 15px; border-radius: 18px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: flex; flex-direction: column; }
+        .stat-card i { color: #0066AE; font-size: 20px; margin-bottom: 8px; }
+        .stat-card span { font-size: 10px; color: #888; font-weight: 600; text-transform: uppercase; }
+        .stat-card b { font-size: 16px; color: #333; margin-top: 4px; }
+        .section-header { padding: 30px 20px 10px; display: flex; justify-content: space-between; align-items: center; }
+        .section-header h3 { margin: 0; font-size: 16px; font-weight: 700; color: #333; }
+        .table-container { margin: 0 20px; background: #fff; padding: 10px 15px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.03); }
+        .schedule-table { width: 100%; border-collapse: collapse; }
+        .schedule-table th { text-align: left; font-size: 10px; color: #bbb; text-transform: uppercase; padding: 15px 0 10px; border-bottom: 1px solid #f0f0f0; }
+        .schedule-table td { padding: 15px 0; font-size: 13px; border-bottom: 1px solid #f9f9f9; color: #444; }
+        .schedule-table tr { cursor: pointer; }
+        .tgl-txt { font-weight: 700; color: #0066AE; }
+        .pax-badge { background: #eef2f7; padding: 4px 12px; border-radius: 8px; font-weight: 800; color: #004a80; font-size: 12px; }
+        .nav-bottom { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 450px; background: #fff; display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -8px 25px rgba(0,0,0,0.08); border-radius: 25px 25px 0 0; z-index: 100; }
+        .nav-bottom a { text-decoration: none; color: #bbb; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: #0066AE; }
+        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { font-size: 10px; font-weight: 600; display: block; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <p>Selamat Datang,</p>
+        <h2>Mahika Trans Admin</h2>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card"><i class="fas fa-wallet"></i><span>Komisi Bulan Ini</span><b id="totalKomisi">Rp 0</b></div>
+        <div class="stat-card"><i class="fas fa-users"></i><span>Total Pax</span><b id="totalPax">0 Orang</b></div>
+    </div>
+
+    <div class="section-header">
+        <h3>Jadwal 7 Hari Ke Depan</h3>
+        <a href="manifes.html" style="font-size: 11px; color: #0066AE; text-decoration: none; font-weight: 700;">LIHAT SEMUA</a>
+    </div>
+
+    <div class="table-container">
+        <table class="schedule-table">
+            <thead><tr><th>Tanggal</th><th>Armada</th><th style="text-align: right;">Pax</th></tr></thead>
+            <tbody id="tabelJadwal">
+                <tr><td colspan="3" style="text-align: center; padding: 30px; color: #999;"><i class="fas fa-sync fa-spin"></i> Loading...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-ticket-alt"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-clipboard-list"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-wallet"></i><span>Finance</span></a>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
+
+    async function loadDashboardData() {
+        const tabelBody = document.getElementById("tabelJadwal");
+        try {
+            const now = new Date();
+            // Ambil waktu hari ini jam 00:00:00
+            const hariIni = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+            const tujuhHariLagi = hariIni + (7 * 24 * 60 * 60 * 1000);
+
+            const bulanIni = now.getFullYear() + "-" + ("0" + (now.getMonth() + 1)).slice(-2);
+            
+            const resp = await fetch(`${API_URL}?p=getPendapatan&bulan=${bulanIni}`);
+            const dataSheet = await resp.json();
+
+            // Statistik
+            let totalIDR = 0, totalPaxBulan = 0;
+            let barisHtml = "";
+
+            // Sortir data berdasarkan tanggal
+            dataSheet.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
+            dataSheet.forEach(row => {
+                totalPaxBulan += parseInt(row[2]) || 0;
+                totalIDR += parseInt(row[4]) || 0;
+
+                // LOGIC FILTER TANGGAL YANG LEBIH LONGGAR
+                const tglRow = new Date(row[0]);
+                const tglRowTime = new Date(tglRow.getFullYear(), tglRow.getMonth(), tglRow.getDate()).getTime();
+
+                if (tglRowTime >= hariIni && tglRowTime <= tujuhHariLagi) {
+                    const tglIndo = tglRow.toLocaleDateString('id-ID', { day: '2-digit', month: 'short' });
+                    barisHtml += `<tr onclick="window.location.href='manifes.html?tgl=${row[0]}'">
+                        <td class="tgl-txt">${tglIndo}</td>
+                        <td style="font-weight:600;">${row[1]}</td>
+                        <td style="text-align: right;"><span class="pax-badge">${row[2]}</span></td>
+                    </tr>`;
+                }
+            });
+
+            document.getElementById("totalKomisi").innerText = "Rp " + totalIDR.toLocaleString('id-ID');
+            document.getElementById("totalPax").innerText = totalPaxBulan + " Orang";
+            tabelBody.innerHTML = barisHtml || "<tr><td colspan='3' style='text-align:center; padding:20px;'>Tidak ada jadwal dlm 7 hari</td></tr>";
+
+        } catch (error) {
+            tabelBody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:red; padding:20px;">Error: ${error.message}</td></tr>`;
+        }
+    }
+
+    window.onload = loadDashboardData;
+</script>
+</body>
+</html>
