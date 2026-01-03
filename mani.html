@@ -138,7 +138,6 @@
         <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
         <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
     </div>
-
 <script>
     function loadManifes() {
         const container = document.getElementById("manifesContainer");
@@ -147,6 +146,7 @@
         let count = 0;
 
         let dataArray = [];
+        // 1. Ambil semua data dari localStorage
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.startsWith("etiket_")) {
@@ -154,7 +154,13 @@
             }
         }
 
-        dataArray.reverse().forEach(data => {
+        // 2. SORTIR: Tanggal Terkecil (Paling Awal) di Atas
+        dataArray.sort((a, b) => {
+            return new Date(a.tanggal) - new Date(b.tanggal);
+        });
+
+        // 3. Render ke HTML
+        dataArray.forEach(data => {
             count++;
             
             // Format Tanggal Indonesia
@@ -194,39 +200,6 @@
         }
     }
 
-    function kirimWA(kode) {
-        const data = JSON.parse(localStorage.getItem("etiket_" + kode));
-        if(!data) return;
-
-        const pesan = `*MAHIKA TRANS*%0A` +
-                      `────────────────────────%0A` +
-                      `Halo Kak *${data.nama}*,%0A%0A` +
-                      `Terima kasih telah memilih Mahika Trans.%0A` +
-                      `Berikut adalah rincian E-Tiket Anda:%0A%0A` +
-                      `*Kode Booking* : ${data.kode_booking}%0A` +
-                      `*Armada* : ${data.armada}%0A` +
-                      `*Kursi* : ${data.no_kursi}%0A` +
-                      `*Jadwal* : ${data.jam} WIB%0A%0A` +
-                      `*Lihat Tiket Online:*%0A` +
-                      `${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A%0A` +
-                      `────────────────────────%0A` +
-                      `_Mohon hadir di lokasi 30 menit sebelum jadwal._%0A` +
-                      `_Simpan pesan ini sebagai bukti perjalanan._`;
-
-        let noHP = data.no_hp.replace(/\D/g, '');
-        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
-        window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
-    }
-
-    // EFEK KETUK LAYAR UNTUK SEMBUNYI/TAMPIL NAVBAR
-    document.addEventListener('click', function(event) {
-        const nav = document.querySelector('.nav-bottom');
-        if (!nav.contains(event.target)) {
-            nav.classList.toggle('nav-hidden');
-        }
-    });
-
-    window.onload = loadManifes;
 </script>
 </body>
     </html>
