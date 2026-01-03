@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
+    <script>
+    // CEK PROTEKSI LOGIN
+    (function() {
+        const session = localStorage.getItem("mahika_session");
+        if (session !== "active") {
+            // Jika tidak ada session, paksa ke halaman login
+            window.location.href = "login.html";
+        }
+    })();
+    </script>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Mahika Trans Modern</title>
