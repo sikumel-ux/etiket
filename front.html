@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Mahika Trans Dark</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0f172a;
+            --card-bg: #1e293b;
+            --accent-blue: #38bdf8;
+            --text-main: #f1f5f9;
+            --text-dim: #94a3b8;
+            --grad-blue: linear-gradient(135deg, #1e40af, #1e3a8a);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0; padding: 0; 
+            display: flex; justify-content: center; 
+            min-height: 100vh;
+        }
+
+        .etiket-container {
+            width: 100%; max-width: 450px; 
+            background: var(--bg-dark); 
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        /* HEADER MODERN */
+        .etiket-header {
+            background: var(--grad-blue);
+            color: #fff; 
+            padding: 60px 25px 80px 25px; 
+            border-radius: 0 0 40px 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        .etiket-header h1 { font-size: 16px; margin: 0; color: rgba(255,255,255,0.7); font-weight: 400; }
+        .etiket-header h2 { font-size: 28px; margin: 5px 0 0 0; font-weight: 800; letter-spacing: -0.5px; }
+
+        /* STATS GRID - FLOATING CARD */
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+            margin-top: -45px; 
+            padding: 0 20px; 
+        }
+        .stat-card {
+            background: var(--card-bg); 
+            padding: 20px 15px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .stat-card i { font-size: 24px; color: var(--accent-blue); margin-bottom: 12px; }
+        .stat-card span { display: block; font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
+        .stat-card strong { font-size: 15px; color: var(--text-main); font-weight: 700; }
+
+        /* SERVICE ICONS */
+        .section-title { 
+            padding: 35px 25px 15px 25px; 
+            font-size: 18px; font-weight: 700; 
+            color: var(--text-main);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        
+        .service-grid { 
+            display: grid; 
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 15px; 
+            padding: 0 20px; 
+        }
+        .service-item {
+            text-align: center; text-decoration: none;
+        }
+        .service-icon {
+            width: 60px; height: 60px; 
+            background: var(--card-bg); 
+            color: var(--accent-blue); 
+            border-radius: 20px; 
+            display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 10px auto; 
+            font-size: 24px; 
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s;
+        }
+        .service-icon:active { transform: scale(0.9); }
+        .service-item span { font-size: 11px; font-weight: 600; color: var(--text-dim); }
+
+        /* MANIFES LIST */
+        .antrean-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
+        .antrean-item {
+            display: flex; align-items: center; gap: 15px; padding: 15px;
+            background: var(--card-bg); 
+            border-radius: 20px; 
+            border: 1px solid rgba(255,255,255,0.03);
+            cursor: pointer;
+        }
+        
+        .tgl-badge {
+            background: rgba(56, 189, 248, 0.1); 
+            color: var(--accent-blue); 
+            padding: 10px; border-radius: 15px;
+            font-size: 12px; font-weight: 700; 
+            min-width: 60px; text-align: center; line-height: 1.2;
+        }
+
+        .antrean-info { flex: 1; }
+        .antrean-info b { font-size: 14px; color: var(--text-main); display: block; margin-bottom: 4px; }
+        .antrean-info span { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+
+        .jam-badge-right { 
+            background: rgba(255,255,255,0.05); 
+            color: var(--text-main); 
+            font-size: 12px; font-weight: 600; 
+            padding: 6px 10px; border-radius: 12px;
+        }
+
+        /* NAVBAR BOTTOM */
+        .nav-bottom {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 100%; max-width: 450px; 
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-around; padding: 15px 0 25px 0; 
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+            border-radius: 30px 30px 0 0; z-index: 1000;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-bottom a { text-decoration: none; color: var(--text-dim); text-align: center; flex: 1; }
+        .nav-bottom a.active { color: var(--accent-blue); }
+        .nav-bottom i { font-size: 20px; margin-bottom: 4px; display: block; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h1 id="greeting">Selamat Malam,</h1>
+        <h2>Mahika Trans</h2>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <i class="fas fa-wallet"></i>
+            <span>KOMISI BULAN INI</span>
+            <strong id="statKomisi">Rp 0</strong>
+        </div>
+        <div class="stat-card">
+            <i class="fas fa-users"></i>
+            <span>TOTAL PAX</span>
+            <strong id="statPax">0 Orang</strong>
+        </div>
+    </div>
+
+    <div class="section-title"><span>Layanan Utama</span></div>
+    <div class="service-grid">
+        <a href="input.html" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-bus"></i></div>
+            <span>Bus</span>
+        </a>
+        <a href="input.html" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-ship"></i></div>
+            <span>Kapal</span>
+        </a>
+        <a href="input.html" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-plane"></i></div>
+            <span>Pesawat</span>
+        </a>
+        <a href="input.html" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-truck"></i></div>
+            <span>Cargo</span>
+        </a>
+    </div>
+
+    <div class="section-title"><span>Manifes Keberangkatan</span></div>
+    <div class="antrean-list" id="antreanList">
+        <p style="font-size: 12px; color: var(--text-dim); padding: 20px; text-align: center;">Mengambil data terbaru...</p>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-plus-circle"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-list-ul"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-chart-line"></i><span>Laporan</span></a>
+</div>
+
+<script>
+    const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
+    const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
+
+    // Salam Dinamis
+    const jamSekarang = new Date().getHours();
+    let salam = "Selamat Malam";
+    if (jamSekarang < 11) salam = "Selamat Pagi";
+    else if (jamSekarang < 15) salam = "Selamat Siang";
+    else if (jamSekarang < 19) salam = "Selamat Sore";
+    document.getElementById('greeting').innerText = salam + ",";
+
+    async function loadDashboard() {
+        try {
+            const res = await fetch(`${API_URL}?p=manifes`);
+            const data = await res.json();
+            const list = document.getElementById('antreanList');
+
+            if(data && data.length > 0) {
+                list.innerHTML = data.slice(0, 10).map(item => {
+                    const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                    const jamBrkt = item.jam ? item.jam.substring(0, 5) : "--:--";
+                    
+                    return `
+                        <div class="antrean-item" onclick="location.href='manifes.html?tgl=${item.tanggal.split('T')[0]}'">
+                            <div class="tgl-badge">${tgl}</div>
+                            <div class="antrean-info">
+                                <b>${item.nama || 'Tanpa Nama'}</b>
+                                <span>${item.armada || '-'} • ${item.tujuan || '-'}</span>
+                            </div>
+                            <div class="jam-badge-right">${jamBrkt}</div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                list.innerHTML = "<p style='text-align:center; font-size:12px; color:#94a3b8;'>Belum ada antrean hari ini.</p>";
+            }
+
+            // Load Stats
+            const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
+            const resStats = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
+            const dataStats = await resStats.json();
+
+            let totalKomisi = 0, totalPax = 0;
+            dataStats.forEach(row => {
+                totalPax += parseInt(row[2]) || 0;
+                totalKomisi += parseInt(row[4]) || 0;
+            });
+
+            document.getElementById('statKomisi').innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
+            document.getElementById('statPax').innerText = totalPax + " Orang";
+
+        } catch (e) {
+            console.error(e);
+            document.getElementById('antreanList').innerHTML = "<p style='text-align:center; color:#ef4444; font-size: 12px;'>Gagal menghubungkan ke server.</p>";
+        }
+    }
+
+    loadDashboard();
+</script>
+
+</body>
+</html>
