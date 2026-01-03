@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Tiket | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-color: var(--primary-blue);
+            margin: 0; padding: 0; color: var(--white);
+            display: flex; justify-content: center;
+        }
+
+        .etiket-container { 
+            width: 100%; max-width: 450px; 
+            min-height: 100vh; 
+            padding-bottom: 120px;
+        }
+
+        /* HEADER */
+        .etiket-header { 
+            padding: 50px 25px 60px 25px; 
+        }
+        .etiket-header h2 { margin: 0; font-weight: 700; font-size: 26px; }
+        .etiket-header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.7; font-weight: 300; }
+        
+        /* FORM CARD - PUTIH KONTRAS */
+        .card-form { 
+            background: var(--white); 
+            margin: -40px 20px 20px 20px; 
+            padding: 30px 20px; 
+            border-radius: 28px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3); 
+            z-index: 10;
+        }
+        
+        .input-group { margin-bottom: 18px; }
+        label { 
+            display: block; font-size: 10px; font-weight: 700; 
+            color: var(--primary-blue); text-transform: uppercase; 
+            margin-bottom: 8px; letter-spacing: 0.8px; 
+        }
+        label i { margin-right: 5px; opacity: 0.7; }
+        
+        input { 
+            width: 100%; padding: 14px 18px; 
+            border: 1.5px solid #eee; border-radius: 15px; 
+            font-family: 'Poppins'; font-size: 14px; color: #333;
+            transition: 0.3s; background: #fcfcfc;
+        }
+        input:focus { border-color: var(--primary-blue); outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(6, 80, 132, 0.08); }
+        input::placeholder { color: #ccc; }
+
+        .row { display: flex; gap: 12px; }
+        .col { flex: 1; }
+
+        button { 
+            width: 100%; padding: 18px; 
+            background: var(--primary-blue);
+            color: white; border: none; border-radius: 18px; 
+            font-weight: 700; font-size: 16px; cursor: pointer; 
+            margin-top: 15px; transition: 0.3s;
+            box-shadow: 0 8px 20px rgba(6, 80, 132, 0.3);
+        }
+        button:active { transform: scale(0.96); }
+        button:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
+
+        /* NAV BOTTOM (MODERN FLOATING) */
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; 
+            padding: 15px 0; border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+
+        .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: var(--primary-blue); }
+        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+
+        /* Darkening indicator for Date input on white card */
+        input[type="date"]::-webkit-calendar-picker-indicator { opacity: 0.5; }
+    </style>
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h2>Booking Tiket</h2>
+        <p>Input data penumpang Mahika Trans</p>
+    </div>
+
+    <div class="card-form">
+        <form id="bookingForm">
+            <div class="input-group">
+                <label><i class="fas fa-user"></i> Nama Penumpang</label>
+                <input type="text" id="nama" placeholder="Budi Santoso" required>
+            </div>
+
+            <div class="row">
+                <div class="input-group" style="flex: 2;">
+                    <label><i class="fas fa-phone"></i> No HP</label>
+                    <input type="tel" id="no_hp" value="08" required>
+                </div>
+                <div class="input-group" style="flex: 1;">
+                    <label><i class="fas fa-chair"></i> Kursi</label>
+                    <input type="text" id="no_kursi" placeholder="A1" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-bus"></i> Armada / Bus</label>
+                <input type="text" id="armada" placeholder="Murni Jaya / Sinar Jaya" required>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-map-marker-alt"></i> Kota Tujuan</label>
+                <input type="text" id="tujuan" placeholder="Contoh: Wonosobo" required>
+            </div>
+
+            <div class="row">
+                <div class="input-group" style="flex: 1.2;">
+                    <label><i class="fas fa-calendar-alt"></i> Tanggal</label>
+                    <input type="date" id="tanggal" required>
+                </div>
+                <div class="input-group" style="flex: 0.8;">
+                    <label><i class="fas fa-clock"></i> Jam</label>
+                    <input type="text" id="jam" placeholder="08.00" required>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label><i class="fas fa-money-bill-wave"></i> Harga Tiket (Rp)</label>
+                <input type="number" id="harga" placeholder="150000" required>
+            </div>
+
+            <button type="submit" id="btnSimpan">Proses & Cetak Tiket</button>
+        </form>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
+    <a href="input.html" class="active"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
+
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btnSimpan');
+        btn.innerText = "Mengirim Data...";
+        btn.disabled = true;
+
+        const formData = {
+            nama: document.getElementById('nama').value,
+            no_hp: document.getElementById('no_hp').value,
+            no_kursi: document.getElementById('no_kursi').value,
+            armada: document.getElementById('armada').value,
+            tujuan: document.getElementById('tujuan').value,
+            tanggal: document.getElementById('tanggal').value,
+            jam: document.getElementById('jam').value,
+            harga: document.getElementById('harga').value,
+            kode_booking: "MT-" + Math.random().toString(36).substr(2, 6).toUpperCase()
+        };
+
+        try {
+            await fetch(API_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(formData)
+            });
+
+            localStorage.setItem("etiket_" + formData.kode_booking, JSON.stringify(formData));
+            window.location.href = "etiket.html?kode=" + formData.kode_booking;
+        } catch (error) {
+            alert("Terjadi kesalahan koneksi!");
+            btn.disabled = false;
+            btn.innerText = "Proses & Cetak Tiket";
+        }
+    });
+
+    // Otomatis isi tanggal hari ini
+    document.getElementById('tanggal').valueAsDate = new Date();
+
+    // Fitur Ketuk Layar Sembunyikan Menu
+    document.addEventListener('click', function(event) {
+        const nav = document.querySelector('.nav-bottom');
+        // Jangan sembunyikan jika sedang klik di dalam form agar tidak ganggu saat input
+        const cardForm = document.querySelector('.card-form');
+        if (!nav.contains(event.target) && !cardForm.contains(event.target)) {
+            nav.classList.toggle('nav-hidden');
+        }
+    });
+</script>
+</body>
+  </html>
 
