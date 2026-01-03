@@ -28,7 +28,7 @@
             min-height: 100vh;
         }
 
-        /* HEADER SECTION - TANPA LOGO */
+        /* HEADER SECTION */
         .header-section {
             padding: 50px 25px 30px;
             text-align: center;
@@ -37,6 +37,7 @@
         .title-page {
             font-size: 22px; font-weight: 700; letter-spacing: 1px;
             margin-bottom: 20px;
+            text-transform: uppercase;
         }
 
         .stats-header {
@@ -65,6 +66,7 @@
             padding: 18px;
             margin-bottom: 15px;
             display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s;
         }
 
         .info-penumpang { flex: 1; }
@@ -77,9 +79,10 @@
             background: rgba(255, 255, 255, 0.15); 
             padding: 3px 10px; border-radius: 8px; 
             font-weight: 600; font-size: 10px; margin-top: 8px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* TOMBOL AKSI - ICON WHATSAPP PUTIH */
+        /* TOMBOL AKSI */
         .aksi-buttons { display: flex; gap: 12px; }
         .btn-aksi {
             width: 45px; height: 45px;
@@ -88,6 +91,7 @@
             text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); 
             background: rgba(255, 255, 255, 0.05); color: #fff;
             transition: 0.3s; font-size: 20px;
+            cursor: pointer;
         }
         .btn-aksi:active { transform: scale(0.9); background: var(--white); color: var(--primary-blue); }
 
@@ -121,7 +125,7 @@
     <div class="header-section">
         <div class="title-page">Manifes Penumpang</div>
         <div class="stats-header">
-            <i class="fas fa-id-card"></i>
+            <i class="fas fa-id-card-alt"></i>
             <div>
                 <span>Database Terdaftar</span>
                 <strong id="countPsg">0 Penumpang</strong>
@@ -138,32 +142,35 @@
         <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
         <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
     </div>
+
 <script>
     function loadManifes() {
         const container = document.getElementById("manifesContainer");
         const countEl = document.getElementById("countPsg");
         container.innerHTML = "";
         let count = 0;
-
         let dataArray = [];
-        // 1. Ambil semua data dari localStorage
+
+        // Ambil data yang mengandung kata 'tiket' (biar aman etiket_ atau tiket_)
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key.startsWith("etiket_")) {
-                dataArray.push(JSON.parse(localStorage.getItem(key)));
+            if (key.includes("tiket_")) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if(data && data.nama) {
+                        dataArray.push(data);
+                    }
+                } catch(e) { console.error("Error load data", e); }
             }
         }
 
-        // 2. SORTIR: Tanggal Terkecil (Paling Awal) di Atas
-        dataArray.sort((a, b) => {
-            return new Date(a.tanggal) - new Date(b.tanggal);
-        });
+        // SORTING: Tanggal Terkecil di Atas
+        dataArray.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
 
-        // 3. Render ke HTML
         dataArray.forEach(data => {
             count++;
             
-            // Format Tanggal Indonesia
+            // Format Tanggal Indonesia (03 Jan 2026)
             const tglObj = new Date(data.tanggal);
             const tglIndo = tglObj.toLocaleDateString('id-ID', {
                 day: '2-digit', month: 'short', year: 'numeric'
@@ -173,9 +180,9 @@
                 <div class="card-manifes">
                     <div class="info-penumpang">
                         <h4>${data.nama}</h4>
-                        <p><i class="fas fa-calendar-day"></i> ${tglIndo} • ${data.jam}</p>
+                        <p><i class="fas fa-calendar-alt"></i> ${tglIndo} • ${data.jam}</p>
                         <p><i class="fas fa-bus"></i> ${data.armada} • ${data.tujuan}</p>
-                        <span class="tag-kursi">No. Kursi ${data.no_kursi}</span>
+                        <span class="tag-kursi">Kursi ${data.no_kursi}</span>
                     </div>
                     <div class="aksi-buttons">
                         <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="Kirim WA">
@@ -200,7 +207,49 @@
         }
     }
 
+    function kirimWA(kode) {
+        // Cari data berdasarkan kode booking
+        let data;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.includes(kode)) {
+                data = JSON.parse(localStorage.getItem(key));
+                break;
+            }
+        }
+        
+        if(!data) return;
+
+        // FORMAT PESAN ELEGAN
+        const pesan = `*MAHIKA TRANS*%0A` +
+                      `────────────────────────%0A` +
+                      `Halo Kak *${data.nama}*,%0A%0A` +
+                      `Terima kasih telah memilih Mahika Trans.%0A` +
+                      `Berikut adalah rincian E-Tiket Anda:%0A%0A` +
+                      `*Kode Booking* : ${data.kode_booking}%0A` +
+                      `*Armada* : ${data.armada}%0A` +
+                      `*Kursi* : ${data.no_kursi}%0A` +
+                      `*Jadwal* : ${data.jam} WIB%0A%0A` +
+                      `*Lihat Tiket Online:*%0A` +
+                      `${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A%0A` +
+                      `────────────────────────%0A` +
+                      `_Mohon hadir di lokasi 30 menit sebelum jadwal._%0A` +
+                      `_Simpan pesan ini sebagai bukti perjalanan._`;
+
+        let noHP = data.no_hp.replace(/\D/g, '');
+        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
+        window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
+    }
+
+    // EFEK KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
+    document.addEventListener('click', function(event) {
+        const nav = document.querySelector('.nav-bottom');
+        if (!nav.contains(event.target)) {
+            nav.classList.toggle('nav-hidden');
+        }
+    });
+
+    window.onload = loadManifes;
 </script>
 </body>
-    </html>
-    
+</html>
