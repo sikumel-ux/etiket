@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Etiket | Mahika Trans</title>
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#0066AE">
+    <meta name="theme-color" content="#065084">
     <link rel="icon" href="m.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -14,7 +14,8 @@
             --primary-blue: #065084;
             --bg-darker: #043a60;
             --white: #ffffff;
-            --yellow: #FFD700; /* Warna kuning logo */
+            --yellow: #FFD700;
+            --glass: rgba(255, 255, 255, 0.1);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -23,114 +24,59 @@
             font-family: 'Poppins', sans-serif; 
             background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
             background-color: var(--primary-blue);
-            margin: 0; padding: 0; 
+            margin: 0; padding: 0; color: var(--white);
             display: flex; justify-content: center;
-            min-height: 100vh;
         }
 
-        .etiket-container { 
-            width: 100%; max-width: 450px; 
-            padding: 40px 20px 120px 20px;
-        }
+        .etiket-container { width: 100%; max-width: 450px; min-height: 100vh; padding-bottom: 120px; }
 
-        /* TIKET UTAMA */
-        .ticket-box {
-            background: var(--white);
-            border-radius: 30px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            position: relative;
-        }
-
-        /* BAGIAN ATAS (BIRU) */
-        .ticket-top {
-            background: var(--bg-darker);
-            padding: 30px 25px;
-            text-align: center;
-            color: var(--white);
-            position: relative;
-        }
-
-        .logo { width: 120px; margin-bottom: 15px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        
+        /* HEADER (SAMA DENGAN HALAMAN LAIN) */
+        .etiket-header { padding: 50px 25px 40px 25px; text-align: center; }
+        .logo { width: 140px; margin-bottom: 15px; }
         .kode-booking { 
-            display: inline-block;
-            background: var(--yellow);
-            color: var(--primary-blue);
-            padding: 5px 20px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 14px;
-            letter-spacing: 1px;
-            margin-top: 5px;
+            display: block; font-size: 24px; font-weight: 800; 
+            color: var(--yellow); letter-spacing: 2px; margin-top: 5px;
         }
 
-        /* INFO GRID */
-        .ticket-body {
-            padding: 30px 25px;
-            color: #333;
-        }
+        .container { padding: 0 20px; }
 
-        .info-grid {
+        /* INFO GRID (Efek Glassmorphism) */
+        .info-grid { 
+            background: var(--glass);
+            border-radius: 28px;
+            padding: 25px;
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
             margin-bottom: 25px;
         }
 
-        .info-item { margin-bottom: 5px; }
-        .info-item label { 
-            display: block; 
-            font-size: 10px; 
-            color: #999; 
-            text-transform: uppercase; 
-            font-weight: 700; 
-            margin-bottom: 2px;
-        }
-        .info-item span { 
-            display: block; 
-            font-size: 13px; 
-            font-weight: 600; 
-            color: var(--primary-blue);
-        }
+        .kolom p { margin: 0 0 15px 0; font-size: 13px; line-height: 1.4; }
+        .kolom p i { width: 20px; opacity: 0.7; margin-right: 5px; }
+        .kolom p span { display: block; font-weight: 600; font-size: 14px; margin-top: 2px; }
 
-        /* GARIS SOBEKAN */
         .tear-line {
             height: 2px;
-            border-top: 2px dashed #eee;
-            margin: 10px 0;
-            position: relative;
+            border-top: 2px dashed rgba(255,255,255,0.2);
+            margin: 10px 0 25px 0;
         }
-        .tear-line::before, .tear-line::after {
-            content: '';
-            position: absolute;
-            top: -11px;
-            width: 20px;
-            height: 20px;
-            background: var(--primary-blue);
-            border-radius: 50%;
-        }
-        .tear-line::before { left: -35px; }
-        .tear-line::after { right: -35px; }
 
         /* BARCODE SECTION */
-        .barcode-section {
-            padding: 20px;
-            text-align: center;
+        .barcode { text-align: center; margin-bottom: 30px; }
+        #barcodeImg { 
+            background: white; padding: 15px; border-radius: 15px; 
+            max-width: 100%; height: auto; 
         }
-        #barcodeImg { max-width: 100%; height: auto; margin-bottom: 10px; }
-        .thanks { font-size: 10px; color: #aaa; margin: 0; padding: 0 20px; line-height: 1.5; }
+        .thanks { font-size: 11px; opacity: 0.7; margin-top: 15px; padding: 0 20px; line-height: 1.6; }
 
         /* KETERANGAN */
-        .keterangan {
-            background: #f9f9f9;
-            padding: 20px 25px;
-            border-top: 1px solid #eee;
-        }
-        .keterangan p { margin: 0 0 5px 0; font-size: 10px; color: #777; line-height: 1.4; }
-        .keterangan strong { color: #444; font-size: 11px; }
+        .keterangan { padding: 0 10px; opacity: 0.8; }
+        .keterangan p { margin: 0 0 5px 0; font-size: 11px; line-height: 1.5; }
+        .keterangan strong { font-size: 13px; color: var(--yellow); }
 
-        /* NAV BOTTOM (TETAP KONSISTEN) */
+        /* NAV BOTTOM (SAMA DENGAN HALAMAN SEBELUMNYA) */
         .nav-bottom { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
             width: 90%; max-width: 400px; 
@@ -140,18 +86,19 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
             transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         }
+
         .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+
         .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: var(--primary-blue); }
         .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
         .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
 
-        /* PRINT SETTING */
         @media print {
             .nav-bottom { display: none; }
-            body { background: white; }
-            .etiket-container { padding: 0; }
-            .ticket-box { box-shadow: none; border: 1px solid #eee; }
-            .tear-line::before, .tear-line::after { display: none; }
+            body { background: white; color: black; }
+            .info-grid { border: 1px solid #ccc; background: none; color: black; }
+            .kode-booking { color: black; }
         }
     </style>
 </head>
@@ -159,70 +106,48 @@
 <body>
 
 <div class="etiket-container">
-    <div class="ticket-box">
-        <div class="ticket-top">
-            <img src="logo.png" alt="Mahika Trans" class="logo">
-            <br>
-            <span class="kode-booking" id="kodeBooking">MT-LOADING</span>
+    <div class="etiket-header">
+        <img src="logo.png" alt="Mahika Trans" class="logo">
+        <p class="kode-booking" id="kodeBooking">-</p>
+    </div>
+
+    <div class="container">
+        <div class="info-grid">
+            <div class="kolom">
+                <p><i class="fas fa-user"></i> Penumpang <span id="nama"></span></p>
+                <p><i class="fas fa-phone"></i> WhatsApp <span id="no_hp"></span></p>
+                <p><i class="fas fa-bus"></i> Armada <span id="armada"></span></p>
+                <p><i class="fas fa-map-marker-alt"></i> Tujuan <span id="tujuan"></span></p>
+            </div>
+
+            <div class="kolom">
+                <p><i class="fas fa-chair"></i> Kursi <span id="no_kursi"></span></p>
+                <p><i class="fas fa-calendar-alt"></i> Tanggal <span id="tgl"></span></p>
+                <p><i class="fas fa-clock"></i> Jam <span id="jam"></span></p>
+                <p><i class="fa-solid fa-rupiah-sign"></i> Harga <span id="harga"></span></p>
+            </div>
         </div>
 
-        <div class="ticket-body">
-            <div class="info-grid">
-                <div class="info-item">
-                    <label>Nama Penumpang</label>
-                    <span id="nama">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Nomor Kursi</label>
-                    <span id="no_kursi">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Armada</label>
-                    <span id="armada">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Tujuan</label>
-                    <span id="tujuan">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Tanggal</label>
-                    <span id="tgl">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Jam</label>
-                    <span id="jam">-</span>
-                </div>
-                <div class="info-item">
-                    <label>No. WhatsApp</label>
-                    <span id="no_hp">-</span>
-                </div>
-                <div class="info-item">
-                    <label>Harga Tiket</label>
-                    <span id="harga">Rp 0</span>
-                </div>
-            </div>
+        <div class="tear-line"></div>
 
-            <div class="tear-line"></div>
-
-            <div class="barcode-section">
-                <img id="barcodeImg" alt="Barcode">
-                <p class="thanks">Simpan tiket ini sebagai bukti pembayaran yang sah saat keberangkatan.</p>
-            </div>
+        <div class="barcode">
+            <img id="barcodeImg" alt="Barcode">
+            <p class="thanks">Terimakasih atas kepercayaan Anda menggunakan jasa layanan kami.</p>
         </div>
 
         <div class="keterangan">
-            <p><strong>Syarat & Ketentuan:</strong></p>
-            <p>1. Tiket tidak dapat dibatalkan atau diuangkan kembali.</p>
-            <p>2. Harap standby di lokasi 30 menit sebelum jam keberangkatan.</p>
-            <p>3. Barang bawaan sepenuhnya menjadi tanggung jawab penumpang.</p>
+            <p><strong>Perhatian:</strong></p>
+            <p>1. Tiket yang sudah dipesan tidak dapat dibatalkan.</p>
+            <p>2. Harap datang maksimal 30 menit sebelum jadwal pemberangkatan.</p>
+            <p>3. Anak usia 3 tahun atau tinggi badan 90cm wajib membeli tiket.</p>
         </div>
     </div>
 </div>
 
 <div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
     <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
     <a href="manifes.html"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
-    <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
     <a href="#" onclick="window.print()"><i class="fas fa-print"></i><span>Cetak</span></a>
 </div>
 
@@ -231,12 +156,12 @@ const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center; color:white;'><h3>Kode booking tidak ditemukan</h3><a href='index.html' style='color:yellow;'>Kembali ke Home</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='index.html' style='color:var(--yellow)'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
     
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; color:white;'><h3>Data tidak ditemukan</h3><a href='index.html' style='color:yellow;'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html' style='color:var(--yellow)'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -249,9 +174,7 @@ if(!kode){
         
         const tglKeberangkatan = new Date(data.tanggal);
         document.getElementById("tgl").innerText = tglKeberangkatan.toLocaleDateString("id-ID", {
-            day: "2-digit", 
-            month: "long", 
-            year: "numeric"
+            day: "2-digit", month: "short", year: "numeric"
         });
 
         const barcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data=" + encodeURIComponent(data.kode_booking) + "&code=Code128&translate-esc=true";
@@ -269,4 +192,5 @@ document.addEventListener('click', function(event) {
 </script>
 
 </body>
-</html>
+                                              </html>
+                                              
