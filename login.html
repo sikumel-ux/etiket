@@ -1,47 +1,157 @@
-function doGet(e) {
-  var p = e.parameter.p;
-  
-  try {
-    // ID Spreadsheet kamu sudah saya masukkan di sini
-    var ss = SpreadsheetApp.openById("1c0G-3sszFQSrRkwGcT09_u7d9_Hwly92Jwy9D4_1REc"); 
-    var sheet = ss.getSheetByName("Users");
-    
-    if (!sheet) {
-      return res({status: "error", message: "Tab 'Users' tidak ditemukan di Sheets"});
-    }
-
-    var data = sheet.getDataRange().getValues();
-
-    if (p === 'login') {
-      var u = e.parameter.u;
-      var ps = e.parameter.ps;
-      
-      // Loop mulai dari baris kedua (indeks 1) karena baris pertama adalah header
-      for (var i = 1; i < data.length; i++) {
-        var userInSheet = data[i][0] ? data[i][0].toString() : "";
-        var passInSheet = data[i][1] ? data[i][1].toString() : "";
-        var namaUser = data[i][2] ? data[i][2].toString() : "User";
-
-        if (userInSheet === u && passInSheet === ps) {
-          return res({ 
-            status: "success", 
-            nama: namaUser 
-          });
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
         }
-      }
-      return res({ status: "fail", message: "Username atau Password salah" });
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden; /* Kunci layar biar gak scroll */
+        }
+
+        body { display: flex; justify-content: center; align-items: center; }
+
+        .login-container { width: 90%; max-width: 380px; text-align: center; }
+
+        .logo-area { color: white; margin-bottom: 25px; }
+        .logo-area i { font-size: 50px; margin-bottom: 10px; }
+        .logo-area h2 { margin: 0; font-size: 22px; letter-spacing: 2px; }
+
+        .login-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            padding: 30px 20px; border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i { 
+            position: absolute; left: 15px; top: 50%; 
+            transform: translateY(-50%); color: rgba(255,255,255,0.7); 
+        }
+        .input-group input {
+            width: 100%; padding: 14px 45px;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px; color: white; outline: none; font-size: 14px;
+        }
+        .input-group .toggle-password { left: auto; right: 15px; cursor: pointer; }
+
+        .options {
+            display: flex; align-items: center; color: white; 
+            font-size: 12px; margin-bottom: 20px; padding-left: 5px;
+        }
+        .options input { margin-right: 8px; }
+
+        .btn-login {
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            background: white; color: var(--primary-blue);
+            font-weight: 700; cursor: pointer; transition: 0.3s;
+        }
+        .btn-login:active { transform: scale(0.97); }
+
+        #msg { margin-top: 15px; font-size: 12px; font-weight: 600; min-height: 20px; }
+        .err { color: #ff9494; }
+        .ok { color: #94ffae; }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo-area">
+        <i class="fas fa-circle-user"></i>
+        <h2>MAHIKA TRANS</h2>
+    </div>
+
+    <div class="login-card">
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="user" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="pass" placeholder="Password" required>
+                <i class="fas fa-eye toggle-password" id="eye"></i>
+            </div>
+            <div class="options">
+                <input type="checkbox" id="rem"> Ingat Saya
+            </div>
+            <button type="submit" class="btn-login" id="btn">MASUK</button>
+        </form>
+        <div id="msg"></div>
+    </div>
+</div>
+
+<script>
+    // GANTI URL DI BAWAH INI DENGAN URL WEB APP KAMU!
+    const API_URL = "https://script.google.com/macros/s/AKfycbw6BUZEXc_WxNilOD7tdg5hJ2pmErMltdtDkgmu0vQeL3ATR9lu4XbK2cEPm1DU-nvB/exec";
+
+    // 1. Show/Hide Password
+    const eye = document.getElementById('eye');
+    const passField = document.getElementById('pass');
+    eye.onclick = () => {
+        const type = passField.type === 'password' ? 'text' : 'password';
+        passField.type = type;
+        eye.classList.toggle('fa-eye-slash');
+    };
+
+    // 2. Remember Me (Load)
+    if(localStorage.getItem('mahika_rem')) {
+        document.getElementById('user').value = localStorage.getItem('mahika_rem');
+        document.getElementById('rem').checked = true;
     }
-    
-    // Default response jika parameter p bukan 'login'
-    return res({status: "error", message: "Parameter tidak dikenali"});
 
-  } catch (err) {
-    return res({status: "error", message: err.toString()});
-  }
-}
+    // 3. Proses Login
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn');
+        const msg = document.getElementById('msg');
+        const userVal = document.getElementById('user').value;
+        const passVal = document.getElementById('pass').value;
 
-function res(obj) {
-  return ContentService.createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON);
-}
-          
+        btn.disabled = true;
+        btn.innerText = "Memproses...";
+        msg.innerText = "";
+
+        try {
+            const resp = await fetch(`${API_URL}?p=login&u=${userVal}&ps=${passVal}`);
+            const res = await resp.json();
+
+            if(res.status === "success") {
+                if(document.getElementById('rem').checked) localStorage.setItem('mahika_rem', userVal);
+                else localStorage.removeItem('mahika_rem');
+
+                msg.className = "ok";
+                msg.innerText = "Berhasil! Mengalihkan...";
+                setTimeout(() => window.location.href = "index.html", 1000);
+            } else {
+                msg.className = "err";
+                msg.innerText = res.message || "Login Gagal!";
+                btn.disabled = false;
+                btn.innerText = "MASUK";
+            }
+        } catch (e) {
+            msg.className = "err";
+            msg.innerText = "Gagal terhubung ke database.";
+            btn.disabled = false;
+            btn.innerText = "MASUK";
+        }
+    };
+</script>
+</body>
+</html>
