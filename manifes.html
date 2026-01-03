@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-color: var(--primary-blue);
+            margin: 0; padding: 0; color: var(--white);
+            display: flex; justify-content: center;
+        }
+
+        .etiket-container { 
+            width: 100%; max-width: 450px; 
+            min-height: 100vh; 
+            padding-bottom: 120px;
+        }
+
+        /* HEADER */
+        .etiket-header { 
+            padding: 50px 25px 60px 25px; 
+        }
+        .etiket-header h2 { margin: 0; font-weight: 700; font-size: 26px; }
+        .etiket-header p { margin: 5px 0 0 0; font-size: 13px; opacity: 0.7; font-weight: 300; }
+
+        /* SEARCH BAR GLASS style */
+        .search-container {
+            padding: 0 20px;
+            margin-top: -35px;
+            margin-bottom: 25px;
+        }
+        .search-box { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(15px);
+            padding: 5px 15px; 
+            border-radius: 20px; 
+            display: flex; align-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .search-box input { 
+            background: transparent; border: none; padding: 12px; 
+            width: 100%; outline: none; font-size: 14px; color: #fff;
+        }
+        .search-box input::placeholder { color: rgba(255,255,255,0.5); }
+        .search-box i { color: rgba(255,255,255,0.5); }
+
+        /* CONTENT */
+        .content { padding: 0 20px; }
+        
+        .date-badge { 
+            background: var(--white); 
+            color: var(--primary-blue); 
+            padding: 6px 16px; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            font-size: 11px; 
+            margin: 25px 0 15px 0; 
+            display: inline-block;
+            text-transform: uppercase;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        /* CARD MANIFES */
+        .manifes-card { 
+            background: var(--glass); 
+            padding: 18px; 
+            border-radius: 24px; 
+            margin-bottom: 12px; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            display: flex; align-items: center;
+            transition: 0.3s;
+        }
+        .manifes-card:active { background: rgba(255,255,255,0.2); }
+        
+        .manifes-card .time { 
+            width: 70px; 
+            font-weight: 700; 
+            color: var(--white); 
+            font-size: 15px; 
+            border-right: 1px solid rgba(255,255,255,0.1); 
+            margin-right: 18px; 
+        }
+        
+        .manifes-card .info { flex: 1; }
+        .manifes-card .info .nama { font-weight: 600; font-size: 14px; display: block; margin-bottom: 2px; }
+        .manifes-card .info .bus { font-size: 11px; color: var(--text-dim); }
+
+        /* NAV BOTTOM (TETAP KONSISTEN) */
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; 
+            padding: 15px 0; border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+
+        .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+
+        .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: var(--primary-blue); }
+        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <h2>Manifes</h2>
+        <p>Jadwal Keberangkatan Mahika Trans</p>
+    </div>
+
+    <div class="search-container">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Cari nama penumpang..." onkeyup="filterManifes()">
+        </div>
+    </div>
+
+    <div class="content" id="manifestContent">
+        <p style="text-align: center; opacity: 0.5; margin-top: 50px; font-size: 13px;">Sinkronisasi jadwal...</p>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
+    <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+    <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+</div>
+
+<script>
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec?p=manifes";
+
+    let manifesData = [];
+
+    async function loadManifes() {
+        try {
+            const res = await fetch(API_URL);
+            manifesData = await res.json();
+            renderManifes(manifesData);
+        } catch (e) {
+            document.getElementById('manifestContent').innerHTML = "<p style='text-align:center; padding:20px;'>Gagal memuat data.</p>";
+        }
+    }
+
+    function renderManifes(data) {
+        const content = document.getElementById('manifestContent');
+        
+        if(data.length === 0) {
+            content.innerHTML = "<p style='text-align:center; margin-top:50px; opacity:0.5;'>Tidak ada jadwal ditemukan.</p>";
+            return;
+        }
+
+        const grouped = data.reduce((acc, item) => {
+            const date = new Date(item.tanggal).toLocaleDateString('id-ID', { weekday:'long', day:'numeric', month:'long' });
+            if (!acc[date]) acc[date] = [];
+            acc[date].push(item);
+            return acc;
+        }, {});
+
+        let html = '';
+        for (const date in grouped) {
+            html += `<div class="date-badge">${date}</div>`;
+            grouped[date].forEach(item => {
+                const jamTampil = item.jam ? item.jam.substring(0, 5) : "--:--";
+                html += `
+                    <div class="manifes-card">
+                        <div class="time">${jamTampil}</div>
+                        <div class="info">
+                            <span class="nama">${item.nama}</span>
+                            <span class="bus">${item.armada} • ${item.tujuan}</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+        content.innerHTML = html;
+    }
+
+    function filterManifes() {
+        const query = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = manifesData.filter(item => 
+            item.nama.toLowerCase().includes(query) || 
+            item.armada.toLowerCase().includes(query) ||
+            item.tujuan.toLowerCase().includes(query)
+        );
+        renderManifes(filtered);
+    }
+
+    // Fitur Ketuk Layar Sembunyikan Menu
+    document.addEventListener('click', function(event) {
+        const nav = document.querySelector('.nav-bottom');
+        const search = document.querySelector('.search-box');
+        // Jangan sembunyikan jika sedang klik input search
+        if (!nav.contains(event.target) && !search.contains(event.target)) {
+            nav.classList.toggle('nav-hidden');
+        }
+    });
+
+    loadManifes();
+</script>
+</body>
+</html>
