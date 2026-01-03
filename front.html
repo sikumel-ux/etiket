@@ -3,24 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Mahika Trans Dark</title>
+    <title>Dashboard | Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0f172a;
-            --card-bg: #1e293b;
-            --accent-blue: #38bdf8;
-            --text-main: #f1f5f9;
+            --accent-light: #78B9B5; /* Aqua */
+            --teal: #0F828C;
+            --blue-deep: #065084;
+            --purple-dark: #320A6B;
+            --bg-night: #050a1a; /* Background dasar lebih gelap */
+            --card-night: #0d162d; /* Warna card */
+            --text-main: #e2e8f0;
             --text-dim: #94a3b8;
-            --grad-blue: linear-gradient(135deg, #1e40af, #1e3a8a);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg-dark);
+            background: var(--bg-night);
             color: var(--text-main);
             margin: 0; padding: 0; 
             display: flex; justify-content: center; 
@@ -29,48 +31,48 @@
 
         .etiket-container {
             width: 100%; max-width: 450px; 
-            background: var(--bg-dark); 
+            background: var(--bg-night); 
             min-height: 100vh;
-            padding-bottom: 100px;
+            padding-bottom: 110px;
         }
 
-        /* HEADER MODERN */
+        /* HEADER DENGAN GRADASI CUSTOM */
         .etiket-header {
-            background: var(--grad-blue);
+            background: linear-gradient(135deg, var(--teal), var(--blue-deep), var(--purple-dark));
             color: #fff; 
-            padding: 60px 25px 80px 25px; 
-            border-radius: 0 0 40px 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 65px 25px 85px 25px; 
+            border-radius: 0 0 50px 50px;
+            box-shadow: 0 10px 40px rgba(5, 10, 26, 0.8);
         }
-        .etiket-header h1 { font-size: 16px; margin: 0; color: rgba(255,255,255,0.7); font-weight: 400; }
-        .etiket-header h2 { font-size: 28px; margin: 5px 0 0 0; font-weight: 800; letter-spacing: -0.5px; }
+        .etiket-header h1 { font-size: 15px; margin: 0; color: var(--accent-light); font-weight: 400; text-transform: uppercase; letter-spacing: 1px; }
+        .etiket-header h2 { font-size: 30px; margin: 5px 0 0 0; font-weight: 800; letter-spacing: -1px; }
 
-        /* STATS GRID - FLOATING CARD */
+        /* STATS GRID */
         .stats-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
             gap: 15px; 
-            margin-top: -45px; 
+            margin-top: -50px; 
             padding: 0 20px; 
         }
         .stat-card {
-            background: var(--card-bg); 
-            padding: 20px 15px; 
-            border-radius: 24px; 
-            border: 1px solid rgba(255,255,255,0.05);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+            background: var(--card-night); 
+            padding: 22px 15px; 
+            border-radius: 28px; 
+            border: 1px solid rgba(120, 185, 181, 0.1); /* Border tipis warna aqua */
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.4);
             text-align: center;
         }
-        .stat-card i { font-size: 24px; color: var(--accent-blue); margin-bottom: 12px; }
-        .stat-card span { display: block; font-size: 10px; color: var(--text-dim); text-transform: uppercase; font-weight: 600; margin-bottom: 6px; }
-        .stat-card strong { font-size: 15px; color: var(--text-main); font-weight: 700; }
+        .stat-card i { font-size: 24px; color: var(--accent-light); margin-bottom: 12px; }
+        .stat-card span { display: block; font-size: 9px; color: var(--text-dim); text-transform: uppercase; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; }
+        .stat-card strong { font-size: 16px; color: #fff; font-weight: 700; }
 
-        /* SERVICE ICONS */
+        /* SERVICES SECTION */
         .section-title { 
-            padding: 35px 25px 15px 25px; 
-            font-size: 18px; font-weight: 700; 
-            color: var(--text-main);
-            display: flex; justify-content: space-between; align-items: center;
+            padding: 40px 25px 15px 25px; 
+            font-size: 17px; font-weight: 700; 
+            color: var(--accent-light);
+            letter-spacing: 0.5px;
         }
         
         .service-grid { 
@@ -79,67 +81,64 @@
             gap: 15px; 
             padding: 0 20px; 
         }
-        .service-item {
-            text-align: center; text-decoration: none;
-        }
+        .service-item { text-align: center; text-decoration: none; }
         .service-icon {
-            width: 60px; height: 60px; 
-            background: var(--card-bg); 
-            color: var(--accent-blue); 
-            border-radius: 20px; 
+            width: 62px; height: 62px; 
+            background: linear-gradient(145deg, #111b36, #0d162d);
+            color: var(--accent-light); 
+            border-radius: 22px; 
             display: flex; align-items: center; justify-content: center; 
             margin: 0 auto 10px auto; 
-            font-size: 24px; 
+            font-size: 22px; 
             border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.2s;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.2);
         }
-        .service-icon:active { transform: scale(0.9); }
-        .service-item span { font-size: 11px; font-weight: 600; color: var(--text-dim); }
+        .service-item span { font-size: 11px; font-weight: 600; color: var(--text-main); }
 
         /* MANIFES LIST */
-        .antrean-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
+        .antrean-list { display: flex; flex-direction: column; gap: 14px; padding: 0 20px; }
         .antrean-item {
             display: flex; align-items: center; gap: 15px; padding: 15px;
-            background: var(--card-bg); 
-            border-radius: 20px; 
-            border: 1px solid rgba(255,255,255,0.03);
-            cursor: pointer;
+            background: var(--card-night); 
+            border-radius: 24px; 
+            border-left: 4px solid var(--teal);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
         }
         
         .tgl-badge {
-            background: rgba(56, 189, 248, 0.1); 
-            color: var(--accent-blue); 
-            padding: 10px; border-radius: 15px;
-            font-size: 12px; font-weight: 700; 
-            min-width: 60px; text-align: center; line-height: 1.2;
+            background: rgba(120, 185, 181, 0.15); 
+            color: var(--accent-light); 
+            padding: 10px; border-radius: 18px;
+            font-size: 11px; font-weight: 800; 
+            min-width: 60px; text-align: center;
         }
 
         .antrean-info { flex: 1; }
-        .antrean-info b { font-size: 14px; color: var(--text-main); display: block; margin-bottom: 4px; }
-        .antrean-info span { font-size: 11px; color: var(--text-dim); font-weight: 400; }
+        .antrean-info b { font-size: 14px; color: #fff; display: block; margin-bottom: 3px; }
+        .antrean-info span { font-size: 11px; color: var(--text-dim); }
 
         .jam-badge-right { 
-            background: rgba(255,255,255,0.05); 
-            color: var(--text-main); 
-            font-size: 12px; font-weight: 600; 
-            padding: 6px 10px; border-radius: 12px;
+            background: var(--blue-deep);
+            color: #fff; 
+            font-size: 11px; font-weight: 700; 
+            padding: 6px 12px; border-radius: 12px;
         }
 
         /* NAVBAR BOTTOM */
         .nav-bottom {
             position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
             width: 100%; max-width: 450px; 
-            background: rgba(30, 41, 59, 0.8);
-            backdrop-filter: blur(20px);
+            background: rgba(13, 22, 45, 0.95);
+            backdrop-filter: blur(15px);
             display: flex;
-            justify-content: space-around; padding: 15px 0 25px 0; 
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
-            border-radius: 30px 30px 0 0; z-index: 1000;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            justify-content: space-around; padding: 18px 0 28px 0; 
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+            border-radius: 35px 35px 0 0; z-index: 1000;
+            border-top: 1px solid rgba(120, 185, 181, 0.1);
         }
-        .nav-bottom a { text-decoration: none; color: var(--text-dim); text-align: center; flex: 1; }
-        .nav-bottom a.active { color: var(--accent-blue); }
-        .nav-bottom i { font-size: 20px; margin-bottom: 4px; display: block; }
+        .nav-bottom a { text-decoration: none; color: #4b5563; text-align: center; flex: 1; transition: 0.3s; }
+        .nav-bottom a.active { color: var(--accent-light); }
+        .nav-bottom i { font-size: 22px; margin-bottom: 5px; display: block; }
         .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
     </style>
 </head>
@@ -154,7 +153,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <i class="fas fa-wallet"></i>
-            <span>KOMISI BULAN INI</span>
+            <span>ESTIMASI KOMISI</span>
             <strong id="statKomisi">Rp 0</strong>
         </div>
         <div class="stat-card">
@@ -164,37 +163,37 @@
         </div>
     </div>
 
-    <div class="section-title"><span>Layanan Utama</span></div>
+    <div class="section-title"><span>Layanan Transportasi</span></div>
     <div class="service-grid">
         <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-bus"></i></div>
+            <div class="service-icon"><i class="fa-solid fa-bus-simple"></i></div>
             <span>Bus</span>
         </a>
         <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-ship"></i></div>
+            <div class="service-icon"><i class="fa-solid fa-ferry"></i></div>
             <span>Kapal</span>
         </a>
         <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-plane"></i></div>
+            <div class="service-icon"><i class="fa-solid fa-plane-up"></i></div>
             <span>Pesawat</span>
         </a>
         <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-truck"></i></div>
+            <div class="service-icon"><i class="fa-solid fa-box-open"></i></div>
             <span>Cargo</span>
         </a>
     </div>
 
-    <div class="section-title"><span>Manifes Keberangkatan</span></div>
+    <div class="section-title"><span>Manifes Terbaru</span></div>
     <div class="antrean-list" id="antreanList">
-        <p style="font-size: 12px; color: var(--text-dim); padding: 20px; text-align: center;">Mengambil data terbaru...</p>
+        <p style="font-size: 12px; color: var(--text-dim); padding: 20px; text-align: center; opacity: 0.5;">Sinkronisasi data...</p>
     </div>
 </div>
 
 <div class="nav-bottom">
-    <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="input.html"><i class="fas fa-plus-circle"></i><span>Booking</span></a>
-    <a href="manifes.html"><i class="fas fa-list-ul"></i><span>Manifes</span></a>
-    <a href="pendapatan.html"><i class="fas fa-chart-line"></i><span>Laporan</span></a>
+    <a href="index.html" class="active"><i class="fas fa-grid-2"></i><i class="fa-solid fa-house"></i><span>Home</span></a>
+    <a href="input.html"><i class="fa-solid fa-circle-plus"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fa-solid fa-receipt"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fa-solid fa-chart-pie"></i><span>Laporan</span></a>
 </div>
 
 <script>
@@ -232,10 +231,10 @@
                     `;
                 }).join('');
             } else {
-                list.innerHTML = "<p style='text-align:center; font-size:12px; color:#94a3b8;'>Belum ada antrean hari ini.</p>";
+                list.innerHTML = "<p style='text-align:center; font-size:12px; color:#94a3b8;'>Data tidak ditemukan.</p>";
             }
 
-            // Load Stats
+            // Stats Komisi
             const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
             const resStats = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
             const dataStats = await resStats.json();
@@ -251,7 +250,7 @@
 
         } catch (e) {
             console.error(e);
-            document.getElementById('antreanList').innerHTML = "<p style='text-align:center; color:#ef4444; font-size: 12px;'>Gagal menghubungkan ke server.</p>";
+            document.getElementById('antreanList').innerHTML = "<p style='text-align:center; color:#78B9B5; font-size: 11px;'>Gagal memuat data.</p>";
         }
     }
 
