@@ -3,85 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etiket | Mahika Trans</title>
+<title>Etiket Mahika Trans</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#065084">
+<meta name="theme-color" content="#0066AE">
 <link rel="icon" href="m.png">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<link rel="stylesheet" href="stylez.css">
 <style>
-    :root {
-        --primary-blue: #065084;
-        --bg-darker: #043a60;
-        --white: #ffffff;
-        --yellow: #FFD700;
-        --glass: rgba(255, 255, 255, 0.1);
-    }
-
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    
-    body { 
-        font-family: 'Poppins', sans-serif; 
-        background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
-        background-color: var(--primary-blue);
-        margin: 0; padding: 0; color: var(--white);
-        display: flex; justify-content: center;
-    }
-
-    .etiket-container { width: 100%; max-width: 450px; min-height: 100vh; padding-bottom: 120px; }
-
-    /* HEADER ASLI KAMU */
-    .etiket-header { padding: 40px 25px 20px 25px; text-align: center; }
-    .header { margin-bottom: 10px; }
-    .logo { width: 150px; }
-    .kode-booking { 
-        font-size: 24px; font-weight: 800; color: var(--yellow); 
-        letter-spacing: 2px; margin: 5px 0; display: block;
-    }
-
-    /* INFO GRID ASLI KAMU */
-    .info-grid { 
-        background: var(--glass); border-radius: 20px; padding: 25px;
-        display: flex; justify-content: space-between;
-        margin: 0 20px 20px 20px; border: 1px solid rgba(255,255,255,0.1);
-    }
-    .kolom { flex: 1; }
-    .kolom p { margin: 0 0 12px 0; font-size: 13px; display: flex; align-items: center; gap: 8px; }
-    .kolom p i { color: var(--yellow); width: 15px; text-align: center; font-size: 12px; }
-
-    .tear-line {
-        height: 2px; border-top: 2px dashed rgba(255,255,255,0.2);
-        margin: 10px 20px 25px 20px;
-    }
-
-    /* BARCODE */
-    .barcode { text-align: center; margin-bottom: 25px; }
-    #barcodeImg { background: white; padding: 10px; border-radius: 12px; max-width: 80%; }
-    .thanks { font-size: 11px; opacity: 0.7; margin-top: 15px; padding: 0 40px; line-height: 1.5; }
-
-    /* KETERANGAN ASLI */
-    .keterangan { padding: 0 25px; opacity: 0.8; }
-    .keterangan p { margin: 0 0 5px 0; font-size: 11px; line-height: 1.4; }
-    .keterangan strong { color: var(--yellow); font-size: 12px; }
-
-    /* NAV BOTTOM (DISAMAKAN) */
+    /* NAVBAR FLOATING (SAMA DENGAN DASHBOARD) */
     .nav-bottom { 
         position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-        width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.95); 
-        display: flex; justify-content: space-around; padding: 15px 0; border-radius: 25px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+        width: 90%; max-width: 400px; 
+        background: rgba(255, 255, 255, 0.95); 
+        display: flex; justify-content: space-around; 
+        padding: 15px 0; border-radius: 25px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1000;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
+
+    /* Efek Ketuk Sembunyi/Tampil */
     .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
-    .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+
+    .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; -webkit-tap-highlight-color: transparent; }
+    .nav-bottom a.active { color: #065084; }
     .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
     .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
 
+    /* Space bawah agar tidak tertutup */
+    body { padding-bottom: 120px; }
+
     @media print {
         .nav-bottom { display: none; }
-        body { background: white; color: black; }
-        .info-grid { border: 1px solid #eee; color: black; background: none; }
-        .kode-booking { color: black; }
     }
 </style>
 </head>
@@ -115,7 +68,7 @@
     <div class="tear-line"></div>
 
     <div class="barcode">
-        <img id="barcodeImg" alt="Barcode">
+        <img id="barcodeImg" alt="Barcode Kode Booking">
         <p class="thanks">Terimakasih atas kepercayaan Anda menggunakan jasa layanan kami.</p>
     </div>
 
@@ -130,21 +83,21 @@
         <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
         <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
         <a href="manifes.html"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
-        <a href="#" onclick="window.print()"><i class="fas fa-print"></i><span>Cetak</span></a>
+        <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
     </div>
 </div>
 
 <script>
+// Logika pengambilan data tetap sama (Kode Asli Kamu)
 const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='manifes.html' style='color:var(--yellow)'>Kembali</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Kode booking tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
-    
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='manifes.html' style='color:var(--yellow)'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Data Etiket tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -154,20 +107,19 @@ if(!kode){
         document.getElementById("no_kursi").innerText = data.no_kursi;
         document.getElementById("jam").innerText = data.jam;
         document.getElementById("harga").innerText = Number(data.harga).toLocaleString("id-ID");
-        
         const tglKeberangkatan = new Date(data.tanggal);
         document.getElementById("tgl").innerText = tglKeberangkatan.toLocaleDateString("id-ID", {
             day: "2-digit", month: "short", year: "numeric"
         });
-
         const barcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data=" + encodeURIComponent(data.kode_booking) + "&code=Code128&translate-esc=true";
         document.getElementById("barcodeImg").src = barcodeUrl;
     }
 }
 
-// Fitur Ketuk Layar Sembunyikan Menu
+// LOGIKA KETUK LAYAR UNTUK SEMBUNYI/TAMPIL NAVBAR
 document.addEventListener('click', function(event) {
     const nav = document.querySelector('.nav-bottom');
+    // Jika yang diklik bukan link di dalam nav, baru toggle sembunyi
     if (!nav.contains(event.target)) {
         nav.classList.toggle('nav-hidden');
     }
