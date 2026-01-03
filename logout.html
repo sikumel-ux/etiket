@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logging Out...</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+        }
+        body {
+            margin: 0; padding: 0;
+            height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            text-align: center;
+        }
+        .loader {
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid #ffffff;
+            border-radius: 50%;
+            width: 40px; height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="logout-box">
+        <div class="loader"></div>
+        <p>Menghapus sesi...</p>
+    </div>
+
+    <script>
+        // 1. Hapus status login dan data user
+        // Kita tidak menghapus 'mahika_rem' supaya fitur "Remember Me" tetap berfungsi
+        localStorage.removeItem("mahika_session");
+        localStorage.removeItem("mahika_user_nama");
+
+        // 2. Beri jeda sebentar (biar kelihatan efek logout-nya) lalu pindah ke login
+        setTimeout(() => {
+            window.location.href = "login.html";
+        }, 800);
+    </script>
+
+</body>
+</html>
