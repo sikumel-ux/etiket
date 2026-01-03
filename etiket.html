@@ -11,26 +11,29 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="stylez.css">
 <style>
-    /* NAVBAR FLOATING (SAMA DENGAN DASHBOARD) */
+    /* NAVBAR DEEP BLUE GLASSMorphism (SAMA PERSIS DASHBOARD) */
     .nav-bottom { 
         position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
         width: 90%; max-width: 400px; 
-        background: rgba(255, 255, 255, 0.95); 
+        background: rgba(255, 255, 255, 0.95); /* Putih bersih sesuai desain terakhir */
         display: flex; justify-content: space-around; 
         padding: 15px 0; border-radius: 25px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
 
-    /* Efek Ketuk Sembunyi/Tampil */
+    /* Efek Ketuk Sembunyi (Biar screenshot bersih) */
     .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
 
     .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; -webkit-tap-highlight-color: transparent; }
-    .nav-bottom a.active { color: #065084; }
+    
+    /* Warna aktif Deep Blue sesuai dashboard */
+    .nav-bottom a.active { color: #065084; } 
+    
     .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
     .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
 
-    /* Space bawah agar tidak tertutup */
+    /* Agar konten tidak terpotong navbar */
     body { padding-bottom: 120px; }
 
     @media print {
@@ -88,16 +91,16 @@
 </div>
 
 <script>
-// Logika pengambilan data tetap sama (Kode Asli Kamu)
+// Logika pengambilan data (Kode Asli Kamu)
 const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Kode booking tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Data Etiket tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -116,14 +119,14 @@ if(!kode){
     }
 }
 
-// LOGIKA KETUK LAYAR UNTUK SEMBUNYI/TAMPIL NAVBAR
+// FITUR KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
 document.addEventListener('click', function(event) {
     const nav = document.querySelector('.nav-bottom');
-    // Jika yang diklik bukan link di dalam nav, baru toggle sembunyi
     if (!nav.contains(event.target)) {
         nav.classList.toggle('nav-hidden');
     }
 });
 </script>
 </body>
-</html>
+            </html>
+            
