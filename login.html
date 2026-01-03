@@ -133,12 +133,22 @@
             const res = await resp.json();
 
             if(res.status === "success") {
-                if(document.getElementById('rem').checked) localStorage.setItem('mahika_rem', userVal);
-                else localStorage.removeItem('mahika_rem');
+    // Simpan tanda login dan nama user
+    localStorage.setItem("mahika_session", "active");
+    localStorage.setItem("mahika_user_nama", res.nama);
+    
+    // Fitur Remember Me
+    if(document.getElementById('rem').checked) {
+        localStorage.setItem('mahika_rem', userVal);
+    } else {
+        localStorage.removeItem('mahika_rem');
+    }
 
-                msg.className = "ok";
-                msg.innerText = "Berhasil! Mengalihkan...";
-                setTimeout(() => window.location.href = "index.html", 1000);
+    msg.className = "ok";
+    msg.innerText = "Berhasil! Mengalihkan...";
+    setTimeout(() => window.location.href = "index.html", 1000);
+
+
             } else {
                 msg.className = "err";
                 msg.innerText = res.message || "Login Gagal!";
