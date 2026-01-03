@@ -3,80 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manifes Penumpang | Mahika Trans</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#065084">
+    <link rel="icon" href="m.png">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
         :root {
             --primary-blue: #065084;
-            --bg-body: #f4f7f9;
+            --bg-darker: #043a60;
             --white: #ffffff;
-            --whatsapp-green: #25D366;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-gray: #a0aec0;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-body);
-            margin: 0; padding: 20px;
-            padding-bottom: 100px;
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-attachment: fixed;
+            margin: 0; padding: 20px; color: var(--white);
+            min-height: 100vh;
         }
 
-        h2 { color: var(--primary-blue); text-align: center; margin-bottom: 25px; font-weight: 700; }
+        h2 { 
+            text-align: center; font-weight: 700; margin: 20px 0 30px; 
+            letter-spacing: 1px; text-transform: uppercase; font-size: 20px;
+        }
 
+        #manifesContainer { padding-bottom: 100px; }
+
+        /* CARD MANIFES GAYA MONOCHROMATIC */
         .card-manifes {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 15px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 18px;
             margin-bottom: 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-left: 5px solid var(--primary-blue);
+            transition: 0.3s;
         }
 
         .info-penumpang { flex: 1; }
-        .info-penumpang h4 { margin: 0; color: #333; font-size: 16px; }
-        .info-penumpang p { margin: 2px 0; color: #666; font-size: 12px; }
+        .info-penumpang h4 { margin: 0; font-size: 16px; color: #fff; letter-spacing: 0.5px; }
+        .info-penumpang p { margin: 4px 0; font-size: 11px; color: var(--text-gray); }
+        .info-penumpang p i { width: 18px; color: var(--white); opacity: 0.7; }
+
         .tag-kursi { 
             display: inline-block; 
-            background: #e1effe; 
-            color: var(--primary-blue); 
-            padding: 2px 8px; 
-            border-radius: 5px; 
+            background: rgba(255, 255, 255, 0.15); 
+            color: #fff; 
+            padding: 3px 10px; 
+            border-radius: 8px; 
             font-weight: 600; 
-            font-size: 11px; 
-            margin-top: 5px;
+            font-size: 10px; 
+            margin-top: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .aksi-buttons { display: flex; gap: 10px; }
+        /* AKSI BUTTONS: Gak Lebay, Senada Teks */
+        .aksi-buttons { display: flex; gap: 12px; }
 
         .btn-aksi {
-            width: 40px; height: 40px;
-            border-radius: 12px;
+            width: 45px; height: 45px;
+            border-radius: 14px;
             display: flex; align-items: center; justify-content: center;
-            text-decoration: none; border: none; cursor: pointer;
-            transition: 0.3s; font-size: 18px;
+            text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); 
+            cursor: pointer; transition: 0.3s; font-size: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white);
         }
 
-        .btn-wa { background-color: var(--whatsapp-green); color: white; }
-        .btn-wa:hover { background-color: #1eb954; transform: scale(1.1); }
+        .btn-aksi:hover { background: var(--white); color: var(--primary-blue); transform: translateY(-3px); }
 
-        .btn-tiket { background-color: var(--primary-blue); color: white; }
-        .btn-tiket:hover { background-color: #043a60; transform: scale(1.1); }
-
-        /* NAV BOTTOM (SAMA DENGAN DASHBOARD) */
+        /* NAV BOTTOM (CARD STYLE) */
         .nav-bottom { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-            width: 90%; max-width: 400px; background: white; 
-            display: flex; justify-content: space-around; padding: 10px; 
-            border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 10px 12px; border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: #999; text-align: center; font-size: 10px; font-weight: 600; }
-        .nav-bottom a.active { color: var(--primary-blue); }
-        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
 
-        .empty-state { text-align: center; padding: 50px; color: #999; }
+        .nav-bottom a { 
+            text-decoration: none; color: #999; 
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border-radius: 20px; transition: 0.3s;
+        }
+
+        .nav-bottom a.active { background: var(--primary-blue); color: #fff !important; }
+        .nav-bottom i { font-size: 18px; }
+        .nav-bottom span { font-size: 12px; font-weight: 600; display: none; }
+        .nav-bottom a.active span { display: block; }
+
+        .empty-state { text-align: center; padding: 100px 20px; color: var(--text-gray); }
     </style>
 </head>
 <body>
@@ -99,39 +125,42 @@
         container.innerHTML = "";
         let adaData = false;
 
-        // Ambil semua key dari localStorage
+        let dataArray = [];
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.startsWith("etiket_")) {
-                adaData = true;
-                const data = JSON.parse(localStorage.getItem(key));
-                
-                const card = `
-                    <div class="card-manifes">
-                        <div class="info-penumpang">
-                            <h4>${data.nama}</h4>
-                            <p><i class="fas fa-bus"></i> ${data.armada} | <i class="fas fa-clock"></i> ${data.jam}</p>
-                            <p><i class="fas fa-map-marker-alt"></i> ${data.tujuan}</p>
-                            <span class="tag-kursi">Kursi ${data.no_kursi}</span>
-                        </div>
-                        <div class="aksi-buttons">
-                            <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi btn-wa">
-                                <i class="fab fa-whatsapp"></i>
-                            </button>
-                            <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi btn-tiket">
-                                <i class="fas fa-ticket-alt"></i>
-                            </a>
-                        </div>
-                    </div>
-                `;
-                container.innerHTML += card;
+                dataArray.push(JSON.parse(localStorage.getItem(key)));
             }
         }
 
+        // Urutkan berdasarkan yang terbaru (opsional)
+        dataArray.reverse().forEach(data => {
+            adaData = true;
+            const card = `
+                <div class="card-manifes">
+                    <div class="info-penumpang">
+                        <h4>${data.nama}</h4>
+                        <p><i class="fas fa-bus"></i> ${data.armada} • ${data.jam}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> ${data.tujuan}</p>
+                        <span class="tag-kursi">Kursi ${data.no_kursi}</span>
+                    </div>
+                    <div class="aksi-buttons">
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="Kirim WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat Tiket">
+                            <i class="fas fa-ticket"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
         if (!adaData) {
             container.innerHTML = `<div class="empty-state">
-                <i class="fas fa-folder-open" style="font-size:48px; margin-bottom:10px;"></i>
-                <p>Belum ada data penumpang.</p>
+                <i class="fas fa-folder-open" style="font-size:40px; opacity:0.3; margin-bottom:15px;"></i>
+                <p>Belum ada manifes penumpang.</p>
             </div>`;
         }
     }
@@ -140,34 +169,23 @@
         const data = JSON.parse(localStorage.getItem("etiket_" + kode));
         if(!data) return;
 
-        // Format Pesan WA
         const pesan = `*E-TIKET MAHIKA TRANS*%0A` +
                       `----------------------------%0A` +
                       `Halo Kak *${data.nama}*,%0A%0A` +
-                      `Berikut adalah detail booking tiket Anda:%0A%0A` +
-                      `🎫 *Kode Booking:* ${data.kode_booking}%0A` +
+                      `Berikut detail tiket Anda:%0A` +
+                      `🎫 *Kode:* ${data.kode_booking}%0A` +
                       `🚌 *Armada:* ${data.armada}%0A` +
                       `📍 *Tujuan:* ${data.tujuan}%0A` +
-                      `💺 *No. Kursi:* ${data.no_kursi}%0A` +
-                      `⏰ *Jam:* ${data.jam}%0A` +
-                      `📅 *Tanggal:* ${data.tanggal}%0A%0A` +
-                      `Cek E-Tiket online di sini:%0A` +
-                      `${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A%0A` +
-                      `_Terima kasih telah memilih Mahika Trans!_`;
+                      `💺 *Kursi:* ${data.no_kursi}%0A` +
+                      `⏰ *Jam:* ${data.jam}%0A%0A` +
+                      `Cek tiket online: ${window.location.origin}/etiket.html?kode=${data.kode_booking}`;
 
-        // Bersihkan No HP
         let noHP = data.no_hp.replace(/\D/g, '');
-        if (noHP.startsWith('0')) {
-            noHP = '62' + noHP.slice(1);
-        }
-
-        // Redirect ke WhatsApp
+        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
         window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
     }
 
-    // Jalankan saat halaman dibuka
     window.onload = loadManifes;
 </script>
-
 </body>
 </html>
