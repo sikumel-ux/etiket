@@ -5,41 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #065084;      /* Latar Belakang Utama */
-            --accent-teal: #0F828C;  /* Warna Aksen / Tombol */
-            --light-aqua: #78B9B5;   /* Warna Teks Aksen */
-            --card-glass: rgba(255, 255, 255, 0.1); /* Efek Kaca */
-            --text-white: #ffffff;
+            --primary-blue: #065084;
+            --bg-darker: #043a60; /* Versi lebih gelap sedikit untuk depth */
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-thick: rgba(255, 255, 255, 0.15);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg-main);
-            color: var(--text-white);
-            margin: 0; padding: 0; 
-            display: flex; justify-content: center; 
-            min-height: 100vh;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            margin: 0; padding: 0;
+            display: flex; justify-content: center;
         }
 
         .etiket-container {
-            width: 100%; max-width: 450px; 
-            padding-bottom: 110px;
+            width: 100%; max-width: 450px;
+            min-height: 100vh;
+            padding-bottom: 120px;
+            /* Background halus agar tidak flat */
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
         }
 
         /* HEADER */
         .etiket-header {
-            padding: 60px 25px 40px 25px; 
-            background: linear-gradient(to bottom, rgba(0,0,0,0.2), transparent);
+            padding: 50px 25px 30px 25px;
         }
-        .etiket-header h1 { font-size: 15px; margin: 0; color: var(--light-aqua); font-weight: 400; text-transform: uppercase; }
-        .etiket-header h2 { font-size: 28px; margin: 5px 0 0 0; font-weight: 800; }
+        .etiket-header h1 { font-size: 14px; margin: 0; opacity: 0.7; font-weight: 300; letter-spacing: 1px; }
+        .etiket-header h2 { font-size: 26px; margin: 5px 0 0 0; font-weight: 700; }
 
-        /* STATS - MENGGUNAKAN CARD TEAL AGAR STANDOUT */
+        /* STATS CARD - FULL WHITE MINIMALIST */
         .stats-grid { 
             display: grid; 
             grid-template-columns: 1fr 1fr; 
@@ -47,106 +48,100 @@
             padding: 0 20px; 
         }
         .stat-card {
-            background: var(--accent-teal); 
+            background: var(--white); 
             padding: 20px 15px; 
             border-radius: 24px; 
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
+            text-align: left;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
         }
-        .stat-card i { font-size: 24px; color: var(--light-aqua); margin-bottom: 10px; }
-        .stat-card span { display: block; font-size: 10px; color: rgba(255,255,255,0.7); font-weight: 600; margin-bottom: 4px; }
-        .stat-card strong { font-size: 15px; font-weight: 700; }
+        .stat-card i { font-size: 20px; color: var(--primary-blue); margin-bottom: 12px; display: block; }
+        .stat-card span { display: block; font-size: 9px; color: #666; font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+        .stat-card strong { font-size: 15px; color: var(--primary-blue); font-weight: 700; }
 
-        /* SERVICES SECTION */
+        /* SERVICES - ICON OUTLINE */
         .section-title { 
-            padding: 30px 25px 15px 25px; 
-            font-size: 17px; font-weight: 700; 
-            color: var(--light-aqua);
+            padding: 35px 25px 15px 25px; 
+            font-size: 16px; font-weight: 600; opacity: 0.9;
+            display: flex; justify-content: space-between;
         }
         
         .service-grid { 
             display: grid; 
             grid-template-columns: repeat(4, 1fr); 
-            gap: 12px; 
+            gap: 10px; 
             padding: 0 20px; 
         }
-        .service-item { text-align: center; text-decoration: none; }
+        .service-item { text-align: center; text-decoration: none; color: var(--white); }
         .service-icon {
-            width: 60px; height: 60px; 
-            background: var(--card-glass);
-            backdrop-filter: blur(10px);
-            color: #fff; 
-            border-radius: 20px; 
+            width: 65px; height: 65px; 
+            background: var(--glass);
+            border-radius: 22px; 
             display: flex; align-items: center; justify-content: center; 
-            margin: 0 auto 10px auto; 
+            margin: 0 auto 8px auto; 
             font-size: 22px; 
             border: 1px solid rgba(255,255,255,0.1);
         }
-        .service-item span { font-size: 11px; font-weight: 500; color: #fff; }
+        .service-item span { font-size: 11px; opacity: 0.8; }
 
-        /* LIST MANIFES - CARD MODERN */
+        /* LIST MANIFES - CLEAN GLASS */
         .antrean-list { display: flex; flex-direction: column; gap: 12px; padding: 0 20px; }
         .antrean-item {
-            display: flex; align-items: center; gap: 15px; padding: 15px;
-            background: rgba(255, 255, 255, 0.05); 
-            border-radius: 22px; 
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: 0.3s;
+            display: flex; align-items: center; gap: 15px; padding: 16px;
+            background: var(--glass);
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .antrean-item:active { background: rgba(255, 255, 255, 0.15); }
         
-        .tgl-badge {
-            background: var(--accent-teal); 
-            color: #fff; 
-            padding: 8px; border-radius: 15px;
-            font-size: 11px; font-weight: 700; 
-            min-width: 55px; text-align: center;
+        .tgl-circle {
+            width: 50px; height: 50px;
+            background: var(--white);
+            color: var(--primary-blue);
+            border-radius: 50%;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 700;
+            line-height: 1.1;
         }
 
         .antrean-info { flex: 1; }
-        .antrean-info b { font-size: 14px; color: #fff; display: block; }
-        .antrean-info span { font-size: 11px; color: var(--light-aqua); }
+        .antrean-info b { font-size: 14px; display: block; margin-bottom: 2px; }
+        .antrean-info span { font-size: 11px; opacity: 0.6; }
 
-        .jam-badge-right { 
-            font-size: 12px; font-weight: 700; color: #fff;
-            background: rgba(15, 130, 140, 0.4);
-            padding: 5px 10px; border-radius: 10px;
-        }
+        .jam-text { font-size: 13px; font-weight: 600; opacity: 0.9; }
 
-        /* BOTTOM NAV */
+        /* NAV BOTTOM */
         .nav-bottom {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-            width: 100%; max-width: 450px; 
-            background: rgba(6, 80, 132, 0.9);
-            backdrop-filter: blur(15px);
-            display: flex;
-            justify-content: space-around; padding: 15px 0 25px 0; 
-            border-radius: 30px 30px 0 0; z-index: 1000;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95);
+            display: flex; justify-content: space-around; 
+            padding: 15px 0; 
+            border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            z-index: 1000;
         }
-        .nav-bottom a { text-decoration: none; color: rgba(255,255,255,0.4); text-align: center; flex: 1; }
-        .nav-bottom a.active { color: var(--light-aqua); }
-        .nav-bottom i { font-size: 20px; margin-bottom: 4px; display: block; }
-        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+        .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+        .nav-bottom a.active { color: var(--primary-blue); }
+        .nav-bottom i { font-size: 20px; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; margin-top: 4px; }
     </style>
 </head>
 <body>
 
 <div class="etiket-container">
     <div class="etiket-header">
-        <h1 id="greeting">Halo,</h1>
-        <h2>Mahika Trans</h2>
+        <h1 id="greeting">Hi, Mahika Trans</h1>
+        <h2>Dashboard</h2>
     </div>
 
     <div class="stats-grid">
         <div class="stat-card">
-            <i class="fas fa-wallet"></i>
-            <span>KOMISI BULAN INI</span>
+            <i class="fas fa-arrow-up-right-dots"></i>
+            <span>KOMISI</span>
             <strong id="statKomisi">Rp 0</strong>
         </div>
         <div class="stat-card">
-            <i class="fas fa-users"></i>
+            <i class="fas fa-user-group"></i>
             <span>TOTAL PAX</span>
             <strong id="statPax">0 Orang</strong>
         </div>
@@ -154,48 +149,40 @@
 
     <div class="section-title"><span>Layanan</span></div>
     <div class="service-grid">
-        <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-bus"></i></div>
+        <a href="#" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-bus-simple"></i></div>
             <span>Bus</span>
         </a>
-        <a href="input.html" class="service-item">
+        <a href="#" class="service-item">
             <div class="service-icon"><i class="fa-solid fa-ship"></i></div>
             <span>Kapal</span>
         </a>
-        <a href="input.html" class="service-item">
+        <a href="#" class="service-item">
             <div class="service-icon"><i class="fa-solid fa-plane"></i></div>
             <span>Pesawat</span>
         </a>
-        <a href="input.html" class="service-item">
-            <div class="service-icon"><i class="fa-solid fa-truck-fast"></i></div>
+        <a href="#" class="service-item">
+            <div class="service-icon"><i class="fa-solid fa-truck"></i></div>
             <span>Cargo</span>
         </a>
     </div>
 
-    <div class="section-title"><span>Manifes Hari Ini</span></div>
+    <div class="section-title"><span>Manifes Terbaru</span></div>
     <div class="antrean-list" id="antreanList">
-        <p style="text-align:center; font-size:12px; color:var(--light-aqua);">Memuat data...</p>
-    </div>
+        </div>
 </div>
 
 <div class="nav-bottom">
-    <a href="index.html" class="active"><i class="fas fa-home"></i><span>Home</span></a>
-    <a href="input.html"><i class="fas fa-plus-circle"></i><span>Booking</span></a>
-    <a href="manifes.html"><i class="fas fa-list-ul"></i><span>Manifes</span></a>
-    <a href="pendapatan.html"><i class="fas fa-chart-line"></i><span>Laporan</span></a>
+    <a href="#" class="active"><i class="fas fa-house"></i><span>Home</span></a>
+    <a href="#"><i class="fas fa-plus-circle"></i><span>Booking</span></a>
+    <a href="#"><i class="fas fa-file-invoice"></i><span>Manifes</span></a>
+    <a href="#"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
 </div>
 
 <script>
-    // Script tetap sama dengan API URL kamu
+    // URL API tetap sama
     const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
     const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
-
-    const jamSekarang = new Date().getHours();
-    let salam = "Selamat Malam";
-    if (jamSekarang < 11) salam = "Selamat Pagi";
-    else if (jamSekarang < 15) salam = "Selamat Siang";
-    else if (jamSekarang < 19) salam = "Selamat Sore";
-    document.getElementById('greeting').innerText = salam + ",";
 
     async function loadDashboard() {
         try {
@@ -205,42 +192,27 @@
 
             if(data && data.length > 0) {
                 list.innerHTML = data.slice(0, 10).map(item => {
-                    const tgl = new Date(item.tanggal).toLocaleDateString('id-ID', {day:'numeric', month:'short'});
+                    const tgl = new Date(item.tanggal);
+                    const d = tgl.getDate();
+                    const m = tgl.toLocaleDateString('id-ID', {month:'short'});
                     const jamBrkt = item.jam ? item.jam.substring(0, 5) : "--:--";
+                    
                     return `
-                        <div class="antrean-item" onclick="location.href='manifes.html?tgl=${item.tanggal.split('T')[0]}'">
-                            <div class="tgl-badge">${tgl}</div>
+                        <div class="antrean-item">
+                            <div class="tgl-circle"><b>${d}</b>${m}</div>
                             <div class="antrean-info">
                                 <b>${item.nama || 'Tanpa Nama'}</b>
                                 <span>${item.armada || '-'} • ${item.tujuan || '-'}</span>
                             </div>
-                            <div class="jam-badge-right">${jamBrkt}</div>
-                        </div>`;
+                            <div class="jam-text">${jamBrkt}</div>
+                        </div>
+                    `;
                 }).join('');
-            } else {
-                list.innerHTML = "<p style='text-align:center; font-size:12px;'>Belum ada antrean.</p>";
             }
-
-            const blnIni = new Date().getFullYear() + "-" + ("0" + (new Date().getMonth() + 1)).slice(-2);
-            const resStats = await fetch(`${API_URL}?p=getPendapatan&bulan=${blnIni}`);
-            const dataStats = await resStats.json();
-
-            let totalKomisi = 0, totalPax = 0;
-            dataStats.forEach(row => {
-                totalPax += parseInt(row[2]) || 0;
-                totalKomisi += parseInt(row[4]) || 0;
-            });
-
-            document.getElementById('statKomisi').innerText = "Rp " + totalKomisi.toLocaleString('id-ID');
-            document.getElementById('statPax').innerText = totalPax + " Orang";
-
-        } catch (e) {
-            document.getElementById('antreanList').innerHTML = "<p style='text-align:center;'>Gagal memuat.</p>";
-        }
+        } catch (e) { console.error(e); }
     }
     loadDashboard();
 </script>
 
 </body>
-  </html>
-  
+</html>
