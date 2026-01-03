@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="stylez.css">
 <style>
-    /* RUBAH WARNA HEADER */
+    /* WARNA HEADER SESUAI PERMINTAAN */
     .etiket-header {
         background-color: #065084 !important;
         padding: 30px 20px;
@@ -20,37 +20,43 @@
     }
 
     .kode-booking {
-        color: #FFD700; /* Warna kuning agar kontras di biru */
+        color: #FFD700;
         font-weight: 700;
         margin-top: 10px;
     }
 
-    /* NAVBAR HANYA TOMBOL BACK */
+    /* NAVBAR HANYA ICON BACK */
     .nav-bottom { 
-        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
-        width: auto;
-        background: rgba(255, 255, 255, 0.95); 
-        display: flex; justify-content: center; align-items: center;
-        padding: 10px 25px; border-radius: 50px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+        position: fixed; 
+        bottom: 30px; 
+        left: 50%; 
+        transform: translateX(-50%); 
+        z-index: 1000;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
 
+    /* Efek Hide saat diketuk screen */
     .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
 
-    .btn-back { 
+    .btn-back-circle { 
         text-decoration: none; 
-        background: #065084; 
-        color: #fff; 
-        display: flex; align-items: center; gap: 10px;
-        padding: 10px 25px; border-radius: 30px;
-        font-weight: 600; font-size: 8px;
-        transition: 0.3s; -webkit-tap-highlight-color: transparent;
+        background-color: #065084; 
+        color: #ffffff; 
+        width: 60px; 
+        height: 60px; 
+        border-radius: 50%; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        font-size: 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        transition: 0.3s;
+        -webkit-tap-highlight-color: transparent;
     }
 
-    .btn-back:active { transform: scale(0.95); }
+    .btn-back-circle:active { transform: scale(0.9); }
 
-    /* Space bawah agar tidak tertutup */
+    /* Space agar konten tidak tertutup */
     body { padding-bottom: 120px; }
 
     @media print {
@@ -100,24 +106,22 @@
     </div>
 
     <div class="nav-bottom">
-        <a href="index.html" class="btn-back">
-            <i class="fas fa-arrow-left"></i>
-            <span>KEMBALI</span>
+        <a href="index.html" class="btn-back-circle">
+            <i class="fas fa-chevron-left"></i>
         </a>
     </div>
 </div>
 
 <script>
-// Logika pengambilan data (Kode Asli Kamu)
 const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -136,7 +140,7 @@ if(!kode){
     }
 }
 
-// EFEK KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
+// LOGIKA KETUK LAYAR UNTUK SEMBUNYI/TAMPIL TOMBOL
 document.addEventListener('click', function(event) {
     const nav = document.querySelector('.nav-bottom');
     if (!nav.contains(event.target)) {
@@ -145,4 +149,5 @@ document.addEventListener('click', function(event) {
 });
 </script>
 </body>
-</html>
+    </html>
+    
