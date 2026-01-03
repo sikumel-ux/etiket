@@ -16,6 +16,7 @@
             --white: #ffffff;
             --glass: rgba(255, 255, 255, 0.1);
             --text-gray: #a0aec0;
+            --red-danger: #ff4444;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -28,7 +29,7 @@
             min-height: 100vh;
         }
 
-        /* HEADER SECTION */
+        /* HEADER */
         .header-section {
             padding: 50px 25px 30px;
             text-align: center;
@@ -36,8 +37,7 @@
 
         .title-page {
             font-size: 22px; font-weight: 700; letter-spacing: 1px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
+            margin-bottom: 20px; text-transform: uppercase;
         }
 
         .stats-header {
@@ -49,7 +49,7 @@
             display: inline-flex; align-items: center;
             gap: 15px; margin: 0 auto;
         }
-        .stats-header i { font-size: 20px; color: #fff; }
+        .stats-header i { font-size: 20px; }
         .stats-header div { text-align: left; }
         .stats-header span { display: block; font-size: 10px; opacity: 0.7; }
         .stats-header strong { font-size: 16px; display: block; }
@@ -66,10 +66,9 @@
             padding: 18px;
             margin-bottom: 15px;
             display: flex; justify-content: space-between; align-items: center;
-            transition: 0.3s;
         }
 
-        .info-penumpang { flex: 1; }
+        .info-penumpang { flex: 1; padding-right: 10px; }
         .info-penumpang h4 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
         .info-penumpang p { margin: 4px 0; font-size: 11px; color: var(--text-gray); display: flex; align-items: center; gap: 6px; }
         .info-penumpang p i { width: 14px; opacity: 0.6; font-size: 12px; }
@@ -79,23 +78,27 @@
             background: rgba(255, 255, 255, 0.15); 
             padding: 3px 10px; border-radius: 8px; 
             font-weight: 600; font-size: 10px; margin-top: 8px;
-            border: 1px solid rgba(255,255,255,0.05);
         }
 
         /* TOMBOL AKSI */
-        .aksi-buttons { display: flex; gap: 12px; }
+        .aksi-buttons { display: flex; gap: 8px; }
         .btn-aksi {
-            width: 45px; height: 45px;
-            border-radius: 14px;
+            width: 40px; height: 40px;
+            border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); 
             background: rgba(255, 255, 255, 0.05); color: #fff;
-            transition: 0.3s; font-size: 20px;
-            cursor: pointer;
+            transition: 0.3s; font-size: 16px; cursor: pointer;
         }
-        .btn-aksi:active { transform: scale(0.9); background: var(--white); color: var(--primary-blue); }
 
-        /* NAVBAR SAMA DENGAN DASHBOARD */
+        /* Spesifik Tombol Hapus */
+        .btn-delete { color: var(--red-danger); border-color: rgba(255, 68, 68, 0.3); }
+        .btn-delete:active { background: var(--red-danger); color: #fff; }
+        
+        /* Spesifik Tombol Lain */
+        .btn-aksi:active:not(.btn-delete) { background: var(--white); color: var(--primary-blue); }
+
+        /* NAVBAR */
         .nav-bottom { 
             position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
             width: 90%; max-width: 400px; 
@@ -103,7 +106,7 @@
             display: flex; justify-content: space-around; align-items: center;
             padding: 10px 12px; border-radius: 30px; 
             box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000;
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+            transition: transform 0.4s ease, opacity 0.3s ease;
         }
         .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
 
@@ -125,16 +128,15 @@
     <div class="header-section">
         <div class="title-page">Manifes Penumpang</div>
         <div class="stats-header">
-            <i class="fas fa-id-card-alt"></i>
+            <i class="fas fa-users-viewfinder"></i>
             <div>
-                <span>Database Terdaftar</span>
+                <span>Total Keberangkatan</span>
                 <strong id="countPsg">0 Penumpang</strong>
             </div>
         </div>
     </div>
 
-    <div id="manifesContainer">
-        </div>
+    <div id="manifesContainer"></div>
 
     <div class="nav-bottom">
         <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
@@ -151,44 +153,40 @@
         let count = 0;
         let dataArray = [];
 
-        // Ambil data yang mengandung kata 'tiket' (biar aman etiket_ atau tiket_)
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
             if (key.includes("tiket_")) {
                 try {
                     const data = JSON.parse(localStorage.getItem(key));
-                    if(data && data.nama) {
-                        dataArray.push(data);
-                    }
-                } catch(e) { console.error("Error load data", e); }
+                    if(data && data.nama) dataArray.push(data);
+                } catch(e) {}
             }
         }
 
-        // SORTING: Tanggal Terkecil di Atas
+        // Urutkan Tanggal Terkecil di Atas
         dataArray.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
 
         dataArray.forEach(data => {
             count++;
-            
-            // Format Tanggal Indonesia (03 Jan 2026)
             const tglObj = new Date(data.tanggal);
-            const tglIndo = tglObj.toLocaleDateString('id-ID', {
-                day: '2-digit', month: 'short', year: 'numeric'
-            });
+            const tglIndo = tglObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
 
             const card = `
                 <div class="card-manifes">
                     <div class="info-penumpang">
                         <h4>${data.nama}</h4>
-                        <p><i class="fas fa-calendar-alt"></i> ${tglIndo} • ${data.jam}</p>
+                        <p><i class="fas fa-calendar-day"></i> ${tglIndo} • ${data.jam}</p>
                         <p><i class="fas fa-bus"></i> ${data.armada} • ${data.tujuan}</p>
                         <span class="tag-kursi">Kursi ${data.no_kursi}</span>
                     </div>
                     <div class="aksi-buttons">
-                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="Kirim WA">
+                        <button onclick="hapusData('${data.kode_booking}', '${data.nama}')" class="btn-aksi btn-delete">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi">
                             <i class="fab fa-whatsapp"></i>
                         </button>
-                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat Tiket">
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi">
                             <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -198,55 +196,40 @@
         });
 
         countEl.innerText = count + " Penumpang";
+        if (count === 0) container.innerHTML = `<div class="empty-state"><p>Data masih kosong, bro.</p></div>`;
+    }
 
-        if (count === 0) {
-            container.innerHTML = `<div class="empty-state">
-                <i class="fas fa-folder-open" style="font-size:40px; opacity:0.2; margin-bottom:15px;"></i>
-                <p>Belum ada data masuk.</p>
-            </div>`;
+    function hapusData(kode, nama) {
+        if (confirm(`Hapus manifes atas nama ${nama}?`)) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.includes(kode)) {
+                    localStorage.removeItem(key);
+                    break;
+                }
+            }
+            loadManifes();
         }
     }
 
     function kirimWA(kode) {
-        // Cari data berdasarkan kode booking
         let data;
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
-            if (key.includes(kode)) {
-                data = JSON.parse(localStorage.getItem(key));
-                break;
-            }
+            if (key.includes(kode)) { data = JSON.parse(localStorage.getItem(key)); break; }
         }
-        
         if(!data) return;
 
-        // FORMAT PESAN ELEGAN
-        const pesan = `*MAHIKA TRANS*%0A` +
-                      `────────────────────────%0A` +
-                      `Halo Kak *${data.nama}*,%0A%0A` +
-                      `Terima kasih telah memilih Mahika Trans.%0A` +
-                      `Berikut adalah rincian E-Tiket Anda:%0A%0A` +
-                      `*Kode Booking* : ${data.kode_booking}%0A` +
-                      `*Armada* : ${data.armada}%0A` +
-                      `*Kursi* : ${data.no_kursi}%0A` +
-                      `*Jadwal* : ${data.jam} WIB%0A%0A` +
-                      `*Lihat Tiket Online:*%0A` +
-                      `${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A%0A` +
-                      `────────────────────────%0A` +
-                      `_Mohon hadir di lokasi 30 menit sebelum jadwal._%0A` +
-                      `_Simpan pesan ini sebagai bukti perjalanan._`;
+        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir 30 menit sebelum jadwal._`;
 
         let noHP = data.no_hp.replace(/\D/g, '');
         if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
         window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
     }
 
-    // EFEK KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function(e) {
         const nav = document.querySelector('.nav-bottom');
-        if (!nav.contains(event.target)) {
-            nav.classList.toggle('nav-hidden');
-        }
+        if (!nav.contains(e.target)) nav.classList.toggle('nav-hidden');
     });
 
     window.onload = loadManifes;
