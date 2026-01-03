@@ -5,45 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Etiket Mahika Trans</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#0066AE">
+<meta name="theme-color" content="#065084">
 <link rel="icon" href="m.png">
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="stylez.css">
 <style>
-    /* NAVBAR CAPSULE STYLE (SAMA PERSIS DASHBOARD) */
+    /* RUBAH WARNA HEADER */
+    .etiket-header {
+        background-color: #065084 !important;
+        padding: 30px 20px;
+        text-align: center;
+        border-radius: 0 0 20px 20px;
+    }
+
+    .kode-booking {
+        color: #FFD700; /* Warna kuning agar kontras di biru */
+        font-weight: 700;
+        margin-top: 10px;
+    }
+
+    /* NAVBAR HANYA TOMBOL BACK */
     .nav-bottom { 
-        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
-        width: 90%; max-width: 400px; 
+        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+        width: auto;
         background: rgba(255, 255, 255, 0.95); 
-        display: flex; justify-content: space-around; align-items: center;
-        padding: 10px 12px; border-radius: 30px; 
-        box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 1000;
+        display: flex; justify-content: center; align-items: center;
+        padding: 10px 25px; border-radius: 50px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
 
-    /* Efek Ketuk Sembunyi */
     .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
 
-    .nav-bottom a { 
-        text-decoration: none; color: #999; 
-        display: flex; align-items: center; gap: 8px;
-        padding: 10px 16px; border-radius: 20px;
+    .btn-back { 
+        text-decoration: none; 
+        background: #065084; 
+        color: #fff; 
+        display: flex; align-items: center; gap: 10px;
+        padding: 10px 25px; border-radius: 30px;
+        font-weight: 600; font-size: 14px;
         transition: 0.3s; -webkit-tap-highlight-color: transparent;
     }
 
-    /* MENU AKTIF: ADA BACKGROUND BIRU (CARD STYLE) */
-    .nav-bottom a.active { 
-        background: #065084; color: #fff !important; 
-    }
+    .btn-back:active { transform: scale(0.95); }
 
-    .nav-bottom i { font-size: 18px; }
-    .nav-bottom span { font-size: 12px; font-weight: 600; display: none; }
-    
-    /* Tampilkan teks hanya pada menu aktif */
-    .nav-bottom a.active span { display: block; }
-
-    /* Space agar konten tidak tertutup */
+    /* Space bawah agar tidak tertutup */
     body { padding-bottom: 120px; }
 
     @media print {
@@ -93,24 +100,24 @@
     </div>
 
     <div class="nav-bottom">
-        <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
-        <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
-        <a href="manifes.html"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
-        <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+        <a href="index.html" class="btn-back">
+            <i class="fas fa-arrow-left"></i>
+            <span>KEMBALI</span>
+        </a>
     </div>
 </div>
 
 <script>
-// Data Logic (Kode Asli Kamu)
+// Logika pengambilan data (Kode Asli Kamu)
 const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center; font-family:Poppins;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -129,18 +136,13 @@ if(!kode){
     }
 }
 
-// LOGIKA KETUK LAYAR UNTUK SEMBUNYI/TAMPIL NAVBAR
+// EFEK KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
 document.addEventListener('click', function(event) {
     const nav = document.querySelector('.nav-bottom');
     if (!nav.contains(event.target)) {
         nav.classList.toggle('nav-hidden');
     }
 });
-
-// Menandai halaman aktif (karena ini etiket, mungkin tidak ada yang aktif, tapi kita set default ke Home jika perlu)
-// Namun biasanya di etiket tidak ada yang aktif secara visual.
 </script>
 </body>
-        </html>
-
-            
+</html>
