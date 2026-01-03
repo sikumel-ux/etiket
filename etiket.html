@@ -11,29 +11,39 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 <link rel="stylesheet" href="stylez.css">
 <style>
-    /* NAVBAR DEEP BLUE GLASSMorphism (SAMA PERSIS DASHBOARD) */
+    /* NAVBAR CAPSULE STYLE (SAMA PERSIS DASHBOARD) */
     .nav-bottom { 
         position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
         width: 90%; max-width: 400px; 
-        background: rgba(255, 255, 255, 0.95); /* Putih bersih sesuai desain terakhir */
-        display: flex; justify-content: space-around; 
-        padding: 15px 0; border-radius: 25px; 
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+        background: rgba(255, 255, 255, 0.95); 
+        display: flex; justify-content: space-around; align-items: center;
+        padding: 10px 12px; border-radius: 30px; 
+        box-shadow: 0 15px 35px rgba(0,0,0,0.2); z-index: 1000;
         transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
     }
 
-    /* Efek Ketuk Sembunyi (Biar screenshot bersih) */
+    /* Efek Ketuk Sembunyi */
     .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
 
-    .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; -webkit-tap-highlight-color: transparent; }
-    
-    /* Warna aktif Deep Blue sesuai dashboard */
-    .nav-bottom a.active { color: #065084; } 
-    
-    .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
-    .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+    .nav-bottom a { 
+        text-decoration: none; color: #999; 
+        display: flex; align-items: center; gap: 8px;
+        padding: 10px 16px; border-radius: 20px;
+        transition: 0.3s; -webkit-tap-highlight-color: transparent;
+    }
 
-    /* Agar konten tidak terpotong navbar */
+    /* MENU AKTIF: ADA BACKGROUND BIRU (CARD STYLE) */
+    .nav-bottom a.active { 
+        background: #065084; color: #fff !important; 
+    }
+
+    .nav-bottom i { font-size: 18px; }
+    .nav-bottom span { font-size: 12px; font-weight: 600; display: none; }
+    
+    /* Tampilkan teks hanya pada menu aktif */
+    .nav-bottom a.active span { display: block; }
+
+    /* Space agar konten tidak tertutup */
     body { padding-bottom: 120px; }
 
     @media print {
@@ -91,16 +101,16 @@
 </div>
 
 <script>
-// Logika pengambilan data (Kode Asli Kamu)
+// Data Logic (Kode Asli Kamu)
 const params = new URLSearchParams(window.location.search);
 const kode = params.get("kode");
 
 if(!kode){
-    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
+    document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
 } else {
     const data = JSON.parse(localStorage.getItem("etiket_" + kode));
     if(!data){
-        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='manifes.html'>Kembali</a></div>";
+        document.body.innerHTML = "<div style='padding:50px; text-align:center;'><h3>Data Etiket tidak ditemukan</h3><a href='index.html'>Kembali</a></div>";
     } else {
         document.getElementById("kodeBooking").innerText = data.kode_booking;
         document.getElementById("nama").innerText = data.nama;
@@ -119,14 +129,18 @@ if(!kode){
     }
 }
 
-// FITUR KETUK LAYAR SEMBUNYI/TAMPIL NAVBAR
+// LOGIKA KETUK LAYAR UNTUK SEMBUNYI/TAMPIL NAVBAR
 document.addEventListener('click', function(event) {
     const nav = document.querySelector('.nav-bottom');
     if (!nav.contains(event.target)) {
         nav.classList.toggle('nav-hidden');
     }
 });
+
+// Menandai halaman aktif (karena ini etiket, mungkin tidak ada yang aktif, tapi kita set default ke Home jika perlu)
+// Namun biasanya di etiket tidak ada yang aktif secara visual.
 </script>
 </body>
-            </html>
+        </html>
+
             
