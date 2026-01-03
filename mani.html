@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#065084">
+    <link rel="icon" href="m.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-gray: #a0aec0;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-attachment: fixed;
+            margin: 0; padding: 0; color: var(--white);
+            min-height: 100vh;
+        }
+
+        /* HEADER POLESAN BARU */
+        .header-section {
+            padding: 40px 25px 30px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 100%);
+            border-radius: 0 0 30px 30px;
+        }
+
+        .logo-main { width: 140px; margin-bottom: 10px; }
+        
+        .title-page {
+            font-size: 18px; font-weight: 700; letter-spacing: 2px;
+            text-transform: uppercase; margin-bottom: 20px;
+        }
+
+        /* STATS CARD DI HEADER */
+        .stats-header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 15px;
+            display: flex; justify-content: center; align-items: center;
+            gap: 15px; max-width: 250px; margin: 0 auto;
+        }
+        .stats-header i { font-size: 20px; color: #fff; }
+        .stats-header div { text-align: left; }
+        .stats-header span { display: block; font-size: 10px; opacity: 0.7; }
+        .stats-header strong { font-size: 16px; display: block; }
+
+        /* LIST CONTAINER */
+        #manifesContainer { padding: 25px 20px 120px; }
+
+        /* CARD MANIFES */
+        .card-manifes {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            transition: 0.3s;
+        }
+
+        .info-penumpang { flex: 1; }
+        .info-penumpang h4 { margin: 0; font-size: 15px; color: #fff; font-weight: 600; }
+        .info-penumpang p { margin: 4px 0; font-size: 11px; color: var(--text-gray); }
+        .info-penumpang p i { width: 18px; opacity: 0.6; }
+
+        .tag-kursi { 
+            display: inline-block; 
+            background: rgba(255, 255, 255, 0.12); 
+            padding: 3px 10px; border-radius: 8px; 
+            font-weight: 600; font-size: 10px; margin-top: 5px;
+        }
+
+        /* TOMBOL AKSI MINIMALIS */
+        .aksi-buttons { display: flex; gap: 10px; }
+        .btn-aksi {
+            width: 42px; height: 42px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.15); 
+            background: rgba(255, 255, 255, 0.05); color: #fff;
+            transition: 0.3s; font-size: 16px;
+        }
+        .btn-aksi:hover { background: #fff; color: var(--primary-blue); }
+
+        /* NAVBAR SAMA DENGAN DASHBOARD */
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 10px 12px; border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000;
+        }
+        .nav-bottom a { 
+            text-decoration: none; color: #999; 
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border-radius: 20px; transition: 0.3s;
+        }
+        .nav-bottom a.active { background: var(--primary-blue); color: #fff !important; }
+        .nav-bottom i { font-size: 18px; }
+        .nav-bottom span { font-size: 12px; font-weight: 600; display: none; }
+        .nav-bottom a.active span { display: block; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-gray); }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <img src="logo.png" alt="Mahika Trans" class="logo-main">
+        <div class="title-page">Manifes Penumpang</div>
+        
+        <div class="stats-header">
+            <i class="fas fa-users"></i>
+            <div>
+                <span>Total Penumpang</span>
+                <strong id="countPsg">0 Orang</strong>
+            </div>
+        </div>
+    </div>
+
+    <div id="manifesContainer">
+        </div>
+
+    <div class="nav-bottom">
+        <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
+        <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+        <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+        <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+    </div>
+
+<script>
+    function loadManifes() {
+        const container = document.getElementById("manifesContainer");
+        const countEl = document.getElementById("countPsg");
+        container.innerHTML = "";
+        let count = 0;
+
+        let dataArray = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith("etiket_")) {
+                dataArray.push(JSON.parse(localStorage.getItem(key)));
+            }
+        }
+
+        // Urutkan data terbaru di atas
+        dataArray.reverse().forEach(data => {
+            count++;
+            const card = `
+                <div class="card-manifes">
+                    <div class="info-penumpang">
+                        <h4>${data.nama}</h4>
+                        <p><i class="fas fa-bus"></i> ${data.armada} • ${data.jam}</p>
+                        <p><i class="fas fa-map-marker-alt"></i> ${data.tujuan}</p>
+                        <span class="tag-kursi">Kursi ${data.no_kursi}</span>
+                    </div>
+                    <div class="aksi-buttons">
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="Kirim WA">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat Tiket">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+        countEl.innerText = count + " Orang";
+
+        if (count === 0) {
+            container.innerHTML = `<div class="empty-state">
+                <i class="fas fa-folder-open" style="font-size:40px; opacity:0.2; margin-bottom:15px;"></i>
+                <p>Belum ada data penumpang.</p>
+            </div>`;
+        }
+    }
+
+    function kirimWA(kode) {
+        const data = JSON.parse(localStorage.getItem("etiket_" + kode));
+        if(!data) return;
+
+        // FORMAT PESAN SESUAI PERMINTAAN (ELEGAN & GAK LEBAY)
+        const pesan = `*MAHIKA TRANS*%0A` +
+                      `────────────────────────%0A` +
+                      `Halo Kak *${data.nama}*,%0A%0A` +
+                      `Terima kasih telah memilih Mahika Trans.%0A` +
+                      `Berikut adalah rincian E-Tiket Anda:%0A%0A` +
+                      `*Kode Booking* : ${data.kode_booking}%0A` +
+                      `*Armada* : ${data.armada}%0A` +
+                      `*Kursi* : ${data.no_kursi}%0A` +
+                      `*Jadwal* : ${data.jam} WIB%0A%0A` +
+                      `*Lihat Tiket Online:*%0A` +
+                      `${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A%0A` +
+                      `────────────────────────%0A` +
+                      `_Mohon hadir di lokasi 30 menit sebelum jadwal._%0A` +
+                      `_Simpan pesan ini sebagai bukti pemesanan._`;
+
+        let noHP = data.no_hp.replace(/\D/g, '');
+        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
+        window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
+    }
+
+    window.onload = loadManifes;
+</script>
+</body>
+</html>
