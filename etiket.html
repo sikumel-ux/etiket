@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etiket | Mahika Trans</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0066AE">
+    <link rel="icon" href="m.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --yellow: #FFD700; /* Warna kuning logo */
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-color: var(--primary-blue);
+            margin: 0; padding: 0; 
+            display: flex; justify-content: center;
+            min-height: 100vh;
+        }
+
+        .etiket-container { 
+            width: 100%; max-width: 450px; 
+            padding: 40px 20px 120px 20px;
+        }
+
+        /* TIKET UTAMA */
+        .ticket-box {
+            background: var(--white);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+        }
+
+        /* BAGIAN ATAS (BIRU) */
+        .ticket-top {
+            background: var(--bg-darker);
+            padding: 30px 25px;
+            text-align: center;
+            color: var(--white);
+            position: relative;
+        }
+
+        .logo { width: 120px; margin-bottom: 15px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+        
+        .kode-booking { 
+            display: inline-block;
+            background: var(--yellow);
+            color: var(--primary-blue);
+            padding: 5px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-top: 5px;
+        }
+
+        /* INFO GRID */
+        .ticket-body {
+            padding: 30px 25px;
+            color: #333;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .info-item { margin-bottom: 5px; }
+        .info-item label { 
+            display: block; 
+            font-size: 10px; 
+            color: #999; 
+            text-transform: uppercase; 
+            font-weight: 700; 
+            margin-bottom: 2px;
+        }
+        .info-item span { 
+            display: block; 
+            font-size: 13px; 
+            font-weight: 600; 
+            color: var(--primary-blue);
+        }
+
+        /* GARIS SOBEKAN */
+        .tear-line {
+            height: 2px;
+            border-top: 2px dashed #eee;
+            margin: 10px 0;
+            position: relative;
+        }
+        .tear-line::before, .tear-line::after {
+            content: '';
+            position: absolute;
+            top: -11px;
+            width: 20px;
+            height: 20px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+        }
+        .tear-line::before { left: -35px; }
+        .tear-line::after { right: -35px; }
+
+        /* BARCODE SECTION */
+        .barcode-section {
+            padding: 20px;
+            text-align: center;
+        }
+        #barcodeImg { max-width: 100%; height: auto; margin-bottom: 10px; }
+        .thanks { font-size: 10px; color: #aaa; margin: 0; padding: 0 20px; line-height: 1.5; }
+
+        /* KETERANGAN */
+        .keterangan {
+            background: #f9f9f9;
+            padding: 20px 25px;
+            border-top: 1px solid #eee;
+        }
+        .keterangan p { margin: 0 0 5px 0; font-size: 10px; color: #777; line-height: 1.4; }
+        .keterangan strong { color: #444; font-size: 11px; }
+
+        /* NAV BOTTOM (TETAP KONSISTEN) */
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; 
+            padding: 15px 0; border-radius: 25px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+        }
+        .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+        .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; }
+        .nav-bottom i { font-size: 20px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { display: block; font-size: 10px; font-weight: 600; }
+
+        /* PRINT SETTING */
+        @media print {
+            .nav-bottom { display: none; }
+            body { background: white; }
+            .etiket-container { padding: 0; }
+            .ticket-box { box-shadow: none; border: 1px solid #eee; }
+            .tear-line::before, .tear-line::after { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="etiket-container">
+    <div class="ticket-box">
+        <div class="ticket-top">
+            <img src="logo.png" alt="Mahika Trans" class="logo">
+            <br>
+            <span class="kode-booking" id="kodeBooking">MT-LOADING</span>
+        </div>
+
+        <div class="ticket-body">
+            <div class="info-grid">
+                <div class="info-item">
+                    <label>Nama Penumpang</label>
+                    <span id="nama">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Nomor Kursi</label>
+                    <span id="no_kursi">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Armada</label>
+                    <span id="armada">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Tujuan</label>
+                    <span id="tujuan">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Tanggal</label>
+                    <span id="tgl">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Jam</label>
+                    <span id="jam">-</span>
+                </div>
+                <div class="info-item">
+                    <label>No. WhatsApp</label>
+                    <span id="no_hp">-</span>
+                </div>
+                <div class="info-item">
+                    <label>Harga Tiket</label>
+                    <span id="harga">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="tear-line"></div>
+
+            <div class="barcode-section">
+                <img id="barcodeImg" alt="Barcode">
+                <p class="thanks">Simpan tiket ini sebagai bukti pembayaran yang sah saat keberangkatan.</p>
+            </div>
+        </div>
+
+        <div class="keterangan">
+            <p><strong>Syarat & Ketentuan:</strong></p>
+            <p>1. Tiket tidak dapat dibatalkan atau diuangkan kembali.</p>
+            <p>2. Harap standby di lokasi 30 menit sebelum jam keberangkatan.</p>
+            <p>3. Barang bawaan sepenuhnya menjadi tanggung jawab penumpang.</p>
+        </div>
+    </div>
+</div>
+
+<div class="nav-bottom">
+    <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+    <a href="manifes.html"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+    <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+    <a href="#" onclick="window.print()"><i class="fas fa-print"></i><span>Cetak</span></a>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const kode = params.get("kode");
+
+if(!kode){
+    document.body.innerHTML = "<div style='padding:50px; text-align:center; color:white;'><h3>Kode booking tidak ditemukan</h3><a href='index.html' style='color:yellow;'>Kembali ke Home</a></div>";
+} else {
+    const data = JSON.parse(localStorage.getItem("etiket_" + kode));
+    
+    if(!data){
+        document.body.innerHTML = "<div style='padding:50px; text-align:center; color:white;'><h3>Data tidak ditemukan</h3><a href='index.html' style='color:yellow;'>Kembali</a></div>";
+    } else {
+        document.getElementById("kodeBooking").innerText = data.kode_booking;
+        document.getElementById("nama").innerText = data.nama;
+        document.getElementById("no_hp").innerText = data.no_hp || "-";
+        document.getElementById("armada").innerText = data.armada;
+        document.getElementById("tujuan").innerText = data.tujuan;
+        document.getElementById("no_kursi").innerText = data.no_kursi;
+        document.getElementById("jam").innerText = data.jam;
+        document.getElementById("harga").innerText = "Rp " + Number(data.harga).toLocaleString("id-ID");
+        
+        const tglKeberangkatan = new Date(data.tanggal);
+        document.getElementById("tgl").innerText = tglKeberangkatan.toLocaleDateString("id-ID", {
+            day: "2-digit", 
+            month: "long", 
+            year: "numeric"
+        });
+
+        const barcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data=" + encodeURIComponent(data.kode_booking) + "&code=Code128&translate-esc=true";
+        document.getElementById("barcodeImg").src = barcodeUrl;
+    }
+}
+
+// Fitur Ketuk Layar Sembunyikan Menu
+document.addEventListener('click', function(event) {
+    const nav = document.querySelector('.nav-bottom');
+    if (!nav.contains(event.target)) {
+        nav.classList.toggle('nav-hidden');
+    }
+});
+</script>
+
+</body>
+</html>
