@@ -16,7 +16,6 @@
             --white: #ffffff;
             --glass: rgba(255, 255, 255, 0.1);
             --text-gray: #a0aec0;
-            --red-danger: #ff4444;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -80,7 +79,7 @@
             font-weight: 600; font-size: 10px; margin-top: 8px;
         }
 
-        /* TOMBOL AKSI */
+        /* TOMBOL AKSI - SEMUA PUTIH SERASI */
         .aksi-buttons { display: flex; gap: 8px; }
         .btn-aksi {
             width: 40px; height: 40px;
@@ -91,12 +90,11 @@
             transition: 0.3s; font-size: 16px; cursor: pointer;
         }
 
-        /* Spesifik Tombol Hapus */
-        .btn-delete { color: var(--red-danger); border-color: rgba(255, 68, 68, 0.3); }
-        .btn-delete:active { background: var(--red-danger); color: #fff; }
-        
-        /* Spesifik Tombol Lain */
-        .btn-aksi:active:not(.btn-delete) { background: var(--white); color: var(--primary-blue); }
+        .btn-aksi:active { 
+            background: var(--white); 
+            color: var(--primary-blue); 
+            transform: scale(0.9);
+        }
 
         /* NAVBAR */
         .nav-bottom { 
@@ -163,7 +161,7 @@
             }
         }
 
-        // Urutkan Tanggal Terkecil di Atas
+        // Sorting: Tanggal Terkecil di Atas
         dataArray.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
 
         dataArray.forEach(data => {
@@ -180,13 +178,13 @@
                         <span class="tag-kursi">Kursi ${data.no_kursi}</span>
                     </div>
                     <div class="aksi-buttons">
-                        <button onclick="hapusData('${data.kode_booking}', '${data.nama}')" class="btn-aksi btn-delete">
+                        <button onclick="hapusData('${data.kode_booking}', '${data.nama}')" class="btn-aksi" title="Hapus">
                             <i class="fas fa-trash-can"></i>
                         </button>
-                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi">
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="WhatsApp">
                             <i class="fab fa-whatsapp"></i>
                         </button>
-                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi">
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat">
                             <i class="fas fa-eye"></i>
                         </a>
                     </div>
@@ -220,13 +218,14 @@
         }
         if(!data) return;
 
-        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir 30 menit sebelum jadwal._`;
+        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket Online:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir di lokasi 30 menit sebelum jadwal._`;
 
         let noHP = data.no_hp.replace(/\D/g, '');
         if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
         window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
     }
 
+    // Efek ketuk layar untuk sembunyi/tampil navbar
     document.addEventListener('click', function(e) {
         const nav = document.querySelector('.nav-bottom');
         if (!nav.contains(e.target)) nav.classList.toggle('nav-hidden');
