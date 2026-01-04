@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script>
+    // CEK PROTEKSI LOGIN
+    (function() {
+        const session = localStorage.getItem("mahika_session");
+        if (session !== "active") {
+            // Jika tidak ada session, paksa ke halaman login
+            window.location.href = "login.html";
+        }
+    })();
+</script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#065084">
+    <link rel="icon" href="m.png">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-gray: #a0aec0;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-attachment: fixed;
+            margin: 0; padding: 0; color: var(--white);
+            min-height: 100vh;
+        }
+
+        /* HEADER */
+        .header-section {
+            padding: 50px 25px 30px;
+            text-align: center;
+        }
+
+        .title-page {
+            font-size: 22px; font-weight: 700; letter-spacing: 1px;
+            margin-bottom: 20px; text-transform: uppercase;
+        }
+
+        .stats-header {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 15px 25px;
+            display: inline-flex; align-items: center;
+            gap: 15px; margin: 0 auto;
+        }
+        .stats-header i { font-size: 20px; }
+        .stats-header div { text-align: left; }
+        .stats-header span { display: block; font-size: 10px; opacity: 0.7; }
+        .stats-header strong { font-size: 16px; display: block; }
+
+        /* LIST CONTAINER */
+        #manifesContainer { padding: 10px 20px 140px; }
+
+        /* CARD MANIFES */
+        .card-manifes {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 18px;
+            margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .info-penumpang { flex: 1; padding-right: 10px; }
+        .info-penumpang h4 { margin: 0; font-size: 16px; color: #fff; font-weight: 600; }
+        .info-penumpang p { margin: 4px 0; font-size: 11px; color: var(--text-gray); display: flex; align-items: center; gap: 6px; }
+        .info-penumpang p i { width: 14px; opacity: 0.6; font-size: 12px; }
+
+        .tag-kursi { 
+            display: inline-block; 
+            background: rgba(255, 255, 255, 0.15); 
+            padding: 3px 10px; border-radius: 8px; 
+            font-weight: 600; font-size: 10px; margin-top: 8px;
+        }
+
+        /* TOMBOL AKSI - SEMUA PUTIH SERASI */
+        .aksi-buttons { display: flex; gap: 8px; }
+        .btn-aksi {
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); 
+            background: rgba(255, 255, 255, 0.05); color: #fff;
+            transition: 0.3s; font-size: 16px; cursor: pointer;
+        }
+
+        .btn-aksi:active { 
+            background: var(--white); 
+            color: var(--primary-blue); 
+            transform: scale(0.9);
+        }
+
+        /* NAVBAR */
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; 
+            background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 10px 12px; border-radius: 30px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+        .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+
+        .nav-bottom a { 
+            text-decoration: none; color: #999; 
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border-radius: 20px; transition: 0.3s;
+        }
+        .nav-bottom a.active { background: var(--primary-blue); color: #fff !important; }
+        .nav-bottom i { font-size: 18px; }
+        .nav-bottom span { font-size: 12px; font-weight: 600; display: none; }
+        .nav-bottom a.active span { display: block; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-gray); }
+    </style>
+</head>
+<body>
+
+    <div class="header-section">
+        <div class="title-page">Manifes Penumpang</div>
+        <div class="stats-header">
+            <i class="fas fa-users-viewfinder"></i>
+            <div>
+                <span>Total Keberangkatan</span>
+                <strong id="countPsg">0 Penumpang</strong>
+            </div>
+        </div>
+    </div>
+
+    <div id="manifesContainer"></div>
+
+    <div class="nav-bottom">
+        <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
+        <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+        <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+        <a href="pendapatan.html"><i class="fas fa-chart-pie"></i><span>Laporan</span></a>
+    </div>
+
+<script>
+    function loadManifes() {
+        const container = document.getElementById("manifesContainer");
+        const countEl = document.getElementById("countPsg");
+        container.innerHTML = "";
+        let count = 0;
+        let dataArray = [];
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.includes("tiket_")) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    if(data && data.nama) dataArray.push(data);
+                } catch(e) {}
+            }
+        }
+
+        // Sorting: Tanggal Terkecil di Atas
+        dataArray.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+
+        dataArray.forEach(data => {
+            count++;
+            const tglObj = new Date(data.tanggal);
+            const tglIndo = tglObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            const card = `
+                <div class="card-manifes">
+                    <div class="info-penumpang">
+                        <h4>${data.nama}</h4>
+                        <p><i class="fas fa-calendar-day"></i> ${tglIndo} • ${data.jam}</p>
+                        <p><i class="fas fa-bus"></i> ${data.armada} • ${data.tujuan}</p>
+                        <span class="tag-kursi">Seat: ${data.no_kursi}</span>
+                    </div>
+                    <div class="aksi-buttons">
+                        <button onclick="hapusData('${data.kode_booking}', '${data.nama}')" class="btn-aksi" title="Hapus">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+        countEl.innerText = count + " Penumpang";
+        if (count === 0) container.innerHTML = `<div class="empty-state"><p>Data masih kosong, bro.</p></div>`;
+    }
+
+    function hapusData(kode, nama) {
+        if (confirm(`Hapus manifes atas nama ${nama}?`)) {
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.includes(kode)) {
+                    localStorage.removeItem(key);
+                    break;
+                }
+            }
+            loadManifes();
+        }
+    }
+
+    function kirimWA(kode) {
+        let data;
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.includes(kode)) { data = JSON.parse(localStorage.getItem(key)); break; }
+        }
+        if(!data) return;
+
+        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket Online:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir di lokasi 30 menit sebelum jadwal._`;
+
+        let noHP = data.no_hp.replace(/\D/g, '');
+        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
+        window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
+    }
+
+    // Efek ketuk layar untuk sembunyi/tampil navbar
+    document.addEventListener('click', function(e) {
+        const nav = document.querySelector('.nav-bottom');
+        if (!nav.contains(e.target)) nav.classList.toggle('nav-hidden');
+    });
+
+    window.onload = loadManifes;
+</script>
+</body>
+</html>
