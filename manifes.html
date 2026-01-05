@@ -204,7 +204,7 @@
         const data = JSON.parse(localStorage.getItem("etiket_" + kode));
         if(!data) return;
 
-        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket Online:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir di lokasi 30 menit sebelum jadwal._`;
+        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} %0A%0A*Lihat Tiket Online:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir di lokasi 30 menit sebelum jadwal._`;
 
         let noHP = data.no_hp.replace(/\D/g, '');
         if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
