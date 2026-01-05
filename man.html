@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <script>
+    // 1. CEK PROTEKSI LOGIN
+    (function() {
+        const session = localStorage.getItem("mahika_session");
+        if (session !== "active") {
+            window.location.href = "login.html";
+        }
+    })();
+    </script>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manifes | Mahika Trans</title>
+    <link rel="icon" href="m.png">
+    <meta name="theme-color" content="#065084">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --text-gray: #a0aec0;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            background-attachment: fixed;
+            margin: 0; padding: 0; color: var(--white);
+            min-height: 100vh;
+            display: flex; justify-content: center;
+        }
+
+        .container-app { width: 100%; max-width: 450px; }
+
+        .header-section { padding: 50px 25px 30px; text-align: center; }
+        .title-page { font-size: 20px; font-weight: 700; letter-spacing: 1px; margin-bottom: 20px; text-transform: uppercase; }
+
+        .stats-header {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1); border-radius: 20px;
+            padding: 15px 25px; display: inline-flex; align-items: center;
+            gap: 15px; margin: 0 auto;
+        }
+        .stats-header i { font-size: 20px; }
+        .stats-header div { text-align: left; }
+        .stats-header span { display: block; font-size: 10px; opacity: 0.7; }
+        .stats-header strong { font-size: 16px; display: block; }
+
+        #manifesContainer { padding: 10px 20px 140px; }
+
+        .card-manifes {
+            background: var(--glass); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px;
+            padding: 18px; margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .info-penumpang { flex: 1; padding-right: 10px; }
+        .info-penumpang h4 { margin: 0; font-size: 15px; color: #fff; font-weight: 600; }
+        .info-penumpang p { margin: 4px 0; font-size: 11px; color: var(--text-gray); display: flex; align-items: center; gap: 6px; }
+        .info-penumpang p i { width: 14px; opacity: 0.6; font-size: 12px; }
+
+        .tag-kursi { 
+            display: inline-block; background: rgba(255, 255, 255, 0.15); 
+            padding: 3px 10px; border-radius: 8px; font-weight: 600; font-size: 10px; margin-top: 8px;
+        }
+
+        .aksi-buttons { display: flex; gap: 8px; }
+        .btn-aksi {
+            width: 38px; height: 38px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; border: 1px solid rgba(255, 255, 255, 0.2); 
+            background: rgba(255, 255, 255, 0.05); color: #fff;
+            transition: 0.3s; font-size: 14px; cursor: pointer;
+        }
+        .btn-aksi:active { background: var(--white); color: var(--primary-blue); transform: scale(0.9); }
+
+        .nav-bottom { 
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); 
+            width: 90%; max-width: 400px; background: rgba(255, 255, 255, 0.95); 
+            display: flex; justify-content: space-around; align-items: center;
+            padding: 12px 0; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 1000;
+            transition: transform 0.4s ease, opacity 0.3s ease;
+        }
+        .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; pointer-events: none; }
+        .nav-bottom a { text-decoration: none; color: #999; text-align: center; flex: 1; transition: 0.3s; }
+        .nav-bottom a.active { color: var(--primary-blue); }
+        .nav-bottom i { font-size: 18px; display: block; margin-bottom: 4px; }
+        .nav-bottom span { display: block; font-size: 9px; font-weight: 600; }
+
+        .empty-state { text-align: center; padding: 60px 20px; color: var(--text-gray); }
+    </style>
+</head>
+<body>
+
+    <div class="container-app">
+        <div class="header-section">
+            <div class="title-page">Manifes Perjalanan</div>
+            <div class="stats-header">
+                <i class="fas fa-users-viewfinder"></i>
+                <div>
+                    <span>Total Keberangkatan</span>
+                    <strong id="countPsg">0 Penumpang</strong>
+                </div>
+            </div>
+        </div>
+        <div id="manifesContainer"></div>
+    </div>
+
+    <div class="nav-bottom">
+        <a href="index.html"><i class="fas fa-house"></i><span>Home</span></a>
+        <a href="input.html"><i class="fas fa-circle-plus"></i><span>Booking</span></a>
+        <a href="manifes.html" class="active"><i class="fas fa-file-lines"></i><span>Manifes</span></a>
+        <a href="pendapatan.html"><i class="fas fa-chart-bar"></i><span>Laporan</span></a>
+        <a href="logout.html"><i class="fas fa-right-from-bracket"></i><span>Logout</span></a>
+    </div>
+
+<script>
+    function loadManifes() {
+        const container = document.getElementById("manifesContainer");
+        const countEl = document.getElementById("countPsg");
+        container.innerHTML = "";
+        
+        let totalPenumpang = 0;
+        let dataArray = [];
+
+        // Ambil Tanggal Hari Ini (Set ke jam 00:00:00 untuk perbandingan akurat)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.includes("etiket_")) {
+                try {
+                    const data = JSON.parse(localStorage.getItem(key));
+                    const tglTiket = new Date(data.tanggal);
+                    tglTiket.setHours(0, 0, 0, 0);
+
+                    // FILTER: Hanya ambil tanggal hari ini atau yang akan datang
+                    if(data && data.nama && tglTiket >= today) {
+                        dataArray.push(data);
+                    }
+                } catch(e) {}
+            }
+        }
+
+        dataArray.sort((a, b) => new Date(a.tanggal) - new Date(b.tanggal));
+
+        dataArray.forEach(data => {
+            // HITUNG JUMLAH PENUMPANG DARI KOLOM KURSI
+            // Pecah string berdasarkan '-' atau ',' atau ' '
+            const listKursi = data.no_kursi.split(/[- ,]+/).filter(k => k !== "");
+            const jmlPsg = listKursi.length;
+            totalPenumpang += jmlPsg;
+
+            const tglObj = new Date(data.tanggal);
+            const tglIndo = tglObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
+
+            const card = `
+                <div class="card-manifes">
+                    <div class="info-penumpang">
+                        <h4>${data.nama} <small style="opacity:0.6; font-size:10px;">(${jmlPsg} Org)</small></h4>
+                        <p><i class="fas fa-calendar-day"></i> ${tglIndo} • ${data.jam}</p>
+                        <p><i class="fas fa-bus"></i> ${data.armada} • ${data.tujuan}</p>
+                        <span class="tag-kursi">Kursi: ${data.no_kursi}</span>
+                    </div>
+                    <div class="aksi-buttons">
+                        <button onclick="hapusData('${data.kode_booking}', '${data.nama}')" class="btn-aksi" title="Hapus">
+                            <i class="fas fa-trash-can"></i>
+                        </button>
+                        <button onclick="kirimWA('${data.kode_booking}')" class="btn-aksi" title="WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </button>
+                        <a href="etiket.html?kode=${data.kode_booking}" class="btn-aksi" title="Lihat">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+
+        countEl.innerText = totalPenumpang + " Orang";
+        if (dataArray.length === 0) container.innerHTML = `<div class="empty-state"><p>Tidak ada jadwal keberangkatan.</p></div>`;
+    }
+
+    function hapusData(kode, nama) {
+        if (confirm(`Hapus manifes atas nama ${nama}?`)) {
+            localStorage.removeItem("etiket_" + kode);
+            loadManifes();
+        }
+    }
+
+    function kirimWA(kode) {
+        const data = JSON.parse(localStorage.getItem("etiket_" + kode));
+        if(!data) return;
+
+        const pesan = `*MAHIKA TRANS*%0A────────────────────────%0AHalo Kak *${data.nama}*,%0A%0ABerikut rincian E-Tiket Anda:%0A%0A*Kode Booking* : ${data.kode_booking}%0A*Armada* : ${data.armada}%0A*Kursi* : ${data.no_kursi}%0A*Jadwal* : ${data.jam} WIB%0A%0A*Lihat Tiket Online:*%0A${window.location.origin}/etiket.html?kode=${data.kode_booking}%0A────────────────────────%0A_Mohon hadir di lokasi 30 menit sebelum jadwal._`;
+
+        let noHP = data.no_hp.replace(/\D/g, '');
+        if (noHP.startsWith('0')) noHP = '62' + noHP.slice(1);
+        window.open(`https://wa.me/${noHP}?text=${pesan}`, '_blank');
+    }
+
+    document.addEventListener('click', function(e) {
+        const nav = document.querySelector('.nav-bottom');
+        if (!nav.contains(e.target)) nav.classList.toggle('nav-hidden');
+    });
+
+    window.onload = loadManifes;
+</script>
+</body>
+</html>
