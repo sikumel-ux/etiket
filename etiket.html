@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <script>
+    // CEK PROTEKSI LOGIN DENGAN PENGECUALIAN KODE BOOKING
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const kode = params.get("kode");
+        const session = localStorage.getItem("mahika_session");
+
+        // Hanya paksa login jika parameter 'kode' tidak ada
+        if (!kode && session !== "active") {
+            window.location.href = "login.html";
+        }
+    })();
+  </script>
+    
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Etiket Mahika Trans</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#065084">
+<link rel="icon" href="m.png">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<style>
+    /* RESET & BASE */
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Poppins', sans-serif; margin: 0; padding: 0; background: #f4f7f6; padding-bottom: 100px; }
+
+    /* WARNA HEADER */
+    .etiket-header {
+        background-color: #065084 !important;
+        padding: 30px 20px;
+        text-align: center;
+        border-radius: 0 0 25px 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .logo { width: 140px; margin-bottom: 10px; }
+    .kode-booking {
+        display: inline-block;
+        background: #FFD700;
+        color: #065084;
+        font-weight: 700;
+        padding: 5px 20px;
+        border-radius: 50px;
+        font-size: 18px;
+        margin: 10px 0 0 0;
+    }
+
+    /* CONTAINER ETIKET */
+    .etiket-container { max-width: 450px; margin: 0 auto; background: white; min-height: 100vh; }
+    
+    .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px; }
+    .kolom p { margin: 12px 0; font-size: 12px; color: #555; display: flex; align-items: center; gap: 8px; }
+    .kolom p i { color: #065084; width: 16px; font-size: 14px; }
+    .kolom p span { font-weight: 600; color: #333; display: block; font-size: 13px; }
+
+    .tear-line { border-top: 2px dashed #ddd; margin: 10px 25px; position: relative; }
+    .tear-line::before, .tear-line::after {
+        content: ''; position: absolute; width: 20px; height: 20px; 
+        background: #f4f7f6; border-radius: 50%; top: -10px;
+    }
+    .tear-line::before { left: -35px; }
+    .tear-line::after { right: -35px; }
+
+    .barcode { text-align: center; padding: 20px; }
+    .barcode img { max-width: 80%; margin-bottom: 10px; }
+    .thanks { font-size: 11px; color: #888; font-style: italic; }
+
+    .keterangan { padding: 0 25px; font-size: 11px; color: #777; line-height: 1.6; }
+
+    /* NAVBAR SENSITIF SESSION */
+    .nav-bottom { 
+        position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); 
+        z-index: 1000; transition: 0.4s ease;
+    }
+    .nav-hidden { transform: translate(-50%, 150%) !important; opacity: 0; }
+    .btn-back-circle { 
+        text-decoration: none; background-color: #065084; color: #ffffff; 
+        width: 60px; height: 60px; border-radius: 50%; 
+        display: flex; align-items: center; justify-content: center; 
+        font-size: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    }
+
+    @media print { .nav-bottom { display: none; } }
+</style>
+</head>
+
+<body>
+
+<div class="etiket-container">
+    <div class="etiket-header">
+        <img src="logo.png" alt="Mahika Trans" class="logo">
+        <p class="kode-booking" id="kodeBooking">-</p>
+    </div>
+
+    <div class="info-grid" id="mainContent">
+        <div class="kolom">
+            <p><i class="fas fa-user"></i> <span>Nama Penumpang<br><strong id="nama"></strong></span></p>
+            <p><i class="fas fa-phone"></i> <span>No. WhatsApp<br><strong id="no_hp"></strong></span></p>
+            <p><i class="fas fa-bus"></i> <span>Armada<br><strong id="armada"></strong></span></p>
+            <p><i class="fas fa-map-marker-alt"></i> <span>Tujuan<br><strong id="tujuan"></strong></span></p>
+        </div>
+
+        <div class="kolom">
+            <p><i class="fas fa-chair"></i> <span>Nomor Kursi<br><strong id="no_kursi"></strong></span></p>
+            <p><i class="fas fa-calendar-alt"></i> <span>Tanggal<br><strong id="tgl"></strong></span></p>
+            <p><i class="fas fa-clock"></i> <span>Jam Berangkat<br><strong id="jam"></strong></span></p>
+            <p><i class="fa-solid fa-rupiah-sign"></i> <span>Total Bayar<br><strong id="harga"></strong></span></p>
+        </div>
+    </div>
+
+    <div class="tear-line"></div>
+
+    <div class="barcode">
+        <img id="barcodeImg" src="" alt="Barcode">
+        <p class="thanks">Terimakasih atas kepercayaan Anda menggunakan Mahika Trans.</p>
+    </div>
+
+    <div class="keterangan">
+        <p><strong>Perhatian:</strong><br>
+        1. Tiket yang sudah dipesan tidak dapat dibatalkan.<br>
+        2. Harap datang 30 menit sebelum jadwal.<br>
+        3. Simpan Etiket ini sebagai bukti boarding.</p>
+    </div>
+
+    <div class="nav-bottom" id="navAdmin" style="display: none;">
+        <a href="manifes.html" class="btn-back-circle">
+            <i class="fa-solid fa-arrow-left"></i>
+        </a>
+    </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const kode = params.get("kode");
+const session = localStorage.getItem("mahika_session");
+
+// Tampilkan tombol back HANYA jika yang buka adalah admin
+if (session === "active") {
+    document.getElementById("navAdmin").style.display = "flex";
+}
+
+if(!kode){
+    document.getElementById("mainContent").innerHTML = "<div style='grid-column: span 2; padding:50px; text-align:center;'><h3>Kode booking tidak ditemukan</h3></div>";
+} else {
+    const data = JSON.parse(localStorage.getItem("etiket_" + kode));
+    if(!data){
+        document.getElementById("mainContent").innerHTML = "<div style='grid-column: span 2; padding:50px; text-align:center;'><h3>Data Etiket Kadaluarsa atau Tidak Ada</h3></div>";
+    } else {
+        document.getElementById("kodeBooking").innerText = data.kode_booking;
+        document.getElementById("nama").innerText = data.nama;
+        document.getElementById("no_hp").innerText = data.no_hp || "-";
+        document.getElementById("armada").innerText = data.armada;
+        document.getElementById("tujuan").innerText = data.tujuan;
+        document.getElementById("no_kursi").innerText = data.no_kursi;
+        document.getElementById("jam").innerText = data.jam;
+        document.getElementById("harga").innerText = "Rp " + Number(data.harga).toLocaleString("id-ID");
+        
+        const tglKeberangkatan = new Date(data.tanggal);
+        document.getElementById("tgl").innerText = tglKeberangkatan.toLocaleDateString("id-ID", {
+            day: "2-digit", month: "long", year: "numeric"
+        });
+
+        const barcodeUrl = "https://barcode.tec-it.com/barcode.ashx?data=" + data.kode_booking + "&code=Code128";
+        document.getElementById("barcodeImg").src = barcodeUrl;
+    }
+}
+
+document.addEventListener('click', function(event) {
+    const nav = document.querySelector('.nav-bottom');
+    if (nav && !nav.contains(event.target)) {
+        nav.classList.toggle('nav-hidden');
+    }
+});
+</script>
+</body>
+</html>
