@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mahika Trans Modern</title>
+    <title>404 | Mahika Trans</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -16,105 +16,93 @@
             --white: #ffffff;
         }
 
-        * { box-sizing: border-box; }
-
         body {
             font-family: 'Poppins', sans-serif;
             background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
             margin: 0;
             height: 100vh;
             display: flex;
-            align-items: center; /* Vertikal Center */
-            justify-content: center; /* Horisontal Center */
+            align-items: center;
+            justify-content: center;
             color: var(--white);
             overflow: hidden;
         }
 
-        .card-compact {
-            width: 280px; /* Ukuran lebih kecil/compact */
-            padding: 30px 20px;
+        /* Animasi Kartu Melayang */
+        .error-container {
+            width: 280px;
+            padding: 40px 20px;
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border-radius: 25px;
+            border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
             text-align: center;
-            animation: fadeIn 0.8s ease-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            animation: float 4s ease-in-out infinite; /* EFEK MELAYANG */
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
-        .bus-icon {
-            width: 60px;
-            height: 60px;
+        .error-code {
+            font-size: 70px;
+            font-weight: 800;
+            margin: 0;
+            background: linear-gradient(45deg, var(--accent-cyan), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Animasi Glow pada Icon */
+        .bus-glow {
+            font-size: 45px;
+            color: var(--accent-cyan);
+            margin: 20px 0;
+            filter: drop-shadow(0 0 5px var(--accent-cyan));
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { filter: drop-shadow(0 0 5px var(--accent-cyan)); opacity: 0.8; }
+            50% { filter: drop-shadow(0 0 20px var(--accent-cyan)); opacity: 1; transform: scale(1.1); }
+        }
+
+        h2 { font-size: 16px; font-weight: 600; margin: 5px 0; }
+        p { font-size: 11px; opacity: 0.6; margin-bottom: 25px; }
+
+        .btn-back {
+            display: inline-block;
+            padding: 12px 20px;
             background: var(--accent-cyan);
             color: var(--bg-darker);
-            border-radius: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            margin: 0 auto 20px auto;
-            box-shadow: 0 8px 15px rgba(0, 210, 255, 0.3);
-        }
-
-        h1 {
-            font-size: 16px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        p {
-            font-size: 11px;
-            opacity: 0.6;
-            line-height: 1.5;
-            margin-bottom: 25px;
-        }
-
-        .btn-minimal {
-            display: block;
-            padding: 12px;
-            background: transparent;
-            color: var(--accent-cyan);
             text-decoration: none;
-            border: 1.5px solid var(--accent-cyan);
             border-radius: 12px;
-            font-weight: 600;
+            font-weight: 700;
             font-size: 12px;
             transition: 0.3s;
         }
 
-        .btn-minimal:hover {
-            background: var(--accent-cyan);
-            color: var(--bg-darker);
-        }
-
-        .footer-text {
-            margin-top: 20px;
-            font-size: 9px;
-            opacity: 0.3;
-            letter-spacing: 2px;
+        .btn-back:hover {
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px var(--accent-cyan);
         }
     </style>
 </head>
 <body>
 
-<div class="card-compact">
-    <div class="bus-icon">
+<div class="error-container">
+    <div class="error-code">404</div>
+    
+    <div class="bus-glow">
         <i class="fa-solid fa-bus-simple"></i>
     </div>
-    <h1>MAHIKA TRANS</h1>
-    <p>Akses direktori dibatasi</p>
+    
+    <h2>NYASAR, BRO?</h2>
     
     
     
-    <div class="footer-text">SECURED BY MAHIKA</div>
 </div>
 
 </body>
