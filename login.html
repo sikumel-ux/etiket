@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Mahika Trans Modern</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            margin: 0; 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 400px;
+            padding: 40px 30px;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .login-container i.logo-icon {
+            font-size: 50px;
+            margin-bottom: 20px;
+            color: #00d2ff;
+        }
+
+        .login-container h2 {
+            margin: 0 0 10px 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .login-container p {
+            font-size: 13px;
+            opacity: 0.7;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            position: relative;
+            text-align: left;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.5);
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-group input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #00d2ff;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            background: #00d2ff;
+            color: var(--bg-darker);
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:active {
+            transform: scale(0.98);
+        }
+
+        #loading {
+            display: none;
+            margin-top: 15px;
+            font-size: 12px;
+            color: #00d2ff;
+        }
+
+        .error-msg {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <i class="fas fa- un-truck-fast logo-icon"></i>
+    <h2>MAHIKA TRANS</h2>
+    <p>Silakan login untuk akses Dashboard</p>
+
+    <div class="input-group">
+        <i class="fas fa-user"></i>
+        <input type="text" id="username" placeholder="Username" required>
+    </div>
+
+    <div class="input-group">
+        <i class="fas fa-lock"></i>
+        <input type="password" id="password" placeholder="Password" required>
+    </div>
+
+    <button class="btn-login" onclick="handleLogin()">MASUK</button>
+    
+    <div id="loading"><i class="fas fa-spinner fa-spin"></i> Memvalidasi...</div>
+    <div id="error" class="error-msg">Username atau Password salah!</div>
+</div>
+
+<script>
+    const API_ID = "AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA";
+    const API_URL = `https://script.google.com/macros/s/${API_ID}/exec`;
+
+    async function handleLogin() {
+        const user = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+        const loading = document.getElementById('loading');
+        const error = document.getElementById('error');
+
+        if(!user || !pass) return alert("Isi semua bidang!");
+
+        loading.style.display = "block";
+        error.style.display = "none";
+
+        try {
+            // Mengirim request login ke Apps Script
+            const response = await fetch(`${API_URL}?p=login&user=${user}&pass=${pass}`);
+            const result = await response.json();
+
+            if (result.status === "success") {
+                // Simpan data user ke LocalStorage agar dashboard bisa mengenalinya
+                localStorage.setItem("mahika_user_nama", result.nama);
+                localStorage.setItem("mahika_user_role", result.role);
+                
+                // Pindah ke dashboard
+                window.location.href = "index.html";
+            } else {
+                error.style.display = "block";
+            }
+        } catch (e) {
+            console.error(e);
+            alert("Terjadi kesalahan koneksi.");
+        } finally {
+            loading.style.display = "none";
+        }
+    }
+</script>
+
+</body>
+</html>
