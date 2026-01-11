@@ -3,146 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Login | Mahika Trans Modern</title>
-    
+    <title>Login | Mahika Trans</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-blue: #065084;
-            --bg-darker: #043a60;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.1);
-        }
-
+        :root { --blue: #065084; --dark: #043a60; --glass: rgba(255, 255, 255, 0.1); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body, html {
-            margin: 0; padding: 0; height: 100%; width: 100%;
+        body {
+            margin: 0; height: 100vh; display: flex; align-items: center; justify-content: center;
             font-family: 'Poppins', sans-serif;
-            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
-            display: flex; justify-content: center; align-items: center;
-            color: var(--white);
-            overflow: hidden;
+            background: radial-gradient(circle at top right, var(--dark), var(--blue));
+            color: white; overflow: hidden;
         }
-
-        .login-container { width: 90%; max-width: 400px; text-align: center; }
-
-        .logo-area { margin-bottom: 30px; }
-        .logo-area i { font-size: 60px; margin-bottom: 10px; color: var(--white); }
-        .logo-area h2 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px; }
-
         .login-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            padding: 35px 25px;
-            border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 90%; max-width: 380px; padding: 40px 25px; text-align: center;
+            background: var(--glass); backdrop-filter: blur(15px);
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-
-        .input-group { position: relative; margin-bottom: 20px; }
-        .input-group i { 
-            position: absolute; left: 15px; top: 50%; 
-            transform: translateY(-50%); color: rgba(255,255,255,0.7); 
-        }
+        .logo i { font-size: 50px; margin-bottom: 10px; }
+        .logo h2 { margin: 0 0 30px 0; letter-spacing: 2px; font-size: 22px; }
+        .input-group { position: relative; margin-bottom: 15px; }
+        .input-group i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); opacity: 0.7; }
         .input-group input {
-            width: 100%; padding: 15px 45px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px; color: white; outline: none; font-size: 16px;
+            width: 100%; padding: 14px 15px 14px 45px; border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.1);
+            color: white; outline: none; font-size: 15px;
         }
-
         .btn-login {
-            width: 100%; padding: 16px; border: none; border-radius: 15px;
-            background: var(--white); color: var(--primary-blue);
-            font-weight: 700; cursor: pointer; transition: 0.3s;
-            font-size: 16px;
+            width: 100%; padding: 15px; border: none; border-radius: 12px;
+            background: white; color: var(--blue); font-weight: 700;
+            cursor: pointer; font-size: 16px; margin-top: 10px;
         }
-        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        #msg { margin-top: 15px; font-size: 13px; min-height: 20px; }
-        .err { color: #ff9494; font-weight: 600; }
-        .ok { color: #94ffae; font-weight: 600; }
+        .btn-login:disabled { opacity: 0.5; }
+        #msg { margin-top: 20px; font-size: 13px; min-height: 20px; }
+        .ok { color: #94ffae; } .err { color: #ff9494; }
     </style>
 </head>
 <body>
 
-<div class="login-container">
-    <div class="logo-area">
+<div class="login-card">
+    <div class="logo">
         <i class="fas fa-bus-simple"></i>
         <h2>MAHIKA TRANS</h2>
     </div>
-
-    <div class="login-card">
-        <form id="loginForm">
-            <div class="input-group">
-                <i class="fas fa-user"></i>
-                <input type="text" id="user" placeholder="Username" required>
-            </div>
-            <div class="input-group">
-                <i class="fas fa-lock"></i>
-                <input type="password" id="pass" placeholder="Password" required>
-            </div>
-            <button type="submit" class="btn-login" id="btn">MASUK</button>
-        </form>
-        <div id="msg"></div>
-    </div>
+    <form id="loginForm">
+        <div class="input-group">
+            <i class="fas fa-user"></i>
+            <input type="text" id="user" placeholder="Username" required>
+        </div>
+        <div class="input-group">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="pass" placeholder="Password" required>
+        </div>
+        <button type="submit" id="btn" class="btn-login">MASUK</button>
+    </form>
+    <div id="msg"></div>
 </div>
 
 <script>
-    // URL API yang kamu berikan
+    // GANTI DENGAN URL WEB APP KAMU YANG BARU
     const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
-    document.getElementById('loginForm').onsubmit = async (e) => {
+    document.getElementById('loginForm').onsubmit = function(e) {
         e.preventDefault();
         const btn = document.getElementById('btn');
         const msg = document.getElementById('msg');
-        const userVal = document.getElementById('user').value;
-        const passVal = document.getElementById('pass').value;
+        const u = document.getElementById('user').value;
+        const ps = document.getElementById('pass').value;
 
-        // Reset tampilan
         btn.disabled = true;
         btn.innerText = "Memverifikasi...";
-        msg.innerText = "";
         msg.className = "";
+        msg.innerText = "Menghubungkan...";
 
-        try {
-            // Kita pakai metode fetch dengan tambahan parameter timestamp agar tidak kena cache
-            const finalUrl = `${API_URL}?p=login&u=${encodeURIComponent(userVal)}&ps=${encodeURIComponent(passVal)}&v=${new Date().getTime()}`;
-            
-            const response = await fetch(finalUrl);
-            
-            if (!response.ok) throw new Error('Network response was not ok');
-            
-            const res = await response.json();
-
+        // Fungsi penangkap respon dari Google
+        window.handleResponse = function(res) {
             if (res.status === "success") {
-                // SIMPAN SESSION
                 localStorage.setItem("mahika_session", "active");
                 localStorage.setItem("mahika_user_nama", res.nama);
-                
                 msg.className = "ok";
-                msg.innerText = "Berhasil! Membuka Dashboard...";
-                
-                setTimeout(() => {
-                    window.location.href = "index.html";
-                }, 1000);
+                msg.innerText = "Berhasil! Mengalihkan...";
+                setTimeout(() => window.location.href = "index.html", 1000);
             } else {
                 msg.className = "err";
-                msg.innerText = res.message || "Username atau Password salah!";
+                msg.innerText = res.message;
                 btn.disabled = false;
                 btn.innerText = "MASUK";
             }
-        } catch (err) {
-            console.error(err);
-            msg.className = "err";
-            msg.innerText = "Gagal terhubung ke server. Pastikan Script sudah di-Deploy sebagai 'Anyone'.";
-            btn.disabled = false;
-            btn.innerText = "MASUK";
-        }
+            // Hapus script sementara
+            document.body.removeChild(document.getElementById('jsonpScript'));
+        };
+
+        // Teknik JSONP (Memanggil Script Google)
+        const script = document.createElement('script');
+        script.id = 'jsonpScript';
+        script.src = `${API_URL}?p=login&u=${encodeURIComponent(u)}&ps=${encodeURIComponent(ps)}&callback=handleResponse`;
+        document.body.appendChild(script);
     };
 </script>
 
