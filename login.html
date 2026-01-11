@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | Mahika Trans</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #065084;
+            --bg-darker: #043a60;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+        }
+
+        * { 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
+        body, html {
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
+            display: flex; justify-content: center; align-items: center;
+            color: var(--white);
+            overflow: hidden;
+        }
+
+        .login-container {
+            width: 90%;
+            max-width: 380px;
+            text-align: center;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-area {
+            margin-bottom: 30px;
+        }
+        .logo-area i {
+            font-size: 60px;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+        }
+        .logo-area h2 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .logo-area p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            opacity: 0.7;
+            font-weight: 300;
+        }
+
+        .login-card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255,255,255,0.6);
+            font-size: 18px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            color: white;
+            outline: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .input-group input:focus {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.4);
+        }
+        .input-group .toggle-password {
+            left: auto;
+            right: 18px;
+            cursor: pointer;
+            pointer-events: all;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 15px;
+            background: var(--white);
+            color: var(--primary-blue);
+            font-weight: 700;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .btn-login:active {
+            transform: scale(0.96);
+        }
+        .btn-login:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #msg {
+            margin-top: 20px;
+            font-size: 13px;
+            min-height: 20px;
+            font-weight: 400;
+        }
+        .err { color: #ff8a8a; }
+        .ok { color: #8affad; }
+
+        .footer-text {
+            margin-top: 30px;
+            font-size: 11px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-container">
+    <div class="logo-area">
+        <i class="fas fa-bus-simple"></i>
+        <h2>Mahika Trans</h2>
+        <p>MODERN TRANSPORTATION SYSTEM</p>
+    </div>
+
+    <div class="login-card">
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="user" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="pass" placeholder="Password" required>
+                <i class="fas fa-eye toggle-password" id="eye"></i>
+            </div>
+            <button type="submit" class="btn-login" id="btn">MASUK</button>
+        </form>
+        <div id="msg"></div>
+    </div>
+
+    <p class="footer-text">&copy; 2024 Mahika Trans Modern Digital</p>
+</div>
+
+<script>
+    // URL API dari Google Apps Script kamu
+    const API_URL = "https://script.google.com/macros/s/AKfycbxq5ydGBjkZ6C04N2BTAn68efdbmAzG4THGYMvf7VqIi0Z6VOzW1C9E5Mq3KZpkZpQrzA/exec";
+
+    // 1. Toggle Password
+    const eye = document.getElementById('eye');
+    const passField = document.getElementById('pass');
+    eye.onclick = () => {
+        const isPass = passField.type === 'password';
+        passField.type = isPass ? 'text' : 'password';
+        eye.classList.toggle('fa-eye', !isPass);
+        eye.classList.toggle('fa-eye-slash', isPass);
+    };
+
+    // 2. Handle Login
+    document.getElementById('loginForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const btn = document.getElementById('btn');
+        const msg = document.getElementById('msg');
+        const userVal = document.getElementById('user').value;
+        const passVal = document.getElementById('pass').value;
+
+        btn.disabled = true;
+        btn.innerText = "Memverifikasi...";
+        msg.innerText = "";
+        msg.className = "";
+
+        try {
+            // Parameter p=login sesuai dengan permintaan API kamu sebelumnya
+            const resp = await fetch(`${API_URL}?p=login&u=${encodeURIComponent(userVal)}&ps=${encodeURIComponent(passVal)}`);
+            const res = await resp.json();
+
+            if(res.status === "success") {
+                // Simpan session agar index.html tidak menendang balik
+                localStorage.setItem("mahika_session", "active");
+                localStorage.setItem("mahika_user_nama", res.nama || userVal);
+                
+                msg.className = "ok";
+                msg.innerText = "Login Berhasil! Mengalihkan...";
+                
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1200);
+            } else {
+                msg.className = "err";
+                msg.innerText = res.message || "Akses Ditolak! Periksa Akun.";
+                btn.disabled = false;
+                btn.innerText = "MASUK";
+            }
+        } catch (err) {
+            msg.className = "err";
+            msg.innerText = "Gangguan koneksi ke server.";
+            btn.disabled = false;
+            btn.innerText = "MASUK";
+            console.error(err);
+        }
+    };
+</script>
+
+</body>
+  </html>
+  
