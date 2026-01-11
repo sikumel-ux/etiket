@@ -27,14 +27,10 @@
             overflow: hidden;
         }
 
-        .login-container {
-            width: 90%;
-            max-width: 400px;
-            text-align: center;
-        }
+        .login-container { width: 90%; max-width: 400px; text-align: center; }
 
         .logo-area { margin-bottom: 30px; }
-        .logo-area i { font-size: 60px; margin-bottom: 10px; }
+        .logo-area i { font-size: 60px; margin-bottom: 10px; color: var(--white); }
         .logo-area h2 { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px; }
 
         .login-card {
@@ -56,7 +52,7 @@
             width: 100%; padding: 15px 45px;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 15px; color: white; outline: none; font-size: 14px;
+            border-radius: 15px; color: white; outline: none; font-size: 16px;
         }
 
         .btn-login {
@@ -65,18 +61,18 @@
             font-weight: 700; cursor: pointer; transition: 0.3s;
             font-size: 16px;
         }
-        .btn-login:active { transform: scale(0.97); }
+        .btn-login:disabled { opacity: 0.6; cursor: not-allowed; }
 
-        #msg { margin-top: 15px; font-size: 13px; font-weight: 400; min-height: 20px; }
-        .err { color: #ff9494; }
-        .ok { color: #94ffae; }
+        #msg { margin-top: 15px; font-size: 13px; min-height: 20px; }
+        .err { color: #ff9494; font-weight: 600; }
+        .ok { color: #94ffae; font-weight: 600; }
     </style>
 </head>
 <body>
 
 <div class="login-container">
     <div class="logo-area">
-        <i class="fas fa-circle-user"></i>
+        <i class="fas fa-bus-simple"></i>
         <h2>MAHIKA TRANS</h2>
     </div>
 
@@ -97,7 +93,7 @@
 </div>
 
 <script>
-    // MASUKKAN URL WEB APP GOOGLE SCRIPT (GS) BARU KAMU DI SINI
+    // URL API yang kamu berikan
     const API_URL = "https://script.google.com/macros/s/AKfycbxLrJrkBAPndRfbgH93T0IkaZQH8Q1RS9r301Aau63_j4QWqvEJ0YtmKuEJv0JigYWT/exec";
 
     document.getElementById('loginForm').onsubmit = async (e) => {
@@ -107,35 +103,43 @@
         const userVal = document.getElementById('user').value;
         const passVal = document.getElementById('pass').value;
 
+        // Reset tampilan
         btn.disabled = true;
         btn.innerText = "Memverifikasi...";
         msg.innerText = "";
+        msg.className = "";
 
         try {
-            // Mengirim parameter p=login agar dikenali script .gs baru
-            const resp = await fetch(`${API_URL}?p=login&u=${encodeURIComponent(userVal)}&ps=${encodeURIComponent(passVal)}`);
-            const res = await resp.json();
+            // Kita pakai metode fetch dengan tambahan parameter timestamp agar tidak kena cache
+            const finalUrl = `${API_URL}?p=login&u=${encodeURIComponent(userVal)}&ps=${encodeURIComponent(passVal)}&v=${new Date().getTime()}`;
+            
+            const response = await fetch(finalUrl);
+            
+            if (!response.ok) throw new Error('Network response was not ok');
+            
+            const res = await response.json();
 
-            if(res.status === "success") {
-                // Simpan sesi agar index.html bisa dibuka
+            if (res.status === "success") {
+                // SIMPAN SESSION
                 localStorage.setItem("mahika_session", "active");
                 localStorage.setItem("mahika_user_nama", res.nama);
                 
                 msg.className = "ok";
-                msg.innerText = "Berhasil! Mengalihkan...";
+                msg.innerText = "Berhasil! Membuka Dashboard...";
                 
                 setTimeout(() => {
                     window.location.href = "index.html";
                 }, 1000);
             } else {
                 msg.className = "err";
-                msg.innerText = res.message || "Gagal Login";
+                msg.innerText = res.message || "Username atau Password salah!";
                 btn.disabled = false;
                 btn.innerText = "MASUK";
             }
         } catch (err) {
+            console.error(err);
             msg.className = "err";
-            msg.innerText = "Gangguan koneksi ke server.";
+            msg.innerText = "Gagal terhubung ke server. Pastikan Script sudah di-Deploy sebagai 'Anyone'.";
             btn.disabled = false;
             btn.innerText = "MASUK";
         }
