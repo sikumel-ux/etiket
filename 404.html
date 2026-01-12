@@ -2,8 +2,9 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5;url=https://mafaza.id/">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 | Mahika Trans</title>
+    <title>404 | Redirecting...</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
@@ -19,26 +20,18 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: radial-gradient(circle at top right, var(--bg-darker), var(--primary-blue));
-            margin: 0;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--white);
-            overflow: hidden;
+            margin: 0; height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--white); overflow: hidden; text-align: center;
         }
 
-        /* Animasi Kartu Melayang */
         .error-container {
-            width: 280px;
-            padding: 40px 20px;
+            width: 280px; padding: 40px 20px;
             background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(15px);
             border-radius: 30px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            animation: float 4s ease-in-out infinite; /* EFEK MELAYANG */
+            animation: float 4s ease-in-out infinite;
         }
 
         @keyframes float {
@@ -46,64 +39,56 @@
             50% { transform: translateY(-15px); }
         }
 
-        .error-code {
-            font-size: 70px;
-            font-weight: 800;
-            margin: 0;
-            background: linear-gradient(45deg, var(--accent-cyan), #fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        /* Animasi Glow pada Icon */
         .bus-glow {
-            font-size: 45px;
-            color: var(--accent-cyan);
-            margin: 20px 0;
-            filter: drop-shadow(0 0 5px var(--accent-cyan));
+            font-size: 45px; color: var(--accent-cyan);
+            margin-bottom: 20px;
             animation: pulse-glow 2s infinite;
         }
 
         @keyframes pulse-glow {
-            0%, 100% { filter: drop-shadow(0 0 5px var(--accent-cyan)); opacity: 0.8; }
-            50% { filter: drop-shadow(0 0 20px var(--accent-cyan)); opacity: 1; transform: scale(1.1); }
+            0%, 100% { filter: drop-shadow(0 0 5px var(--accent-cyan)); transform: scale(1); }
+            50% { filter: drop-shadow(0 0 20px var(--accent-cyan)); transform: scale(1.1); }
         }
 
-        h2 { font-size: 16px; font-weight: 600; margin: 5px 0; }
-        p { font-size: 11px; opacity: 0.6; margin-bottom: 25px; }
-
-        .btn-back {
-            display: inline-block;
-            padding: 12px 20px;
-            background: var(--accent-cyan);
-            color: var(--bg-darker);
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 12px;
-            transition: 0.3s;
-        }
-
-        .btn-back:hover {
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px var(--accent-cyan);
+        h2 { font-size: 18px; margin: 10px 0; }
+        p { font-size: 12px; opacity: 0.7; margin-bottom: 20px; }
+        
+        .countdown {
+            font-weight: 700; color: var(--accent-cyan);
+            background: rgba(0, 210, 255, 0.1);
+            padding: 5px 15px; border-radius: 20px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
 
 <div class="error-container">
-    <div class="error-code">404</div>
-    
     <div class="bus-glow">
         <i class="fa-solid fa-bus-simple"></i>
     </div>
     
     <h2>NYASAR, BRO?</h2>
+    <p>Kamu akan dialihkan ke terminal utama dalam:</p>
     
-    
-    
+    <div class="countdown"><span id="timer">5</span> detik</div>
 </div>
+
+<script>
+    // Script tambahan untuk countdown & redirect instan
+    let timeLeft = 5;
+    const timerDisplay = document.getElementById('timer');
+
+    const interval = setInterval(() => {
+        timeLeft--;
+        timerDisplay.innerText = timeLeft;
+        
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            window.location.href = "https://mahikatrans.my.id/"; // domain utama
+        }
+    }, 1000);
+</script>
 
 </body>
 </html>
